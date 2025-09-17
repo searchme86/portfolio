@@ -1,0 +1,2812 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <!-- /portfolio/mobile-sticky-menu-fixed.html -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GSAP 앱 스크롤 애니메이션 - 프로젝트 상세</title>
+    <style>
+      :root {
+        --rui-fixed-black: #000000;
+        --rui-fixed-white: #ffffff;
+        --rui-bg100: #ffffff;
+        --rui-bg300: #e0e0e0;
+        --rui-contents000: #000000;
+        --rui-contents200: #666666;
+        --rui-contents150: #999999;
+        --rui-divider: #e0e0e0;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #fff;
+        overflow-x: hidden;
+        font-size: 14px;
+      }
+
+      /* Header 스택 시스템 - 고정 헤더 (스크롤해도 안사라짐) */
+      .header-stack {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 10000;
+      }
+
+      /* 정보 헤더 - 레고 데모 방식 그대로 */
+      .info-header {
+        width: 100%;
+        height: 60px;
+        background: white;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        transform: translateY(-100%);
+        transition: transform 0.4s ease;
+        display: none;
+        align-items: center;
+      }
+
+      .info-header.show {
+        display: flex;
+        transform: translateY(0);
+      }
+
+      .info-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .info-project-details {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .info-project-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(45deg, #ff9a9e, #fecfef);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+      }
+
+      .info-details h4 {
+        font-size: 1rem;
+        margin-bottom: 3px;
+        color: #333;
+      }
+
+      .info-status {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #f39c12;
+      }
+
+      /* 메인 헤더 - 고정 (숨기지 않음) */
+      .main-header {
+        width: 100%;
+        min-height: 60px;
+        height: 60px;
+        box-sizing: border-box;
+        align-items: center;
+        background-color: var(--rui-fixed-black);
+        overflow: hidden;
+        font-size: 14px;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 15px;
+      }
+
+      .header-logo {
+        color: var(--rui-fixed-white);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1rem;
+      }
+
+      .header-nav {
+        display: none;
+      }
+
+      .nav-link {
+        color: var(--rui-fixed-white);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.8rem;
+        transition: opacity 0.2s;
+      }
+
+      .nav-link:hover {
+        opacity: 0.8;
+      }
+
+      .page {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        margin-top: 60px;
+      }
+
+      .container {
+        display: flex;
+        margin: 0 auto;
+        max-width: 900px;
+      }
+
+      /* 프로젝트 헤더 섹션 */
+      .project-intro-section {
+        padding: 120px 0 50px 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 8px;
+        height: 400px;
+      }
+
+      .project-header-content {
+        text-align: center;
+      }
+
+      .project-category {
+        font-size: 0.8rem;
+        opacity: 0.9;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .project-main-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        line-height: 1.2;
+      }
+
+      .project-subtitle {
+        font-size: 1rem;
+        opacity: 0.9;
+        margin-bottom: 25px;
+        line-height: 1.4;
+      }
+
+      .main-content-section {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        position: relative;
+      }
+
+      .content-body {
+        flex: 1;
+      }
+
+      /* Mobile sidebar 스타일 추가 */
+      .mobile-sidebar {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      .mobile-sidebar .project-intro-section {
+        height: 300px;
+      }
+
+      .mobile-sidebar .project-main-title {
+        font-size: 1.5rem;
+      }
+
+      .mobile-sidebar .sidebar-inner {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+
+      /* sticky-scroll-menu-duplicate.html의 네비게이션 메뉴 CSS 그대로 복사 */
+      .navigation-container {
+        position: relative;
+        margin-bottom: 24px;
+      }
+
+      .navigation-menu {
+        background: white;
+        position: relative;
+        z-index: 900;
+        transition: all 0.3s ease;
+        height: 60px;
+      }
+
+      .navigation-menu.sticky {
+        position: fixed;
+        top: 60px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .menu-list {
+        display: flex;
+        justify-content: space-between;
+        -moz-box-align: center;
+        align-items: center;
+        background-color: #fff;
+        overflow-x: auto;
+        max-width: 100%;
+        padding-top: 24px;
+        white-space: nowrap;
+        scrollbar-width: none;
+        list-style: none;
+        height: 100%;
+      }
+
+      .menu-list::-webkit-scrollbar {
+        display: none;
+      }
+
+      .menu-list.dragging {
+        cursor: grabbing;
+      }
+
+      .menu-item {
+        cursor: pointer;
+        flex-shrink: 0;
+        -moz-box-flex: 1;
+        flex-grow: 1;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+
+      .menu-item:hover {
+        background-color: #f8f9fa;
+      }
+
+      .menu-item.active {
+        border-bottom: 2px solid #000;
+      }
+
+      .menu-link {
+        display: inline-block;
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji',
+          'Segoe UI Symbol', sans-serif;
+        font-size: 16px;
+        line-height: 1.3;
+        font-weight: 600;
+        color: #bdbdbd;
+        padding: 0px 20px 4px;
+        text-align: center;
+        width: 100%;
+        white-space: nowrap;
+        text-decoration: none;
+      }
+
+      .menu-item.active .menu-link {
+        color: #000;
+      }
+
+      .content-section {
+        margin-bottom: 100px;
+      }
+
+      .section-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #333;
+        padding-bottom: 10px;
+      }
+
+      .section-content {
+        font-size: 0.95rem;
+        color: #555;
+        margin-top: 24px;
+      }
+
+      .section-content p {
+        margin-bottom: 15px;
+      }
+
+      .section-content strong {
+        color: #333;
+        font-weight: 600;
+      }
+
+      .tech-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin: 25px 0;
+      }
+
+      .tech-category {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 6px;
+        border-left: 4px solid #f39c12;
+      }
+
+      .tech-category h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: #333;
+      }
+
+      .tech-list {
+        list-style: none;
+      }
+
+      .tech-list li {
+        padding: 4px 0;
+        color: #666;
+        position: relative;
+        padding-left: 12px;
+        font-size: 0.9rem;
+      }
+
+      .tech-list li::before {
+        content: '▸';
+        position: absolute;
+        left: 0;
+        color: #f39c12;
+        font-weight: bold;
+      }
+
+      .sidebar {
+        width: 100%;
+        position: relative;
+        padding: 20px;
+        box-sizing: border-box;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+        transition: transform;
+      }
+
+      .sidebar.move {
+        transform: translateY(60px);
+      }
+
+      .sidebar-button {
+        background: #000;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 18px;
+        width: 100%;
+        transition: background 0.3s;
+        margin-bottom: 10px;
+        height: 51px;
+        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+      }
+
+      .sidebar-button:hover {
+        background: #0056b3;
+      }
+
+      /* 채용공고 스타일의 관련 프로젝트 섹션 */
+
+      .related-projects-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 24px;
+        color: #333;
+        text-align: left;
+      }
+
+      /* ✅ CSS Grid를 CSS Flex로 변경 */
+      .job-style-projects-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .job-style-project-item {
+        margin: 0;
+        /* 2개씩 보이도록 설정 (gap 16px 고려) */
+        width: calc(50% - 8px);
+        flex-shrink: 0;
+      }
+
+      .job-style-project-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        height: 100%;
+      }
+
+      .job-style-project-card {
+        width: 100%;
+        background: white;
+        border-radius: 8px;
+        padding: 16px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .job-style-project-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .project-image-container {
+        position: relative;
+        margin-bottom: 12px;
+        border: 1px solid var(--rui-divider);
+        border-radius: 4px;
+        overflow: hidden;
+        aspect-ratio: 1.5 / 1;
+      }
+
+      .project-thumbnail {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+      }
+
+      .bookmark-button-container {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        appearance: none;
+        padding: 7px;
+        cursor: pointer;
+      }
+
+      .bookmark-button {
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 4px;
+        padding: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+      }
+
+      .bookmark-button:hover {
+        background: rgba(255, 255, 255, 1);
+      }
+
+      .bookmark-icon {
+        width: 16px;
+        height: 16px;
+        color: #666;
+      }
+
+      .project-header-info {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: 8px;
+        position: relative;
+      }
+
+      .project-title-main {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji',
+          'Segoe UI Symbol', sans-serif;
+        font-size: 14px;
+        line-height: 1.3;
+        font-weight: 600;
+        color: var(--rui-contents000);
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        word-break: break-all;
+        margin-bottom: 2px;
+      }
+
+      .project-company-name {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji',
+          'Segoe UI Symbol', sans-serif;
+        font-size: 12px;
+        line-height: 1.45;
+        font-weight: 400;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        word-break: break-all;
+        color: var(--rui-contents150);
+        text-align: left;
+      }
+
+      .project-tags-container {
+        display: flex;
+        gap: 4px;
+        width: 100%;
+        min-width: 0px;
+        align-items: center;
+        flex-wrap: wrap;
+        white-space: normal;
+        overflow-x: visible;
+        scrollbar-width: none;
+      }
+
+      .project-tag-wrapper {
+        box-sizing: border-box;
+        display: flex;
+        width: auto;
+        height: auto;
+        gap: 0px;
+        align-items: center;
+        justify-content: center;
+        flex-flow: row;
+      }
+
+      .project-tag {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji',
+          'Segoe UI Symbol', sans-serif;
+        font-size: 12px;
+        line-height: 1.35;
+        font-weight: 500;
+        color: var(--rui-contents150);
+        background: var(--rui-bg300);
+        padding: 4px 6px;
+        border-radius: 4px;
+      }
+
+      .bottom-navigation {
+        padding: 30px 0;
+        border-top: 1px solid #e0e0e0;
+        background: #f8f9fa;
+      }
+
+      .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 20px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+      }
+
+      .back-button:hover {
+        background: #f8f9fa;
+        border-color: #ccc;
+      }
+
+      /* 이 포지션에 필요한 전문분야/기술 섹션 스타일 */
+      .position-skills-section {
+        margin: 40px 0;
+        padding: 20px 0;
+        border-top: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .skills-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .skills-title {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        line-height: 1.4;
+      }
+
+      .skills-tags-wrapper {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .skill-tag-item {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .skill-tag-text {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #666;
+        background: #f1f3f4;
+        padding: 8px 12px;
+        border-radius: 6px;
+        white-space: nowrap;
+      }
+
+      /* 회사 정보 섹션 스타일 */
+      .company-info-section {
+        margin: 40px 0;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        overflow: hidden;
+      }
+
+      .company-info-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px;
+        position: relative;
+      }
+
+      .company-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex: 1;
+      }
+
+      .company-logo-wrapper {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .company-logo-placeholder {
+        font-size: 24px;
+        color: white;
+      }
+
+      .company-details {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1;
+      }
+
+      .company-name {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        line-height: 1.3;
+      }
+
+      .company-info-link {
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .info-link-text {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #f39c12;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: opacity 0.2s;
+      }
+
+      .info-link-text:hover {
+        opacity: 0.8;
+      }
+
+      .company-bookmark-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 4px;
+        transition: background 0.2s;
+        flex-shrink: 0;
+      }
+
+      .company-bookmark-btn:hover {
+        background: #f5f5f5;
+      }
+
+      .bookmark-icon-wrapper {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* 프로젝트 헤더 소개 섹션 스타일 */
+      .project-header-introduction-section {
+        background: #ffffff;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .company-logo-and-name-container {
+        display: flex;
+        align-items: center;
+      }
+
+      .company-profile-link {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        transition: opacity 0.2s ease;
+      }
+
+      .company-profile-link:hover {
+        opacity: 0.8;
+      }
+
+      .company-logo-image-container {
+        width: 22px;
+        height: 22px;
+        border-radius: 4px;
+        overflow: hidden;
+        flex-shrink: 0;
+        background: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .company-logo-image {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .company-name-and-arrow-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .project-company-and-title-wrapper {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .company-name-text {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #666;
+        line-height: 1.4;
+      }
+
+      .company-link-arrow-icon {
+        color: #666;
+        flex-shrink: 0;
+      }
+
+      .job-posting-title-container {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .job-posting-main-title {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: #333;
+        line-height: 1.3;
+        margin: 0;
+        word-break: keep-all;
+      }
+
+      .project-list .project-item {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .project-list .project-item:not(:last-child) {
+        margin-bottom: 8px;
+      }
+
+      .project-list .project-item .project-subject,
+      .project-list .project-item .project-content {
+        font-size: 14px;
+        font-size: 14px;
+        line-height: 1.45;
+        font-weight: 400;
+      }
+
+      /* 여기 */
+      .project-util .box-list {
+        gap: 8px;
+        list-style: none;
+      }
+
+      @media (min-width: 360px) {
+        body {
+          font-size: 15px;
+        }
+
+        .main-header {
+          height: 60px;
+          min-height: 60px;
+          padding: 0 18px;
+        }
+
+        .header-logo {
+          font-size: 1.1rem;
+        }
+
+        .project-main-title {
+          font-size: 2rem;
+        }
+
+        .container {
+          flex-direction: column-reverse;
+          padding: 0 20px;
+        }
+
+        .mobile-sidebar {
+          padding-top: 24px;
+          gap: 16px;
+        }
+        .project-header-introduction-section {
+          padding-bottom: 0;
+        }
+
+        .mobile-sidebar .sidebar-inner {
+          background: #fff;
+          margin-bottom: 0;
+        }
+
+        .project-util {
+          z-index: 1000;
+          position: fixed;
+          left: 0px;
+          right: 0px;
+          bottom: 0px;
+          width: 100vw;
+          box-sizing: border-box;
+          padding: 0px 24px;
+          background: linear-gradient(
+            0deg,
+            var(--rui-bg100) 87.5%,
+            rgba(255, 255, 255, 0.3) 100.54%
+          );
+          height: 100px;
+
+          display: flex;
+          flex-grow: 1;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .box-list {
+          display: flex;
+          width: 100vw;
+          flex-direction: row-reverse;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .box-item {
+          flex-grow: 1;
+        }
+        .box-item.preview {
+          width: 116px;
+          background-color: #fff;
+        }
+        .box-item.preview .sidebar-button {
+          background-color: #fff;
+          border: 1px solid rgb(212, 212, 212);
+          color: #000;
+        }
+        .box-item.source-code {
+          width: calc(100% - ((24px * 2) + 116px + 8px));
+        }
+
+        .project-header-content {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          padding: 0 15px;
+        }
+
+        .project-intro-section {
+          padding: 0;
+        }
+
+        .content-section {
+          margin-bottom: 50px;
+        }
+
+        .bottom-navigation {
+          padding: 10px 0 110px 0;
+        }
+
+        /* ✅ 모바일에서도 2개씩 보이도록 유지 (gap 16px 고려) */
+        .job-style-project-item {
+          width: calc(50% - 8px);
+        }
+      }
+
+      @media (min-width: 412px) {
+        body {
+          font-size: 16px;
+        }
+
+        .header-nav {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .main-header {
+          padding: 0 30px;
+        }
+
+        .header-nav {
+          display: flex;
+          gap: 24px;
+        }
+
+        .nav-link {
+          font-size: 0.9rem;
+        }
+
+        .main-content-section {
+          flex-direction: row;
+          gap: 40px;
+        }
+
+        .content-body {
+          padding: 40px 40px 40px 0;
+        }
+
+        .sidebar {
+          display: block;
+          width: 265px;
+          position: sticky;
+          top: 100px;
+          height: fit-content;
+          margin-top: 0;
+        }
+
+        .sidebar-inner {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          gap: 18px;
+        }
+
+        .tech-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+        }
+
+        /* ✅ 데스크톱에서도 2개씩 보이도록 유지 (gap 20px로 변경) */
+        .job-style-projects-grid {
+          gap: 20px;
+        }
+
+        .job-style-project-item {
+          width: calc(50% - 10px);
+        }
+
+        .related-projects-title {
+          font-size: 1.4rem;
+        }
+
+        .company-name-text {
+          font-size: 16px;
+        }
+
+        .job-posting-main-title {
+          font-size: 20px;
+        }
+        .container {
+          display: flex;
+          flex-direction: row;
+        }
+        .project-header-introduction-section {
+          padding-bottom: 24px;
+        }
+
+        .project-util {
+          position: relative;
+          width: 100%;
+          height: auto;
+          padding: 0;
+          z-index: auto;
+          left: auto;
+          right: auto;
+          bottom: auto;
+        }
+
+        .box-list {
+          flex-direction: column;
+          width: 100%;
+        }
+
+        .box-item.source-code,
+        .box-item.preview {
+          width: 100%;
+        }
+
+        .bottom-navigation {
+          padding: 10px 0;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .project-main-title {
+          font-size: 2.5rem;
+        }
+
+        .tech-grid {
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 20px;
+        }
+
+        /* ✅ 1024px 이상에서도 2개씩 보이도록 유지 (gap 24px로 변경) */
+        .job-style-projects-grid {
+          gap: 24px;
+        }
+
+        .job-style-project-item {
+          width: calc(50% - 12px);
+        }
+      }
+
+      @media (min-width: 1200px) {
+        .container {
+          max-width: 900px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header 스택 시스템 -->
+    <header class="header-stack" id="headerStack">
+      <div class="info-header" id="infoHeader">
+        <div class="info-content">
+          <div class="info-project-details">
+            <div class="info-project-icon">🎯</div>
+            <div class="info-details">
+              <h4>GSAP 앱 스크롤 애니메이션</h4>
+              <div class="info-status">고급 스크롤 인터랙션 구현</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-header" id="mainHeader">
+        <a href="./portfolio.html" class="header-logo">포트폴리오 메인</a>
+      </div>
+    </header>
+
+    <div class="page">
+      <!-- 메인 컨텐츠 섹션 -->
+      <section class="main-content-section">
+        <div class="container">
+          <div class="content-body">
+            <section class="project-header-introduction-section">
+              <div class="project-company-and-title-wrapper">
+                <div class="section-company">
+                  <div class="company-logo-and-name-container">
+                    <a
+                      href="#"
+                      class="company-profile-link"
+                      aria-label="브리스캔영어영시에이션 회사 정보"
+                    >
+                      <div class="company-logo-wrapper">
+                        <div class="company-logo-image-container">
+                          <img src="" alt="" class="company-logo-image" />
+                        </div>
+                        <div class="company-name-and-arrow-wrapper">
+                          <p class="company-name-text">React(카테고리)</p>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 32 32"
+                            class="company-link-arrow-icon"
+                            width="16"
+                            height="16"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fill="currentColor"
+                              d="m21 16-9.65 10L10 24.6l8.298-8.6L10 7.4 11.35 6z"
+                            ></path>
+                          </svg>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <div class="job-posting-title-container">
+                  <h1 id="posting-detail-title" class="job-posting-main-title">
+                    프로젝트명
+                  </h1>
+                </div>
+              </div>
+            </section>
+
+            <!-- sticky-scroll-menu-duplicate.html의 네비게이션 구조 그대로 복사 -->
+            <nav class="navigation-container">
+              <div class="navigation-menu" id="navigationMenu">
+                <ul class="menu-list" id="menuList">
+                  <li class="menu-item active" data-target="introduction">
+                    <a href="#introduction" class="menu-link">소개</a>
+                  </li>
+                  <li class="menu-item" data-target="tech-stack">
+                    <a href="#tech-stack" class="menu-link">기술스택</a>
+                  </li>
+                  <li class="menu-item" data-target="details">
+                    <a href="#details" class="menu-link">상세정보</a>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+
+            <div class="resume-section">
+              <!-- 소개 섹션 -->
+              <div class="content-section introduction" id="introduction">
+                <!--  -->
+                <section class="project-intro-section">
+                  <div class="project-header-content">
+                    <div class="project-category">GSAP 애니메이션 실험</div>
+                    <strong class="project-main-title">
+                      GSAP 앱 스크롤 애니메이션
+                    </strong>
+                    <p class="project-subtitle">
+                      Apple 공식 홈페이지 스타일의 고급 스크롤 애니메이션을
+                      GSAP로 구현한 연구 프로젝트
+                    </p>
+                  </div>
+                </section>
+                <!--  -->
+                <div class="section-content">
+                  <p>
+                    <strong>프로젝트 개요:</strong> Apple 공식 홈페이지에서 볼
+                    수 있는 정교한 스크롤 애니메이션을 GSAP(GreenSock Animation
+                    Platform)을 활용해 완벽하게 재현한 연구 프로젝트입니다.
+                  </p>
+
+                  <p>
+                    <strong>개발 동기:</strong> 기존의 CSS만으로는 구현하기
+                    어려운 복잡한 스크롤 기반 애니메이션을 JavaScript 애니메이션
+                    라이브러리를 통해 어떻게 구현할 수 있는지 깊이 있게
+                    탐구하고자 시작했습니다.
+                  </p>
+
+                  <p><strong>핵심 목표:</strong></p>
+                  <ul style="padding-left: 20px; margin: 20px 0">
+                    <li>순차적 애니메이션 시스템 구축</li>
+                    <li>Pin-spacer 높이 동기화 해결</li>
+                    <li>자연스러운 레이아웃 플로우 구현</li>
+                    <li>양방향 스크롤 애니메이션 완성</li>
+                    <li>Transform 최적화를 통한 성능 향상</li>
+                  </ul>
+
+                  <p>
+                    이 프로젝트를 통해 <strong>ScrollTrigger</strong>의 고급
+                    기능들을 활용한 실무 수준의 인터랙티브 웹 애니메이션 구현
+                    역량을 확보할 수 있었습니다.
+                  </p>
+                </div>
+              </div>
+
+              <!-- 기술스택 섹션 -->
+              <div class="content-section tech-stack" id="tech-stack">
+                <h2 class="section-title">기술스택</h2>
+                <div class="section-content">
+                  <p>
+                    이 프로젝트에서 사용된 주요 기술들과 그 선택 이유를
+                    소개합니다.
+                  </p>
+
+                  <div class="tech-grid">
+                    <div class="tech-category">
+                      <h4>애니메이션 라이브러리</h4>
+                      <ul class="tech-list">
+                        <li>GSAP (GreenSock)</li>
+                        <li>ScrollTrigger Plugin</li>
+                        <li>Timeline 시스템</li>
+                      </ul>
+                    </div>
+
+                    <div class="tech-category">
+                      <h4>프론트엔드 기술</h4>
+                      <ul class="tech-list">
+                        <li>HTML5 (시맨틱 마크업)</li>
+                        <li>CSS3 (Flexbox, Grid)</li>
+                        <li>JavaScript ES6+</li>
+                      </ul>
+                    </div>
+
+                    <div class="tech-category">
+                      <h4>성능 최적화</h4>
+                      <ul class="tech-list">
+                        <li>Transform3D 활용</li>
+                        <li>will-change 속성</li>
+                        <li>GPU 가속 활용</li>
+                      </ul>
+                    </div>
+
+                    <div class="tech-category">
+                      <h4>개발 도구</h4>
+                      <ul class="tech-list">
+                        <li>Chrome DevTools</li>
+                        <li>Performance Monitor</li>
+                        <li>GSAP DevTools</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <p><strong>기술 선택 이유:</strong></p>
+                  <p>
+                    GSAP을 선택한 가장 큰 이유는
+                    <strong>정밀한 타이밍 제어</strong>와
+                    <strong>높은 성능</strong>입니다. 특히 ScrollTrigger
+                    플러그인은 복잡한 스크롤 기반 애니메이션을 간단하고
+                    직관적으로 구현할 수 있게 해주며, 브라우저 호환성도
+                    뛰어납니다.
+                  </p>
+                </div>
+              </div>
+
+              <!-- 상세정보 섹션 -->
+              <div class="content-section details" id="details">
+                <h2 class="section-title">상세정보</h2>
+                <div class="section-content">
+                  <p><strong>이전 버전 대비 핵심 개선사항:</strong></p>
+
+                  <p>
+                    <strong>1. 순차적 애니메이션 시스템</strong><br />
+                    onComplete 콜백 기반 체인으로 스케일 → 높이 축소 순서 보장.
+                    각 애니메이션이 완료된 후 다음 단계로 자연스럽게 이어지도록
+                    구현했습니다.
+                  </p>
+
+                  <p>
+                    <strong>2. Pin-spacer 높이 동기화</strong><br />
+                    110vh 고정으로 레이아웃 점프 현상 완전 해결. ScrollTrigger의
+                    pin 기능 사용 시 발생하는 높이 계산 오류를 사전에
+                    방지했습니다.
+                  </p>
+
+                  <p>
+                    <strong>3. 자연스러운 레이아웃 플로우</strong><br />
+                    translateY 강제 이동 대신 height 기반 자연 플로우로 변경.
+                    이를 통해 더욱 부드럽고 예측 가능한 애니메이션을
+                    구현했습니다.
+                  </p>
+
+                  <p>
+                    <strong>4. 양방향 Pill 애니메이션</strong><br />
+                    극적인 상승과 부드러운 사라짐의 완벽한 대칭. 사용자가 스크롤
+                    방향을 바꿔도 자연스러운 애니메이션이 유지됩니다.
+                  </p>
+
+                  <p>
+                    <strong>5. Transform 제거 시스템</strong><br />
+                    애니메이션 완료 후 순수 sticky positioning으로 전환. 성능
+                    최적화와 함께 레이아웃 안정성을 확보했습니다.
+                  </p>
+
+                  <p>
+                    <strong>6. 스크롤 방향 인식</strong><br />
+                    사용자 의도에 따른 차별적 반응 시스템. 위/아래 스크롤에 따라
+                    다른 애니메이션 패턴을 적용했습니다.
+                  </p>
+
+                  <p>
+                    <strong>성과와 학습:</strong><br />
+                    이 프로젝트를 통해 단순한 라이브러리 사용법을 넘어서서,
+                    <strong>고성능 애니메이션의 원리</strong>와
+                    <strong>사용자 경험을 고려한 인터랙션 디자인</strong>에 대해
+                    깊이 있게 이해할 수 있었습니다. 특히 브라우저 렌더링
+                    최적화와 메모리 관리에 대한 실무적 지식을 습득했습니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="position-skills-section">
+              <div class="skills-container">
+                <div class="skills-title">이 프로젝트의 키워드</div>
+                <div class="skills-tags-wrapper">
+                  <span class="skill-tag-item">
+                    <div class="skill-tag-text">키워드1</div>
+                  </span>
+                  <span class="skill-tag-item">
+                    <div class="skill-tag-text">키워드2</div>
+                  </span>
+                  <span class="skill-tag-item">
+                    <div class="skill-tag-text">키워드3</div>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="company-info-section">
+              <div class="company-info-container">
+                <div class="company-header">
+                  <div class="company-logo-wrapper">
+                    <div class="company-logo-placeholder">🎯</div>
+                  </div>
+                  <div class="company-details">
+                    <div class="company-name">프로젝트명</div>
+                    <a href="#" class="company-info-link">
+                      <div class="info-link-text">
+                        해당 프로젝트로 이동하기
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 32 32"
+                          width="16"
+                          height="16"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="m21 16-9.65 10L10 24.6l8.298-8.6L10 7.4 11.35 6z"
+                          ></path>
+                        </svg>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <button type="button" class="company-bookmark-btn">
+                  <div class="bookmark-icon-wrapper">
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M12 17.25L18.75 21V3.75H5.25V21L12 17.25ZM6.75 18.4507L12 15.5341L17.25 18.4507V5.25H6.75V18.4507Z"
+                        fill="#CDCCC6"
+                      ></path>
+                    </svg>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <!-- 관련된 다른 프로젝트들 섹션 - 채용공고 스타일 -->
+            <section class="related-projects-section">
+              <h3 class="related-projects-title">
+                다른 프로젝트도 확인해보세요
+              </h3>
+              <ul class="job-style-projects-grid">
+                <!-- 프로젝트 1 -->
+                <li class="job-style-project-item">
+                  <a href="project2-detail.html" class="job-style-project-link">
+                    <div class="job-style-project-card">
+                      <div class="project-image-container">
+                        <div class="project-thumbnail">⌚</div>
+                        <div class="bookmark-button-container">
+                          <button type="button" class="bookmark-button">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 32 32"
+                              class="bookmark-icon"
+                              width="16"
+                              height="16"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-width="2"
+                                d="M15.514 22.126 8 26.3V6h16v20.3l-7.514-4.174-.486-.27z"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <header class="project-header-info">
+                        <strong class="project-title-main">
+                          스크롤 시계 애니메이션
+                        </strong>
+                        <div class="project-company-name">
+                          개인 연구 프로젝트
+                        </div>
+                      </header>
+                      <div class="project-tags-container">
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">3주 완성</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">GSAP/ScrollTrigger</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">로컬 프로젝트</div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+
+                <!-- 프로젝트 2 -->
+                <li class="job-style-project-item">
+                  <a href="project3-detail.html" class="job-style-project-link">
+                    <div class="job-style-project-card">
+                      <div class="project-image-container">
+                        <div class="project-thumbnail">📋</div>
+                        <div class="bookmark-button-container">
+                          <button type="button" class="bookmark-button">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 32 32"
+                              class="bookmark-icon"
+                              width="16"
+                              height="16"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-width="2"
+                                d="M15.514 22.126 8 26.3V6h16v20.3l-7.514-4.174-.486-.27z"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <header class="project-header-info">
+                        <strong class="project-title-main">
+                          리액트 멀티스텝 폼 블로그
+                        </strong>
+                        <div class="project-company-name">개인 개발</div>
+                      </header>
+                      <div class="project-tags-container">
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">진행중</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">React/TypeScript</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">프리뷰 가능</div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+
+                <!-- 프로젝트 3 -->
+                <li class="job-style-project-item">
+                  <a href="project4-detail.html" class="job-style-project-link">
+                    <div class="job-style-project-card">
+                      <div class="project-image-container">
+                        <div class="project-thumbnail">⚡</div>
+                        <div class="bookmark-button-container">
+                          <button type="button" class="bookmark-button">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 32 32"
+                              class="bookmark-icon"
+                              width="16"
+                              height="16"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-width="2"
+                                d="M15.514 22.126 8 26.3V6h16v20.3l-7.514-4.174-.486-.27z"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <header class="project-header-info">
+                        <div class="project-title-main">
+                          Vanilla JS 어플리케이션 구현
+                        </div>
+                        <div class="project-company-name">
+                          개인 학습 프로젝트
+                        </div>
+                      </header>
+                      <div class="project-tags-container">
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">3개월 완성</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">Vanilla JS/Vite</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">라이브 배포</div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+
+                <!-- 프로젝트 4 -->
+                <li class="job-style-project-item">
+                  <a href="project5-detail.html" class="job-style-project-link">
+                    <div class="job-style-project-card">
+                      <div class="project-image-container">
+                        <div class="project-thumbnail">🎨</div>
+                        <div class="bookmark-button-container">
+                          <button type="button" class="bookmark-button">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 32 32"
+                              class="bookmark-icon"
+                              width="16"
+                              height="16"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-width="2"
+                                d="M15.514 22.126 8 26.3V6h16v20.3l-7.514-4.174-.486-.27z"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <header class="project-header-info">
+                        <div class="project-title-main">
+                          PR&Communications Manager, 반응형 UI
+                        </div>
+                        <div class="project-company-name">
+                          프리랜서 프로젝트
+                        </div>
+                      </header>
+                      <div class="project-tags-container">
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">6주 완성</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">CSS/JavaScript</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">클라이언트 납품</div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+
+                <!-- 프로젝트 5 -->
+                <li class="job-style-project-item">
+                  <a href="project6-detail.html" class="job-style-project-link">
+                    <div class="job-style-project-card">
+                      <div class="project-image-container">
+                        <div class="project-thumbnail">📱</div>
+                        <div class="bookmark-button-container">
+                          <button type="button" class="bookmark-button">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 32 32"
+                              class="bookmark-icon"
+                              width="16"
+                              height="16"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-width="2"
+                                d="M15.514 22.126 8 26.3V6h16v20.3l-7.514-4.174-.486-.27z"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <header class="project-header-info">
+                        <div class="project-title-main">
+                          Communications Manager 모바일 최적화
+                        </div>
+                        <div class="project-company-name">스타트업 협업</div>
+                      </header>
+                      <div class="project-tags-container">
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">4주 완성</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">PWA/Mobile</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">협업 보상</div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+
+                <!-- 프로젝트 6 -->
+                <li class="job-style-project-item">
+                  <a href="project7-detail.html" class="job-style-project-link">
+                    <div class="job-style-project-card">
+                      <div class="project-image-container">
+                        <div class="project-thumbnail">🔧</div>
+                        <div class="bookmark-button-container">
+                          <button type="button" class="bookmark-button">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 32 32"
+                              class="bookmark-icon"
+                              width="16"
+                              height="16"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-width="2"
+                                d="M15.514 22.126 8 26.3V6h16v20.3l-7.514-4.174-.486-.27z"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <header class="project-header-info">
+                        <div class="project-title-main">
+                          IMC본부 PR AE 개발도구 최적화
+                        </div>
+                        <div class="project-company-name">도구 개발 연구</div>
+                      </header>
+                      <div class="project-tags-container">
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">5주 연구</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">DevTools/Node.js</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">오픈소스</div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </section>
+          </div>
+
+          <!-- 사이드바 - 데스크톱에서는 sticky -->
+          <aside class="sidebar">
+            <div class="sidebar-inner">
+              <ul class="project-list">
+                <li class="project-item">
+                  <span class="project-subject">개발기간</span>
+                  <span class="project-content">2025.07 (2주)</span>
+                </li>
+                <li class="project-item">
+                  <span class="project-subject">프로젝트 타입</span>
+                  <span class="project-content">개인 연구</span>
+                </li>
+                <li class="project-item">
+                  <span class="project-subject">상태</span>
+                  <span class="project-content">로컬완료</span>
+                </li>
+              </ul>
+              <div class="project-util">
+                <ul class="box-list">
+                  <li class="box-item source-code">
+                    <a href="javascript:void(0);" class="sidebar-button">
+                      Source Code
+                    </a>
+                  </li>
+                  <li class="box-item preview">
+                    <a href="" class="sidebar-button"> Demo </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- 하단 네비게이션 -->
+      <section class="bottom-navigation">
+        <div class="container">
+          <a href="./portfolio.html" class="back-button">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 32 32"
+              width="16"
+              height="16"
+            >
+              <path
+                fill="currentColor"
+                d="m10 16 9.65-10L21 7.4 12.702 16 21 24.6 19.65 26z"
+              ></path>
+            </svg>
+            <span>포트폴리오 목록으로 돌아가기</span>
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      // /portfolio/mobile-sticky-menu-fixed.html - 모바일 스티키 메뉴 위치 버그 수정된 시스템
+
+      class StickyMenuApplicationController {
+        constructor() {
+          console.log('스티키 메뉴 앱 초기화 시작');
+
+          // DOM 요소들 구조분해할당으로 안전하게 참조
+          const {
+            headerElement = null,
+            navigationElement = null,
+            menuListElement = null,
+            menuItemElements = [],
+            sectionElements = [],
+            infoHeaderElement = null,
+          } = this.extractDomElementsWithFallback();
+
+          this.domElementsReference = {
+            headerElement,
+            navigationElement,
+            menuListElement,
+            menuItemElements,
+            sectionElements,
+            infoHeaderElement,
+          };
+
+          // 스크롤 상태 관리 객체
+          this.scrollStateDataContainer = {
+            currentScrollPositionY: 0,
+            headerElementCalculatedHeight: headerElement
+              ? headerElement.offsetHeight
+              : 60,
+            menuActivationTriggerPoint: 0,
+            menuDeactivationTriggerPoint: 0,
+            isHeaderElementInStickyMode: false,
+            isMenuElementInStickyMode: false,
+            isInfoHeaderElementCurrentlyVisible: false,
+            menuElementOriginalWidthPixels: 0,
+            // 스크롤 중 클릭 방지를 위한 새로운 플래그들
+            isUserCurrentlyScrolling: false,
+            scrollDetectionTimeoutId: null,
+            lastScrollTimestamp: 0,
+            scrollVelocity: 0,
+            previousScrollPosition: 0,
+          };
+
+          // 드래그 상태 관리 객체 (개선된 버전)
+          this.dragInteractionStateContainer = {
+            isDragOperationCurrentlyActive: false,
+            dragStartPositionXCoordinate: 0,
+            dragInitialScrollLeftOffset: 0,
+            hasUserMovedDuringDragOperation: false,
+            dragStartTimestamp: 0,
+            minimumDragDurationMs: 100, // 최소 드래그 지속 시간
+            minimumDragDistancePixels: 5, // 최소 드래그 거리
+          };
+
+          this.initializeCompleteApplication();
+        }
+
+        // DOM 요소 추출 메서드 (구조분해할당과 fallback 적용)
+        extractDomElementsWithFallback() {
+          console.log('DOM 요소 추출 및 fallback 설정 시작');
+
+          const headerElement = document.getElementById('mainHeader');
+          const navigationElement = document.getElementById('navigationMenu');
+          const menuListElement = document.getElementById('menuList');
+          const menuItemElements = document.querySelectorAll('.menu-item');
+          const sectionElements = document.querySelectorAll('.content-section');
+          const infoHeaderElement = document.getElementById('infoHeader');
+
+          // 각 요소에 대한 존재 여부 검증 및 디버깅
+          const elementValidationResults = {
+            headerElement: headerElement !== null,
+            navigationElement: navigationElement !== null,
+            menuListElement: menuListElement !== null,
+            menuItemElements: menuItemElements.length > 0,
+            sectionElements: sectionElements.length > 0,
+            infoHeaderElement: infoHeaderElement !== null,
+          };
+
+          console.log('DOM 요소 검증 결과:', elementValidationResults);
+
+          return {
+            headerElement,
+            navigationElement,
+            menuListElement,
+            menuItemElements: Array.from(menuItemElements),
+            sectionElements: Array.from(sectionElements),
+            infoHeaderElement,
+          };
+        }
+
+        // 애플리케이션 초기화 메서드
+        initializeCompleteApplication() {
+          console.log('스티키 메뉴 앱 초기화 진행');
+
+          this.calculateAllTriggerPositionsAccurately();
+          this.bindAllRequiredEventListeners();
+          this.updateCurrentScrollStateInformation();
+
+          // 정보 헤더 초기 상태 설정
+          const { infoHeaderElement = null } = this.domElementsReference;
+          if (infoHeaderElement) {
+            infoHeaderElement.style.display = 'none';
+          }
+
+          console.log('초기 트리거 포인트 계산 완료:', {
+            menuActivationTriggerPoint:
+              this.scrollStateDataContainer.menuActivationTriggerPoint,
+            menuDeactivationTriggerPoint:
+              this.scrollStateDataContainer.menuDeactivationTriggerPoint,
+          });
+        }
+
+        // 트리거 포인트 계산 메서드
+        calculateAllTriggerPositionsAccurately() {
+          console.log('트리거 포인트 정확한 계산 시작');
+
+          const { navigationElement = null } = this.domElementsReference;
+
+          if (!navigationElement) {
+            console.warn('네비게이션 요소를 찾을 수 없어 계산을 건너뜁니다');
+            return;
+          }
+
+          // 네비게이션 메뉴의 현재 위치 정보 계산
+          const navigationElementRect =
+            navigationElement.getBoundingClientRect();
+          const currentPageScrollY = window.scrollY || 0;
+
+          this.scrollStateDataContainer.menuActivationTriggerPoint =
+            navigationElementRect.top +
+            currentPageScrollY -
+            this.scrollStateDataContainer.headerElementCalculatedHeight;
+
+          // 원본 메뉴 너비 저장
+          this.scrollStateDataContainer.menuElementOriginalWidthPixels =
+            navigationElement.offsetWidth || 0;
+
+          // 메뉴 비활성화 포인트 계산
+          const resumeContentSectionElement =
+            document.querySelector('.resume-section');
+          const menuElementCalculatedHeight =
+            navigationElement.offsetHeight || 60;
+
+          if (resumeContentSectionElement) {
+            const {
+              offsetTop: resumeSectionTop = 0,
+              offsetHeight: resumeSectionHeight = 0,
+            } = resumeContentSectionElement;
+
+            this.scrollStateDataContainer.menuDeactivationTriggerPoint =
+              resumeSectionTop +
+              resumeSectionHeight -
+              menuElementCalculatedHeight;
+          } else {
+            console.warn('resume-section 요소를 찾을 수 없음');
+            this.scrollStateDataContainer.menuDeactivationTriggerPoint = 9999999;
+          }
+
+          console.log('계산된 트리거 포인트들:', {
+            menuActivationTriggerPoint:
+              this.scrollStateDataContainer.menuActivationTriggerPoint,
+            menuDeactivationTriggerPoint:
+              this.scrollStateDataContainer.menuDeactivationTriggerPoint,
+          });
+        }
+
+        // ✅ 모바일 전용 트리거 포인트 재계산 메서드 추가
+        recalculateTriggersForMobile() {
+          console.log('모바일용 트리거 포인트 재계산 시작');
+
+          // 모바일에서는 실제로 보이는 navigation 요소 찾기
+          const visibleNavigationElement = document.querySelector(
+            '.navigation-menu:not([style*="display: none"])'
+          );
+
+          if (visibleNavigationElement) {
+            const navigationRect =
+              visibleNavigationElement.getBoundingClientRect();
+            const currentScrollY = window.scrollY || 0;
+
+            const previousTriggerPoint =
+              this.scrollStateDataContainer.menuActivationTriggerPoint;
+
+            this.scrollStateDataContainer.menuActivationTriggerPoint =
+              navigationRect.top +
+              currentScrollY -
+              this.scrollStateDataContainer.headerElementCalculatedHeight;
+
+            console.log('모바일 트리거 포인트 업데이트:', {
+              previousTriggerPoint,
+              newTriggerPoint:
+                this.scrollStateDataContainer.menuActivationTriggerPoint,
+              navigationRect: {
+                top: navigationRect.top,
+                currentScrollY,
+                headerHeight:
+                  this.scrollStateDataContainer.headerElementCalculatedHeight,
+              },
+            });
+
+            // 원본 메뉴 너비도 다시 저장
+            this.scrollStateDataContainer.menuElementOriginalWidthPixels =
+              visibleNavigationElement.offsetWidth || 0;
+
+            // 메뉴 비활성화 포인트도 재계산
+            const resumeContentSectionElement =
+              document.querySelector('.resume-section');
+            const menuElementCalculatedHeight =
+              visibleNavigationElement.offsetHeight || 60;
+
+            if (resumeContentSectionElement) {
+              const {
+                offsetTop: resumeSectionTop = 0,
+                offsetHeight: resumeSectionHeight = 0,
+              } = resumeContentSectionElement;
+
+              this.scrollStateDataContainer.menuDeactivationTriggerPoint =
+                resumeSectionTop +
+                resumeSectionHeight -
+                menuElementCalculatedHeight;
+
+              console.log('모바일 비활성화 포인트 업데이트:', {
+                menuDeactivationTriggerPoint:
+                  this.scrollStateDataContainer.menuDeactivationTriggerPoint,
+              });
+            }
+          } else {
+            console.warn(
+              '모바일에서 보이는 네비게이션 요소를 찾을 수 없습니다'
+            );
+          }
+
+          // 현재 스크롤 상태 다시 확인
+          setTimeout(() => {
+            this.handleScrollEventOccurrence();
+          }, 50);
+        }
+
+        // 이벤트 리스너 바인딩 메서드
+        bindAllRequiredEventListeners() {
+          console.log('이벤트 리스너 바인딩 시작');
+
+          // 스크롤 및 리사이즈 이벤트
+          window.addEventListener('scroll', () =>
+            this.handleScrollEventOccurrence()
+          );
+          window.addEventListener('resize', () =>
+            this.handleWindowResizeEventOccurrence()
+          );
+
+          // 드래그 기능 설정
+          this.setupMenuDragFunctionalityWithTouchSupport();
+        }
+
+        // 스크롤 이벤트 핸들러 (개선된 버전)
+        handleScrollEventOccurrence() {
+          this.updateCurrentScrollStateInformation();
+          this.detectUserScrollingState(); // 새로운 스크롤 감지 로직
+          this.updateStickyMenuActivationState();
+          this.updateActiveMenuItemSelectionState();
+          this.updateInfoHeaderVisibilityState();
+        }
+
+        // 사용자 스크롤 상태 감지 메서드 (새로 추가)
+        detectUserScrollingState() {
+          const currentTimestamp = Date.now();
+          const {
+            currentScrollPositionY,
+            previousScrollPosition,
+            lastScrollTimestamp,
+          } = this.scrollStateDataContainer;
+
+          // 스크롤 속도 계산
+          const timeDelta = currentTimestamp - lastScrollTimestamp;
+          const scrollDelta = Math.abs(
+            currentScrollPositionY - previousScrollPosition
+          );
+
+          if (timeDelta > 0) {
+            this.scrollStateDataContainer.scrollVelocity =
+              scrollDelta / timeDelta;
+          }
+
+          // 스크롤 중 플래그 설정
+          if (scrollDelta > 1) {
+            // 1px 이상 움직임이 있으면 스크롤 중으로 판단
+            this.scrollStateDataContainer.isUserCurrentlyScrolling = true;
+
+            console.log('사용자 스크롤 감지됨:', {
+              scrollVelocity: this.scrollStateDataContainer.scrollVelocity,
+              scrollDelta,
+              currentPosition: currentScrollPositionY,
+            });
+          }
+
+          // 이전 타임아웃 클리어
+          if (this.scrollStateDataContainer.scrollDetectionTimeoutId) {
+            clearTimeout(
+              this.scrollStateDataContainer.scrollDetectionTimeoutId
+            );
+          }
+
+          // 스크롤이 멈춘 후 300ms 후에 스크롤 완료로 판단
+          this.scrollStateDataContainer.scrollDetectionTimeoutId = setTimeout(
+            () => {
+              this.scrollStateDataContainer.isUserCurrentlyScrolling = false;
+              this.scrollStateDataContainer.scrollVelocity = 0;
+              console.log('사용자 스크롤 완료됨');
+            },
+            300
+          );
+
+          // 이전 값들 업데이트
+          this.scrollStateDataContainer.previousScrollPosition =
+            currentScrollPositionY;
+          this.scrollStateDataContainer.lastScrollTimestamp = currentTimestamp;
+        }
+
+        // 현재 스크롤 상태 업데이트
+        updateCurrentScrollStateInformation() {
+          this.scrollStateDataContainer.currentScrollPositionY =
+            window.scrollY || 0;
+        }
+
+        // 스티키 메뉴 상태 업데이트 메서드
+        updateStickyMenuActivationState() {
+          const {
+            currentScrollPositionY = 0,
+            menuActivationTriggerPoint = 0,
+            menuDeactivationTriggerPoint = 0,
+          } = this.scrollStateDataContainer;
+
+          const shouldMenuBeInStickyMode =
+            currentScrollPositionY >= menuActivationTriggerPoint &&
+            currentScrollPositionY <= menuDeactivationTriggerPoint;
+
+          // 스티키 상태 변경이 필요한 경우에만 실행
+          if (
+            shouldMenuBeInStickyMode !==
+            this.scrollStateDataContainer.isMenuElementInStickyMode
+          ) {
+            this.scrollStateDataContainer.isMenuElementInStickyMode =
+              shouldMenuBeInStickyMode;
+
+            shouldMenuBeInStickyMode
+              ? this.activateStickyMenuWithWidthPreservation()
+              : this.deactivateStickyMenuAndRestoreOriginalState();
+          }
+        }
+
+        // 스티키 메뉴 활성화
+        activateStickyMenuWithWidthPreservation() {
+          const { navigationElement = null } = this.domElementsReference;
+          if (!navigationElement) return;
+
+          navigationElement.classList.add('sticky');
+          navigationElement.style.height = `${navigationElement.offsetHeight}px`;
+
+          const { menuElementOriginalWidthPixels = 0 } =
+            this.scrollStateDataContainer;
+
+          if (menuElementOriginalWidthPixels > 0) {
+            navigationElement.style.width = `${menuElementOriginalWidthPixels}px`;
+          }
+
+          console.log('메뉴 스티키 활성화 완료');
+        }
+
+        // 스티키 메뉴 비활성화
+        deactivateStickyMenuAndRestoreOriginalState() {
+          const { navigationElement = null } = this.domElementsReference;
+          if (!navigationElement) return;
+
+          navigationElement.style.height = '';
+          navigationElement.classList.remove('sticky');
+          navigationElement.style.width = '';
+
+          console.log('메뉴 스티키 비활성화 완료');
+        }
+
+        // 정보 헤더 상태 업데이트
+        updateInfoHeaderVisibilityState() {
+          const {
+            currentScrollPositionY = 0,
+            isInfoHeaderElementCurrentlyVisible = false,
+          } = this.scrollStateDataContainer;
+
+          const techStackSectionElement = document.querySelector('.tech-stack');
+
+          let startTriggerPositionY = 500;
+          let endTriggerPositionY = 1000;
+
+          if (techStackSectionElement) {
+            const {
+              offsetTop: techStackOffsetTop = 0,
+              offsetHeight: techStackOffsetHeight = 0,
+            } = techStackSectionElement;
+
+            startTriggerPositionY = techStackOffsetTop;
+            endTriggerPositionY = techStackOffsetTop + techStackOffsetHeight;
+          }
+
+          const shouldShowInfoHeaderNow =
+            currentScrollPositionY >= startTriggerPositionY &&
+            currentScrollPositionY < endTriggerPositionY;
+
+          if (shouldShowInfoHeaderNow && !isInfoHeaderElementCurrentlyVisible) {
+            this.showInfoHeaderWithAnimation();
+            const sideBar = document.querySelector('.sidebar');
+            sideBar?.classList.add('move');
+            return;
+          }
+
+          if (!shouldShowInfoHeaderNow && isInfoHeaderElementCurrentlyVisible) {
+            this.hideInfoHeaderWithAnimation();
+            const sideBar = document.querySelector('.sidebar');
+            sideBar?.classList.remove('move');
+            return;
+          }
+        }
+
+        // 정보 헤더 표시
+        showInfoHeaderWithAnimation() {
+          const { infoHeaderElement = null, navigationElement = null } =
+            this.domElementsReference;
+
+          if (!infoHeaderElement) return;
+
+          infoHeaderElement.style.display = 'flex';
+
+          setTimeout(() => {
+            infoHeaderElement.classList.add('show');
+
+            if (navigationElement?.classList.contains('sticky')) {
+              navigationElement.style.transform = 'translateY(100%)';
+            }
+          }, 10);
+
+          this.scrollStateDataContainer.isInfoHeaderElementCurrentlyVisible = true;
+        }
+
+        // 정보 헤더 숨김
+        hideInfoHeaderWithAnimation() {
+          const { infoHeaderElement = null, navigationElement = null } =
+            this.domElementsReference;
+
+          if (!infoHeaderElement || !navigationElement) return;
+
+          infoHeaderElement.classList.remove('show');
+          setTimeout(() => {
+            infoHeaderElement.style.display = 'none';
+          }, 200);
+          navigationElement.style.transform = 'none';
+
+          this.scrollStateDataContainer.isInfoHeaderElementCurrentlyVisible = false;
+        }
+
+        // 활성 메뉴 아이템 상태 업데이트
+        updateActiveMenuItemSelectionState() {
+          let activeMenuSectionIdentifier = '';
+
+          const { sectionElements = [] } = this.domElementsReference;
+
+          sectionElements.forEach((sectionElement) => {
+            const sectionBoundingRect = sectionElement.getBoundingClientRect();
+            const scrollOffsetCalculated = this.scrollStateDataContainer
+              .isMenuElementInStickyMode
+              ? 120
+              : 60;
+
+            const isSectionCurrentlyVisible =
+              sectionBoundingRect.top <= scrollOffsetCalculated &&
+              sectionBoundingRect.bottom > scrollOffsetCalculated;
+
+            if (isSectionCurrentlyVisible) {
+              activeMenuSectionIdentifier = sectionElement.id || '';
+            }
+          });
+
+          if (activeMenuSectionIdentifier) {
+            this.setActiveMenuItemByTargetId(activeMenuSectionIdentifier);
+          }
+        }
+
+        // 활성 메뉴 아이템 설정
+        setActiveMenuItemByTargetId(targetSectionIdentifier) {
+          const { menuItemElements = [] } = this.domElementsReference;
+
+          menuItemElements.forEach((menuItemElement) =>
+            menuItemElement.classList.remove('active')
+          );
+
+          const targetMenuItemElement = document.querySelector(
+            `[data-target="${targetSectionIdentifier}"]`
+          );
+
+          if (targetMenuItemElement) {
+            targetMenuItemElement.classList.add('active');
+            this.scrollMenuToActiveItemCenter(targetMenuItemElement);
+          }
+        }
+
+        // 활성 메뉴 아이템을 보이는 위치로 스크롤
+        scrollMenuToActiveItemCenter(activeMenuItemElement) {
+          const { menuListElement = null } = this.domElementsReference;
+
+          if (!menuListElement || !activeMenuItemElement) return;
+
+          const menuListBoundingRect = menuListElement.getBoundingClientRect();
+          const menuItemBoundingRect =
+            activeMenuItemElement.getBoundingClientRect();
+
+          const isItemOutOfViewport =
+            menuItemBoundingRect.left < menuListBoundingRect.left ||
+            menuItemBoundingRect.right > menuListBoundingRect.right;
+
+          if (isItemOutOfViewport) {
+            // activeMenuItemElement.scrollIntoView({
+            //   behavior: 'smooth',
+            //   inline: 'center',
+            // });
+          }
+        }
+
+        // ✅ 개선된 리사이즈 이벤트 핸들러
+        handleWindowResizeEventOccurrence() {
+          console.log('리사이즈 이벤트 감지됨');
+
+          this.scrollStateDataContainer.menuActivationTriggerPoint = 0;
+          this.scrollStateDataContainer.menuDeactivationTriggerPoint = 0;
+
+          setTimeout(() => {
+            // 모바일 레이아웃이 활성화된 상태라면 모바일 전용 재계산 사용
+            if (
+              window.responsiveDomController &&
+              window.responsiveDomController.viewportStateTracker
+                .isMobileLayoutActive
+            ) {
+              this.recalculateTriggersForMobile();
+            } else {
+              this.calculateAllTriggerPositionsAccurately();
+            }
+            this.handleScrollEventOccurrence();
+          }, 100);
+        }
+
+        // 메뉴 드래그 기능 설정 (개선된 버전)
+        setupMenuDragFunctionalityWithTouchSupport() {
+          const { menuListElement = null } = this.domElementsReference;
+
+          if (!menuListElement) return;
+
+          // 마우스 이벤트
+          menuListElement.addEventListener('mousedown', (mouseDownEvent) =>
+            this.handleDragStartInteraction(mouseDownEvent)
+          );
+          menuListElement.addEventListener('mousemove', (mouseMoveEvent) =>
+            this.handleDragMoveInteraction(mouseMoveEvent)
+          );
+          menuListElement.addEventListener('mouseup', () =>
+            this.handleDragEndInteraction()
+          );
+          menuListElement.addEventListener('mouseleave', () =>
+            this.handleDragEndInteraction()
+          );
+
+          // 터치 이벤트
+          menuListElement.addEventListener('touchstart', (touchStartEvent) =>
+            this.handleDragStartInteraction(touchStartEvent)
+          );
+          menuListElement.addEventListener('touchmove', (touchMoveEvent) =>
+            this.handleDragMoveInteraction(touchMoveEvent)
+          );
+          menuListElement.addEventListener('touchend', () =>
+            this.handleDragEndInteraction()
+          );
+        }
+
+        // 드래그 시작 핸들러 (개선된 버전)
+        handleDragStartInteraction(dragStartEvent) {
+          const currentTimestamp = Date.now();
+
+          this.dragInteractionStateContainer.isDragOperationCurrentlyActive = true;
+          this.dragInteractionStateContainer.hasUserMovedDuringDragOperation = false;
+          this.dragInteractionStateContainer.dragStartTimestamp =
+            currentTimestamp;
+
+          const clientXPositionCoordinate = dragStartEvent.type.includes(
+            'touch'
+          )
+            ? dragStartEvent.touches[0].clientX
+            : dragStartEvent.clientX;
+
+          const { menuListElement = null } = this.domElementsReference;
+          if (!menuListElement) return;
+
+          this.dragInteractionStateContainer.dragStartPositionXCoordinate =
+            clientXPositionCoordinate - menuListElement.offsetLeft;
+          this.dragInteractionStateContainer.dragInitialScrollLeftOffset =
+            menuListElement.scrollLeft;
+
+          menuListElement.classList.add('dragging');
+
+          console.log('드래그 시작:', { timestamp: currentTimestamp });
+        }
+
+        // 드래그 이동 핸들러 (개선된 버전)
+        handleDragMoveInteraction(dragMoveEvent) {
+          if (
+            !this.dragInteractionStateContainer.isDragOperationCurrentlyActive
+          )
+            return;
+
+          dragMoveEvent.preventDefault();
+
+          const clientXPositionCoordinate = dragMoveEvent.type.includes('touch')
+            ? dragMoveEvent.touches[0].clientX
+            : dragMoveEvent.clientX;
+
+          const { menuListElement = null } = this.domElementsReference;
+          if (!menuListElement) return;
+
+          const currentXPositionCoordinate =
+            clientXPositionCoordinate - menuListElement.offsetLeft;
+          const walkDistanceCalculated =
+            (currentXPositionCoordinate -
+              this.dragInteractionStateContainer.dragStartPositionXCoordinate) *
+            2;
+
+          // 최소 드래그 거리 체크
+          const totalDragDistance = Math.abs(walkDistanceCalculated);
+          if (
+            totalDragDistance >
+            this.dragInteractionStateContainer.minimumDragDistancePixels
+          ) {
+            this.dragInteractionStateContainer.hasUserMovedDuringDragOperation = true;
+            console.log('드래그 움직임 감지됨, 거리:', totalDragDistance);
+          }
+
+          menuListElement.scrollLeft =
+            this.dragInteractionStateContainer.dragInitialScrollLeftOffset -
+            walkDistanceCalculated;
+        }
+
+        // 드래그 종료 핸들러 (개선된 버전)
+        handleDragEndInteraction() {
+          if (
+            !this.dragInteractionStateContainer.isDragOperationCurrentlyActive
+          )
+            return;
+
+          const currentTimestamp = Date.now();
+          const dragDuration =
+            currentTimestamp -
+            this.dragInteractionStateContainer.dragStartTimestamp;
+
+          console.log('드래그 종료:', {
+            duration: dragDuration,
+            hasMoved:
+              this.dragInteractionStateContainer
+                .hasUserMovedDuringDragOperation,
+          });
+
+          this.dragInteractionStateContainer.isDragOperationCurrentlyActive = false;
+
+          const { menuListElement = null } = this.domElementsReference;
+          if (menuListElement) {
+            menuListElement.classList.remove('dragging');
+          }
+
+          // 드래그 상태를 일정 시간 유지하여 즉시 클릭으로 인식되는 것을 방지
+          setTimeout(() => {
+            this.dragInteractionStateContainer.hasUserMovedDuringDragOperation = false;
+            console.log('드래그 상태 초기화 완료');
+          }, 150);
+        }
+      }
+
+      // 반응형 DOM 재구성 컨트롤러 클래스 추가
+      class ResponsiveDomRestructureController {
+        constructor() {
+          console.log('반응형 DOM 재구성 컨트롤러 초기화 시작');
+
+          // DOM 요소들의 원본 저장
+          this.originalDomElementsStorage = {
+            projectCompanyAndTitleWrapper: null,
+            projectIntroSection: null,
+            sidebarElement: null,
+            sidebarInnerElement: null,
+            projectUtilElement: null,
+          };
+
+          // 현재 뷰포트 상태 추적
+          this.viewportStateTracker = {
+            currentViewportWidth: window.innerWidth,
+            isMobileLayoutActive: false,
+            isDesktopLayoutActive: false,
+          };
+
+          this.initializeResponsiveLayoutSystem();
+        }
+
+        // 반응형 레이아웃 시스템 초기화
+        initializeResponsiveLayoutSystem() {
+          console.log('반응형 레이아웃 시스템 초기화');
+
+          this.storeOriginalDomElements();
+          this.bindViewportResizeEventListener();
+          this.applyInitialLayoutBasedOnViewport();
+        }
+
+        // 원본 DOM 요소들 저장
+        storeOriginalDomElements() {
+          console.log('원본 DOM 요소들 저장 시작');
+
+          const projectCompanyAndTitleWrapper = document.querySelector(
+            '.project-company-and-title-wrapper'
+          );
+          const projectIntroSection = document.querySelector(
+            '.project-intro-section'
+          );
+          const sidebarElement = document.querySelector('.sidebar');
+          const sidebarInnerElement = document.querySelector('.sidebar-inner');
+          const projectUtilElement = document.querySelector('.project-util');
+
+          // 원본 요소들의 부모와 위치 정보 저장
+          this.originalDomElementsStorage = {
+            projectCompanyAndTitleWrapper: {
+              element: projectCompanyAndTitleWrapper,
+              originalParent: projectCompanyAndTitleWrapper?.parentElement,
+              originalNextSibling:
+                projectCompanyAndTitleWrapper?.nextElementSibling,
+            },
+            projectIntroSection: {
+              element: projectIntroSection,
+              originalParent: projectIntroSection?.parentElement,
+              originalNextSibling: projectIntroSection?.nextElementSibling,
+            },
+            sidebarElement: {
+              element: sidebarElement,
+              originalParent: sidebarElement?.parentElement,
+              originalNextSibling: sidebarElement?.nextElementSibling,
+            },
+            sidebarInnerElement: {
+              element: sidebarInnerElement,
+              originalParent: sidebarInnerElement?.parentElement,
+              originalNextSibling: sidebarInnerElement?.nextElementSibling,
+            },
+            projectUtilElement: {
+              element: projectUtilElement,
+              originalParent: projectUtilElement?.parentElement,
+              originalNextSibling: projectUtilElement?.nextElementSibling,
+            },
+          };
+
+          console.log(
+            '원본 DOM 요소 저장 완료:',
+            this.originalDomElementsStorage
+          );
+        }
+
+        // 뷰포트 리사이즈 이벤트 리스너 바인딩
+        bindViewportResizeEventListener() {
+          console.log('뷰포트 리사이즈 이벤트 리스너 바인딩');
+
+          let resizeTimeoutId = null;
+
+          window.addEventListener('resize', () => {
+            // 디바운싱으로 성능 최적화
+            if (resizeTimeoutId) {
+              clearTimeout(resizeTimeoutId);
+            }
+
+            resizeTimeoutId = setTimeout(() => {
+              const newViewportWidth = window.innerWidth;
+              console.log('뷰포트 크기 변경 감지:', {
+                previousWidth: this.viewportStateTracker.currentViewportWidth,
+                newWidth: newViewportWidth,
+              });
+
+              this.viewportStateTracker.currentViewportWidth = newViewportWidth;
+              this.handleViewportSizeChangeEvent();
+            }, 150);
+          });
+        }
+
+        // 초기 레이아웃 적용
+        applyInitialLayoutBasedOnViewport() {
+          console.log('초기 레이아웃 적용');
+          this.handleViewportSizeChangeEvent();
+        }
+
+        // 뷰포트 크기 변경 이벤트 처리
+        handleViewportSizeChangeEvent() {
+          const currentViewportWidth =
+            this.viewportStateTracker.currentViewportWidth;
+
+          console.log('뷰포트 크기 변경 처리:', {
+            currentWidth: currentViewportWidth,
+            isMobileActive: this.viewportStateTracker.isMobileLayoutActive,
+            isDesktopActive: this.viewportStateTracker.isDesktopLayoutActive,
+          });
+
+          if (currentViewportWidth >= 350 && currentViewportWidth < 768) {
+            // 모바일 레이아웃 적용 (350px 이상 768px 미만)
+            if (!this.viewportStateTracker.isMobileLayoutActive) {
+              this.activateMobileLayoutConfiguration();
+            }
+          } else if (currentViewportWidth >= 768) {
+            // 데스크톱 레이아웃 적용 (768px 이상)
+            if (!this.viewportStateTracker.isDesktopLayoutActive) {
+              this.activateDesktopLayoutConfiguration();
+            }
+          }
+        }
+
+        // ✅ 모바일 레이아웃 활성화 (수정된 버전)
+        activateMobileLayoutConfiguration() {
+          console.log('모바일 레이아웃 활성화 시작');
+
+          try {
+            // 1. project-company-and-title-wrapper 숨기기
+            const projectCompanyAndTitleWrapper =
+              this.originalDomElementsStorage.projectCompanyAndTitleWrapper
+                .element;
+            if (projectCompanyAndTitleWrapper) {
+              projectCompanyAndTitleWrapper.style.display = 'none';
+              console.log('project-company-and-title-wrapper 숨김 완료');
+            }
+
+            // 2. 기존 sidebar와 project-intro-section 숨기기
+            const sidebarElement =
+              this.originalDomElementsStorage.sidebarElement.element;
+            const projectIntroSection =
+              this.originalDomElementsStorage.projectIntroSection.element;
+
+            if (sidebarElement) {
+              sidebarElement.style.display = 'none';
+              console.log('원본 sidebar 숨김 완료');
+            }
+
+            if (projectIntroSection) {
+              projectIntroSection.style.display = 'none';
+              console.log('원본 project-intro-section 숨김 완료');
+            }
+
+            // 3. mobile-sidebar 생성 및 구성
+            this.createMobileSidebarLayout();
+
+            // 상태 업데이트
+            this.viewportStateTracker.isMobileLayoutActive = true;
+            this.viewportStateTracker.isDesktopLayoutActive = false;
+
+            // ✅ DOM 변경 후 트리거 포인트 재계산 추가
+            setTimeout(() => {
+              if (window.stickyMenuController) {
+                window.stickyMenuController.recalculateTriggersForMobile();
+              }
+            }, 100); // DOM 변경이 완전히 적용된 후 실행
+
+            console.log('모바일 레이아웃 활성화 완료');
+          } catch (error) {
+            console.error('모바일 레이아웃 활성화 중 오류 발생:', error);
+          }
+        }
+
+        // 모바일 사이드바 레이아웃 생성
+        createMobileSidebarLayout() {
+          console.log('모바일 사이드바 레이아웃 생성 시작');
+
+          // 기존 mobile-sidebar가 있으면 제거
+          const existingMobileSidebar =
+            document.querySelector('.mobile-sidebar');
+          if (existingMobileSidebar) {
+            existingMobileSidebar.remove();
+            console.log('기존 mobile-sidebar 제거 완료');
+          }
+
+          // 새로운 mobile-sidebar 생성
+          const mobileSidebarContainer = document.createElement('div');
+          mobileSidebarContainer.className = 'mobile-sidebar';
+
+          // content-body 다음에 삽입
+          const contentBodyElement = document.querySelector('.content-body');
+          if (!contentBodyElement) {
+            console.error('content-body 요소를 찾을 수 없습니다');
+            return;
+          }
+
+          // 1. project-company-and-title-wrapper 복사 및 추가
+          const originalProjectCompanyWrapper =
+            this.originalDomElementsStorage.projectCompanyAndTitleWrapper
+              .element;
+          if (originalProjectCompanyWrapper) {
+            const clonedProjectCompanyWrapper =
+              originalProjectCompanyWrapper.cloneNode(true);
+            clonedProjectCompanyWrapper.style.display = 'flex';
+            mobileSidebarContainer.appendChild(clonedProjectCompanyWrapper);
+            console.log('project-company-and-title-wrapper 복사 완료');
+          }
+
+          // 2. project-intro-section 복사 및 추가
+          const originalProjectIntroSection =
+            this.originalDomElementsStorage.projectIntroSection.element;
+          if (originalProjectIntroSection) {
+            const clonedProjectIntroSection =
+              originalProjectIntroSection.cloneNode(true);
+            clonedProjectIntroSection.style.display = 'flex';
+            mobileSidebarContainer.appendChild(clonedProjectIntroSection);
+            console.log('project-intro-section 복사 완료');
+          }
+
+          // 3. sidebar-inner 복사 및 추가
+          const originalSidebarInner =
+            this.originalDomElementsStorage.sidebarInnerElement.element;
+          if (originalSidebarInner) {
+            const clonedSidebarInner = originalSidebarInner.cloneNode(true);
+            mobileSidebarContainer.appendChild(clonedSidebarInner);
+            console.log('sidebar-inner 복사 완료');
+          }
+
+          // mobile-sidebar를 content-body 다음에 삽입
+          contentBodyElement.parentElement.insertBefore(
+            mobileSidebarContainer,
+            contentBodyElement.nextElementSibling
+          );
+
+          console.log('모바일 사이드바 레이아웃 생성 완료');
+        }
+
+        // 데스크톱 레이아웃 활성화
+        activateDesktopLayoutConfiguration() {
+          console.log('데스크톱 레이아웃 활성화 시작');
+
+          try {
+            // 1. project-company-and-title-wrapper 보이기
+            const projectCompanyAndTitleWrapper =
+              this.originalDomElementsStorage.projectCompanyAndTitleWrapper
+                .element;
+            if (projectCompanyAndTitleWrapper) {
+              projectCompanyAndTitleWrapper.style.display = 'flex';
+              console.log('project-company-and-title-wrapper 표시 완료');
+            }
+
+            // 2. 원본 sidebar와 project-intro-section 보이기
+            const sidebarElement =
+              this.originalDomElementsStorage.sidebarElement.element;
+            const projectIntroSection =
+              this.originalDomElementsStorage.projectIntroSection.element;
+
+            if (sidebarElement) {
+              sidebarElement.style.display = 'block';
+              console.log('원본 sidebar 표시 완료');
+            }
+
+            if (projectIntroSection) {
+              projectIntroSection.style.display = 'flex';
+              console.log('원본 project-intro-section 표시 완료');
+            }
+
+            // 3. mobile-sidebar 제거
+            this.removeMobileSidebarLayout();
+
+            // 상태 업데이트
+            this.viewportStateTracker.isMobileLayoutActive = false;
+            this.viewportStateTracker.isDesktopLayoutActive = true;
+
+            // ✅ 데스크톱으로 변경 시에도 트리거 포인트 재계산
+            setTimeout(() => {
+              if (window.stickyMenuController) {
+                window.stickyMenuController.calculateAllTriggerPositionsAccurately();
+                window.stickyMenuController.handleScrollEventOccurrence();
+              }
+            }, 100);
+
+            console.log('데스크톱 레이아웃 활성화 완료');
+          } catch (error) {
+            console.error('데스크톱 레이아웃 활성화 중 오류 발생:', error);
+          }
+        }
+
+        // 모바일 사이드바 레이아웃 제거
+        removeMobileSidebarLayout() {
+          console.log('모바일 사이드바 레이아웃 제거 시작');
+
+          const mobileSidebarElement =
+            document.querySelector('.mobile-sidebar');
+          if (mobileSidebarElement) {
+            mobileSidebarElement.remove();
+            console.log('mobile-sidebar 제거 완료');
+          }
+        }
+      }
+
+      // 사이드바 버튼 핸들러들
+      const handleDownloadAction = () => {
+        console.log('소스코드 다운로드 액션 실행');
+        alert('소스코드 다운로드 기능을 준비 중입니다.');
+      };
+
+      const handlePreviewAction = () => {
+        console.log('Demo 액션 실행');
+        alert('Demo 기능을 준비 중입니다.');
+      };
+
+      // 전역 함수로 내보내기
+      window.handleDownloadAction = handleDownloadAction;
+      window.handlePreviewAction = handlePreviewAction;
+
+      // DOM 로딩 완료 후 앱 초기화
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM 로딩 완료, 앱 시작');
+
+        // ✅ 스티키 메뉴 컨트롤러 초기화 및 전역 참조 저장
+        window.stickyMenuController = new StickyMenuApplicationController();
+
+        // ✅ 반응형 DOM 재구성 컨트롤러 초기화 및 전역 참조 저장
+        window.responsiveDomController =
+          new ResponsiveDomRestructureController();
+      });
+    </script>
+  </body>
+</html>

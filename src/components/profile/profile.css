@@ -1,0 +1,476 @@
+/* /src/components/profile/profile.css */
+
+/* Profile Sidebar */
+.profile-sidebar {
+  flex: 0 0 383px;
+  position: sticky;
+  height: fit-content;
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  top: 70px;
+  background-color: var(--bg-card);
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme='dark'] .profile-sidebar {
+  box-shadow: var(--card-shadow);
+}
+
+/* Profile Content Styles */
+.profile-image {
+  width: 248px;
+  height: 248px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--border-color);
+  margin: 0 auto var(--space-md);
+}
+
+.profile-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-name {
+  display: block;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+  color: var(--text-primary);
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+.profile-username {
+  font-size: var(--font-size-xl);
+  font-weight: 300;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-md);
+  text-align: center;
+}
+
+.profile-bio {
+  font-size: 14px;
+  margin-bottom: var(--space-lg);
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* Profile Contact Section - 업데이트된 스타일 */
+.profile-contact {
+  margin-top: var(--space-lg);
+}
+
+.profile-contact-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.profile-contact-method {
+  width: calc(50% - 5px);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+  background-color: var(--bg-card);
+  box-sizing: border-box;
+  text-decoration: none;
+  color: inherit;
+  flex-direction: column;
+}
+
+.profile-contact-method-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+  font-weight: bold;
+}
+
+.profile-contact-content {
+  flex: 1;
+}
+
+.profile-contact-content h4 {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
+  color: var(--text-primary);
+}
+
+.profile-contact-content p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+  word-break: break-all;
+}
+
+/* Contact Section - 기존 섹션 스타일 (제거 예정) */
+.contact-section {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl);
+  box-shadow: var(--card-shadow);
+  position: relative;
+  border: 1px solid var(--border-color);
+}
+
+[data-theme='dark'] .contact-section {
+  box-shadow: var(--card-shadow);
+}
+
+.contact-content {
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+}
+
+.contact-content h2 {
+  margin-bottom: var(--space-lg);
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.contact-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+}
+
+.contact-method {
+  flex: 1;
+  min-width: 200px;
+  text-align: center;
+  padding: var(--space-lg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+  background-color: var(--bg-secondary);
+}
+
+.contact-method:hover {
+  background-color: var(--bg-card);
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--accent-color);
+}
+
+.contact-method-icon {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto var(--space-md);
+  background-color: var(--accent-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: var(--font-size-lg);
+}
+
+.contact-method h3 {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+  color: var(--text-primary);
+}
+
+.contact-method p {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* 추가된 모바일 미디어쿼리 - 세분화된 반응형 대응 */
+
+/* 1) ≥360px (Galaxy S 등 360 폭 계열) */
+@media (min-width: 360px) {
+  .profile-contact-method-icon {
+    font-size: calc(var(--font-size-sm) + 0.125rem);
+  }
+
+  .profile-contact-content h4 {
+    font-size: calc(var(--font-size-base) + 0.0625rem);
+  }
+
+  .profile-contact-content p {
+    /* font-size: calc(var(--font-size-sm) + 0.0625rem); */
+  }
+}
+
+/* 2) ≥375px (iPhone 375 폭 계열) */
+@media (min-width: 375px) {
+  .profile-contact-method {
+    min-height: 80px;
+  }
+}
+
+/* 3) ≥390px (iPhone Pro 390×844 계열) */
+@media (min-width: 390px) {
+  .profile-contact-method {
+    border-radius: calc(var(--radius-sm) + 0.125rem);
+  }
+
+  .profile-contact-method-icon {
+    font-size: var(--font-size-base);
+  }
+
+  .profile-contact-content h4 {
+    font-size: var(--font-size-lg);
+    margin-bottom: calc(var(--space-xs) + 0.125rem);
+  }
+
+  .profile-contact-content p {
+    /* font-size: var(--font-size-base); */
+  }
+}
+
+/* 4) ≥393px (iPhone 16 / 일부 Android 393 폭) */
+@media (min-width: 393px) {
+  .profile-contact-method:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.1), 0 3px 6px 0 rgba(0, 0, 0, 0.05);
+  }
+}
+
+/* 5) ≥402px (iPhone 16 Pro 402 폭) */
+@media (min-width: 402px) {
+  .profile-contact-method {
+    min-height: 85px;
+  }
+
+  .profile-contact-method-icon {
+    border-radius: calc(var(--radius-sm) + 0.125rem);
+  }
+}
+
+/* 6) ≥412px (Pixel/Android 다수 412 폭) */
+@media (min-width: 412px) {
+  .profile-contact-method {
+    border-radius: var(--radius-lg);
+  }
+
+  .profile-contact-content h4 {
+    margin-bottom: var(--space-sm);
+  }
+}
+
+/* 7) ≥430px (iPhone Plus/Pro Max 430 폭) */
+@media (min-width: 430px) {
+  .profile-contact-method {
+    min-height: 90px;
+  }
+}
+
+/* 8) ≥440px (iPhone 16 Pro Max 440 폭) */
+@media (min-width: 440px) {
+  .profile-contact-method {
+    min-height: 95px;
+  }
+
+  .profile-contact-method-icon {
+    font-size: calc(var(--font-size-base) + 0.125rem);
+  }
+
+  .profile-contact-content h4 {
+    font-size: calc(var(--font-size-lg) + 0.0625rem);
+  }
+}
+
+/* 태블릿 및 데스크톱 개선 */
+@media (min-width: 640px) {
+  .profile-contact-grid {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .profile-contact-method {
+    min-height: 100px;
+  }
+
+  .profile-contact-method-icon {
+    font-size: var(--font-size-lg);
+  }
+
+  .profile-contact-content h4 {
+    font-size: var(--font-size-xl);
+    margin-bottom: calc(var(--space-sm) + 0.125rem);
+  }
+
+  .profile-contact-content p {
+    /* font-size: 0.813rem; */
+  }
+}
+
+/* Responsive Design - 기존 미디어쿼리 유지 및 개선 */
+@media (max-width: 1012px) {
+  .profile-sidebar {
+    flex: none;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-lg);
+    position: static;
+    margin-top: 0;
+  }
+
+  .profile-image {
+    width: 117px;
+    height: 117px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+
+  .profile-info {
+    flex: 1;
+  }
+
+  .profile-name {
+    /* font-size: var(--font-size-3xl); */
+    text-align: left;
+  }
+
+  .profile-username {
+    font-size: var(--font-size-lg);
+    text-align: left;
+  }
+
+  .profile-contact-grid {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .profile-contact-method-icon {
+    font-size: var(--font-size-xs);
+  }
+
+  .profile-contact-content h4 {
+    font-size: var(--font-size-sm);
+  }
+
+  .profile-contact-content p {
+    /* font-size: var(--font-size-xs); */
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-sidebar {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .profile-info {
+    width: 100%;
+  }
+
+  .profile-name {
+    /* font-size: var(--font-size-2xl); */
+    text-align: center;
+  }
+
+  .profile-username {
+    font-size: var(--font-size-base);
+    text-align: center;
+  }
+
+  .profile-bio {
+    /* font-size: var(--font-size-sm); */
+  }
+
+  .profile-contact-grid {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .profile-contact-method {
+    text-align: center;
+    gap: var(--space-sm);
+  }
+
+  .profile-contact-method-icon {
+    font-size: var(--font-size-xs);
+  }
+
+  .profile-contact-content h4 {
+    font-size: var(--font-size-sm);
+  }
+
+  .profile-contact-content p {
+    /* font-size: var(--font-size-xs); */
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-image {
+    width: 125px;
+    height: 125px;
+  }
+
+  .profile-name {
+    /* font-size: var(--font-size-xl); */
+  }
+
+  .profile-username {
+    font-size: var(--font-size-sm);
+  }
+
+  .profile-bio {
+    /* font-size: var(--font-size-xs); */
+  }
+
+  .profile-contact-grid {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .profile-contact-method {
+    text-align: left;
+    gap: var(--space-sm);
+  }
+
+  .profile-contact-method-icon {
+    font-size: 10px;
+  }
+
+  .profile-contact-content h4 {
+    font-size: var(--font-size-xs);
+  }
+
+  .profile-contact-content p {
+    /* font-size: 9px; */
+  }
+}
+
+/* 접근성 개선 */
+@media (prefers-reduced-motion: reduce) {
+  .profile-contact-method {
+    transition: none;
+  }
+}
+
+/* 포커스 시각화 개선 */
+.profile-contact-method:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}

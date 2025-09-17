@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>노현우 - 퍼블리셔</title>
+    <style>
+      /* src/styles/resume.css */
+
+      /* 0) Base: 공통(모바일 퍼스트) 스타일 */
+      /* 가장 작은 화면(320px 이하)에서도 적용될 공통 스타일 */
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, system-ui, Roboto,
+          sans-serif;
+        line-height: 1.6;
+        color: #000000;
+        background: #ffffff;
+        padding: 0;
+        font-size: 14px;
+      }
+
+      .container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .sidebar {
+        background: #ffffff;
+        padding: 15px;
+        color: #000000;
+        order: 2;
+        border-top: 2px solid #000000;
+      }
+
+      .profile-section {
+        margin-bottom: 25px;
+      }
+
+      .name {
+        font-size: 1.3rem;
+        font-weight: 800;
+        margin-bottom: 5px;
+        color: #000000;
+      }
+
+      .role {
+        font-size: 0.9rem;
+        color: #000000;
+        font-weight: 400;
+        margin-bottom: 8px;
+      }
+
+      .tagline {
+        font-size: 0.8rem;
+        color: #000000;
+        line-height: 1.4;
+      }
+
+      .contact-section {
+        border-top: 1px solid #000000;
+        padding-top: 15px;
+      }
+
+      .contact-title {
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: #000000;
+      }
+
+      .contact-item {
+        display: block;
+        color: #000000;
+        text-decoration: none;
+        margin-bottom: 8px;
+        font-size: 0.75rem;
+        transition: color 0.2s;
+      }
+
+      .contact-item:hover {
+        color: #666666;
+      }
+
+      .main-content {
+        background: #ffffff;
+        padding: 15px;
+        order: 1;
+      }
+
+      .section {
+        margin-bottom: 30px;
+      }
+
+      .section-title {
+        display: inline-block;
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: #000000;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #000000;
+        padding-bottom: 8px;
+      }
+
+      .section-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* 메인 강점 항목들 */
+      .strength-item {
+        background: #ffffff;
+        padding: 0;
+        margin-bottom: 30px;
+      }
+
+      .strength-item:not(:last-child) {
+        margin-bottom: 35px;
+      }
+
+      .strength-title {
+        display: inline-block;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #000000;
+        margin-bottom: 6px;
+        line-height: 1.3;
+      }
+
+      .strength-title::before {
+        content: '| ';
+        color: #000000;
+        font-weight: 900;
+      }
+
+      .strength-subtitle {
+        font-size: 0.8rem;
+        color: #f39c12;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+
+      .strength-content {
+        font-size: 12px;
+        color: #000000;
+        line-height: 1.6;
+      }
+
+      .strength-content p {
+        margin-bottom: 10px;
+      }
+
+      .strength-content strong {
+        display: inline-block;
+        color: #000000;
+        font-weight: 600;
+      }
+
+      /* 같은 레벨 항목들 */
+      .uniform-item {
+        background: #ffffff;
+        padding: 0;
+        margin-bottom: 30px;
+      }
+
+      .uniform-item:not(:last-child) {
+        margin-bottom: 35px;
+      }
+
+      .uniform-title {
+        display: inline-block;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #000000;
+        margin-bottom: 6px;
+        line-height: 1.3;
+      }
+
+      .uniform-title::before {
+        content: '| ';
+        color: #000000;
+        font-weight: 900;
+      }
+
+      .uniform-subtitle {
+        font-size: 0.8rem;
+        color: #000000;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+
+      .uniform-content {
+        font-size: 0.8rem;
+        color: #000000;
+        line-height: 1.6;
+      }
+
+      .uniform-content p {
+        margin-bottom: 10px;
+      }
+
+      .uniform-content strong {
+        display: inline-block;
+        color: #000000;
+        font-weight: 600;
+      }
+
+      /* 네비게이션 컨테이너 - 모바일 퍼스트 */
+      .navigation-container {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        z-index: 100;
+      }
+
+      .navigation-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .navigation-item {
+        margin: 0;
+        height: 30px;
+      }
+
+      .download-btn,
+      .navigation-link {
+        background: #000000;
+        color: #ffffff;
+        border: 1px solid #000000;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 0.7rem;
+        text-decoration: none;
+        display: block;
+        transition: all 0.2s;
+        text-align: center;
+        min-width: 80px;
+        height: 100%;
+        line-height: 30px;
+      }
+
+      .download-btn:hover,
+      .navigation-link:hover {
+        background: #ffffff;
+        color: #000000;
+      }
+
+      .list-title {
+        display: inline-block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #000000;
+        margin-bottom: 6px;
+      }
+
+      .list-content {
+        font-size: 0.8rem;
+        color: #000000;
+        line-height: 1.5;
+      }
+
+      /* 번호 매겨진 리스트 */
+      .numbered-list {
+        counter-reset: item-counter;
+        margin-top: 15px;
+        list-style: none;
+        padding: 0;
+      }
+
+      .numbered-item {
+        counter-increment: item-counter;
+        margin-bottom: 12px;
+        position: relative;
+        padding-left: 20px;
+      }
+
+      .numbered-item::before {
+        content: counter(item-counter) '.';
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-weight: 600;
+        color: #000000;
+      }
+
+      /* 모든 strong 태그에 inline-block 적용 */
+      strong {
+        display: inline-block;
+      }
+
+      /* 1) ≥360px (Galaxy S 등 360 폭 계열) */
+      @media (min-width: 360px) {
+        body {
+          font-size: 15px;
+        }
+
+        .navigation-container {
+          top: 16px;
+          right: 16px;
+        }
+
+        .navigation-list {
+          gap: 9px;
+        }
+
+        .download-btn,
+        .navigation-link {
+          font-size: 0.75rem;
+          min-width: 85px;
+        }
+
+        .sidebar {
+          padding: 16px;
+        }
+
+        .main-content {
+          padding: 16px;
+        }
+
+        .name {
+          font-size: 1.35rem;
+        }
+
+        .section-title {
+          font-size: 19px;
+        }
+      }
+
+      /* 2) ≥375px (iPhone 375 폭 계열) */
+      @media (min-width: 375px) {
+        .navigation-container {
+          top: 18px;
+          right: 18px;
+        }
+
+        .navigation-list {
+          gap: 10px;
+        }
+
+        .download-btn,
+        .navigation-link {
+          font-size: 0.8rem;
+          min-width: 90px;
+        }
+
+        .sidebar {
+          padding: 18px;
+        }
+
+        .main-content {
+          padding: 18px;
+        }
+
+        .name {
+          font-size: 1.4rem;
+        }
+
+        .strength-content,
+        .uniform-content {
+          line-height: 1.65;
+        }
+      }
+
+      /* 3) ≥390px (iPhone Pro 390×844 계열) */
+      @media (min-width: 390px) {
+        .download-btn,
+        .navigation-link {
+          min-width: 95px;
+        }
+
+        .name {
+          font-size: 1.45rem;
+        }
+
+        .strength-title,
+        .uniform-title {
+          font-size: 15px;
+        }
+      }
+
+      /* 4) ≥393px (iPhone 16 / 일부 Android 393 폭) */
+      @media (min-width: 393px) {
+        .navigation-container {
+          top: 20px;
+          right: 20px;
+        }
+
+        .download-btn,
+        .navigation-link {
+          min-width: 100px;
+        }
+
+        .sidebar {
+          padding: 20px;
+        }
+
+        .main-content {
+          padding: 20px;
+        }
+      }
+
+      /* 5) ≥402px (iPhone 16 Pro 402 폭) */
+      @media (min-width: 402px) {
+        .name {
+          font-size: 1.5rem;
+        }
+
+        .strength-content,
+        .uniform-content {
+          font-size: 14px;
+          line-height: 1.7;
+        }
+      }
+
+      /* 6) ≥412px (Pixel/Android 다수 412 폭) */
+      @media (min-width: 412px) {
+        .download-btn,
+        .navigation-link {
+          min-width: 105px;
+        }
+
+        .section {
+          margin-bottom: 35px;
+        }
+      }
+
+      /* 7) ≥430px (iPhone Plus/Pro Max 430 폭) */
+      @media (min-width: 430px) {
+        .navigation-list {
+          flex-direction: row;
+          gap: 10px;
+        }
+
+        .download-btn,
+        .navigation-link {
+          min-width: 110px;
+        }
+
+        .name {
+          font-size: 1.6rem;
+        }
+      }
+
+      /* 8) ≥440px (iPhone 16 Pro Max 440 폭) */
+      @media (min-width: 440px) {
+        .download-btn,
+        .navigation-link {
+          font-size: 0.85rem;
+          min-width: 115px;
+        }
+
+        .strength-item:not(:last-child),
+        .uniform-item:not(:last-child) {
+          margin-bottom: 40px;
+        }
+      }
+
+      /* 9) ≥480px (기존 모바일 퍼스트 확장) */
+      @media (min-width: 480px) {
+        body {
+          font-size: 16px;
+        }
+
+        .name {
+          font-size: 1.8rem;
+        }
+
+        .main-content {
+          padding: 30px;
+        }
+
+        .sidebar {
+          padding: 30px;
+        }
+
+        .section {
+          margin-bottom: 40px;
+        }
+
+        .strength-item:not(:last-child),
+        .uniform-item:not(:last-child) {
+          margin-bottom: 50px;
+        }
+
+        .profile-section {
+          margin-bottom: 30px;
+        }
+
+        .contact-section {
+          padding-top: 20px;
+        }
+
+        .contact-title {
+          font-size: 1rem;
+          margin-bottom: 15px;
+        }
+
+        .contact-item {
+          font-size: 0.85rem;
+          margin-bottom: 10px;
+        }
+
+        .section-title {
+          font-size: 21px;
+          margin-bottom: 25px;
+          padding-bottom: 10px;
+        }
+
+        .strength-title,
+        .uniform-title {
+          margin-bottom: 8px;
+          line-height: 1.4;
+        }
+
+        .strength-subtitle,
+        .uniform-subtitle {
+          font-size: 0.9rem;
+          margin-bottom: 15px;
+        }
+
+        .strength-content p,
+        .uniform-content p {
+          margin-bottom: 12px;
+        }
+
+        .list-title {
+          font-size: 1rem;
+          margin-bottom: 8px;
+        }
+
+        .list-content {
+          font-size: 0.9rem;
+          line-height: 1.6;
+        }
+
+        .numbered-list {
+          margin-top: 20px;
+        }
+
+        .numbered-item {
+          margin-bottom: 15px;
+          padding-left: 25px;
+        }
+      }
+
+      /* 10) ≥768px (태블릿) */
+      @media (min-width: 768px) {
+        .container {
+          display: grid;
+          grid-template-columns: 300px 1fr;
+          gap: 0;
+        }
+
+        .sidebar {
+          order: 1;
+          position: sticky;
+          top: 0;
+          height: 100vh;
+          overflow-y: auto;
+          border-top: none;
+          border-right: 2px solid #000000;
+        }
+
+        .main-content {
+          order: 2;
+          padding: 40px;
+        }
+
+        .name {
+          font-size: 2rem;
+        }
+      }
+
+      /* 11) ≥1024px (데스크톱) */
+      @media (min-width: 1024px) {
+        .container {
+          grid-template-columns: 350px 1fr;
+        }
+
+        .main-content {
+          padding: 60px;
+        }
+
+        .sidebar {
+          padding: 40px;
+        }
+      }
+
+      /* 12) ≥1200px (대형 데스크톱) */
+      @media (min-width: 1200px) {
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+      }
+
+      /* 인쇄용 스타일 */
+      @media print {
+        .navigation-container {
+          display: none;
+        }
+
+        .container {
+          display: block;
+        }
+
+        .sidebar {
+          background: #ffffff;
+          color: #000000;
+          border: 1px solid #000000;
+          page-break-inside: avoid;
+        }
+
+        .contact-item {
+          color: #000000;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navigation-container">
+      <ul class="navigation-list">
+        <li class="navigation-item">
+          <button type="button" class="download-btn">PDF 다운로드</button>
+        </li>
+        <li class="navigation-item">
+          <a href="../../../index.html" class="navigation-link">홈으로</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="container">
+      <aside class="sidebar">
+        <div class="profile-section">
+          <h1 class="name">노현우</h1>
+          <p class="role">Markup Developer</p>
+          <p class="tagline">겸손함을 무게감을 이해하는 개발자</p>
+        </div>
+
+        <div class="contact-section">
+          <h3 class="contact-title">Contact</h3>
+          <a href="mailto:searchme86@gmail.com" class="contact-item"
+            >searchme86@gmail.com</a
+          >
+          <a href="https://github.com/searchme86" class="contact-item"
+            >GitHub Profile</a
+          >
+          <a href="https://velog.io/@rohkorea86" class="contact-item"
+            >Tech Blog</a
+          >
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <section class="section">
+          <strong class="section-title"
+            >다른 사람과 구별되는 나만의 강점</strong
+          >
+          <ul class="section-list">
+            <li class="strength-item">
+              <strong class="strength-title"
+                >GSAP 기반 사용자 초기 설정 가이드 구현</strong
+              >
+              <p class="strength-subtitle">
+                신규 사용자 온보딩 이해도·완료율 개선
+              </p>
+              <div class="strength-content">
+                <p>
+                  신규 사용자가 서비스 초기 설정 과정을 직관적이고 친숙하게
+                  경험할 수 있도록 사용자 가이드 페이지를 설계·구현했습니다.
+                  페이지 구조, 단계별 이동 스크립트, 컴포넌트, 애니메이션을
+                  전반적으로 담당했습니다.
+                </p>
+                <p>
+                  CSS/JS만으로는 구현 복잡도가 높아 GSAP을 도입했고, to/from
+                  메서드, SplitText, stagger, easing을 적용하여
+                  텍스트·레이아웃을 가독성 높은 애니메이션 콘텐츠로
+                  전환했습니다.
+                </p>
+                <p>
+                  <strong>성과:</strong> 온보딩 시간을 단축하며 초기 설정
+                  완료율을 높이는 성과를 냈으며, 테스트 단위 데모 URL을 통한
+                  협업 효율 향상도 달성했습니다.
+                </p>
+              </div>
+            </li>
+
+            <li class="strength-item">
+              <strong class="strength-title">메신저 React UI 개선</strong>
+              <p class="strength-subtitle">
+                대화방 대기시간 1~2초 → 0초, 스크롤 3~4회 제거, 전송 오류 100%
+                방지
+              </p>
+              <div class="strength-content">
+                <p>
+                  React 기반으로 메신저 UI를 직접 구현하며 사용자 경험을
+                  체계적으로 개선했습니다.
+                </p>
+                <p>
+                  <strong>대화방 입장 최적화:</strong> 1~2초 대기시간을 0초로
+                  단축하여 즉시 메시지 입력 가능한 UX 완성
+                </p>
+                <p>
+                  <strong>네비게이션 개선:</strong> 3~4회 스크롤을 버튼 한
+                  번으로 해결
+                </p>
+                <p>
+                  <strong>입력 시스템 개선:</strong> Enter/Shift+Enter 분리로
+                  전송 오류 100% 방지
+                </p>
+                <p>
+                  <strong>이미지 로딩 최적화:</strong> 비동기 이미지 onLoad
+                  이벤트 처리로 스크롤 튐 현상 근본 해결
+                </p>
+              </div>
+            </li>
+
+            <li class="strength-item">
+              <strong class="strength-title"
+                >공통 컴포넌트화 (그리드 컴포넌트 제작)</strong
+              >
+              <p class="strength-subtitle">
+                신규 페이지 제작 속도·유지보수 효율 향상
+              </p>
+              <div class="strength-content">
+                <p>
+                  신규 서비스 프로토타입 제작 속도를 높이고 레거시 코드를
+                  모듈화하기 위해 공통 그리드 컴포넌트를 설계·구현했습니다.
+                </p>
+                <p>
+                  사이트 전체 패턴을 분석·카테고리화한 후 ul-li 기반 시멘틱
+                  마크업 + 반응형 설계로 구현하여, "컴포넌트 불러오기 →
+                  배치"만으로 페이지 조립이 가능해졌습니다.
+                </p>
+                <p>
+                  이 과정에서 설계 의도를 코드 예시로 공유하고 합의를 이끌어내는
+                  커뮤니케이션 방식의 중요성을 실무적으로 확인했습니다.
+                </p>
+              </div>
+            </li>
+
+            <li class="strength-item">
+              <strong class="strength-title"
+                >BEM 방법론 적용을 통한 CSS 컨벤션 정의</strong
+              >
+              <p class="strength-subtitle">
+                페이지 재작업 시간 20분(30분→10분), 디자인 완료 평균 기간
+                2.5일(3일→0.5일) 단축
+              </p>
+              <div class="strength-content">
+                <p>
+                  좋은 품질의 마크업과 스타일 산출물을 목표로 사이트 운영업무 한
+                  적 있습니다. 마크업 1건을 수정하려고 해당 클래스명을 검색하면,
+                  같은 스타일의 다른 클래스가 여러 발견하곤 했습니다.
+                </p>
+                <p>
+                  불필요하게 중복된 속성이 검색되어 유지보수가 좋지 않았습니다.
+                  기존 정의된 속성을 가져다 쓰는 운영업무 특성상, 작업자가
+                  중복되게 입력할 여지가 있었습니다.
+                </p>
+                <p>
+                  이를 해결하기 위해 BEM방식을 적용하기로 마음먹었습니다. 마크업
+                  구조를 염두에 두며 스타일 정의하는 BEM으로 클래스 컨벤션을
+                  정의하고 사용해, 페이지 재작업 시간을 20분(기존 30분에서)으로,
+                  디자인 완료 평균 기간을 2.5일(기존 3일에서)로 단축했습니다.
+                </p>
+              </div>
+            </li>
+
+            <li class="strength-item">
+              <strong class="strength-title"
+                >업무 history 문서화를 통한 의사소통 개선</strong
+              >
+              <p class="strength-subtitle">
+                기획자의 업무 확인 메시지 문의 횟수를 0으로 단축
+              </p>
+              <div class="strength-content">
+                <p>
+                  요약 정리한 작업 history를 사용해, 기획자와 업무 의사소통
+                  이슈를 개선 한 경험이 있습니다.
+                </p>
+                <p>
+                  팀에서 페이지 산출물을 이메일로 전달할 때, 첨부 파일의
+                  폴더구조와 모바일/웹 작업 링크를 함께 적어두는 작업 규칙이
+                  있었습니다. 기획자 관점에서 정보가 부족했는지 종종 메신저
+                  문의가 오곤 했습니다.
+                </p>
+                <p>
+                  메신저로 문의받은 질문을 분류했습니다. 대부분 이전 작업 파일
+                  대비 변경 사항은 무엇인지 파일 상태가 작업 중 혹은 최신
+                  여부인지 알고 싶어 했습니다.
+                </p>
+                <p>
+                  어떤 클래스를 변경했는지, 바로 확인할 수 있는 주석 명은
+                  무엇인지, 달라진 내용은 무엇인지, 기획자/개발자 관점에서
+                  필요한 정보를 찾을 수 있도록 관련 사항을 기록했습니다.
+                </p>
+              </div>
+            </li>
+
+            <li class="strength-item">
+              <strong class="strength-title"
+                >프로젝트 의존성 라이브러리 Settings 파일 수정</strong
+              >
+              <p class="strength-subtitle">스크립트 기능 오류 1건 해결</p>
+              <div class="strength-content">
+                <p>
+                  테이블 헤더 영역에 마우스 호버하면, 말풍선을 보여주는
+                  툴팁(tooltip) 플러그인 적용 업무가 있었습니다. 텍스트 너비가
+                  유동적으로 달라지기 때문에, 이에 맞게 툴팁 위치도 변경해야
+                  했습니다.
+                </p>
+                <p>
+                  그러나 라이브러리에서 해당 기능을 실행하는 헬퍼함수가
+                  없었습니다. 툴팁 위치를 이동하는데, 힌트를 얻고자
+                  Settings(환경설정) 파일을 훑어봤습니다.
+                </p>
+                <p>
+                  대상이 생성될 때, 위치(position) 결정하는 속성이 있지 않을까
+                  궁금했기 때문입니다. 인스턴스 만드는 생성자 함수값을
+                  변경하면서 테스트 해봤는데, 브라우저에서 다른 위치로 이동해
+                  출력됨을 확인했습니다.
+                </p>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <strong class="section-title"
+            >개발 프로젝트 진행 시, 주요 담당 역할</strong
+          >
+          <ul class="section-list">
+            <li class="uniform-item">
+              <strong class="uniform-title"
+                >프로젝트 코드 활용해, 스크립트 개발자 업무 8건 지원</strong
+              >
+              <div class="uniform-content">
+                <p>
+                  삼성카드 운영 프로젝트에서 마크업과 해당 UI 스크립트 업무를
+                  수행한 적이 있습니다. 작성한 스크립트가 프로젝트 제품으로
+                  적합한지 점검받고 싶었고, 이미 다른 곳에서 구현된 사례가
+                  있는지 확인하기 어려웠습니다.
+                </p>
+                <p>
+                  코드 신뢰성을 확보하고 중복을 방지하기 위해, 프로젝트 가이드
+                  문서를 검색했습니다. 스스로 참고 자료를 얻기 위해, 사이트의
+                  모든 페이지를 확인했습니다.
+                </p>
+                <p>
+                  직접 코드를 작성하면서, 보완할 점이 없는지 획득한 자료와
+                  비교해보곤 했습니다. 혼자서 끝까지 완성한 이후, 매번
+                  개발자에게 코드 리뷰를 받았습니다. 그 결과 스크립트 8건 업무를
+                  성공적으로 수행할 수 있었습니다.
+                </p>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <strong class="section-title">실패 경험</strong>
+          <ul class="section-list">
+            <li class="uniform-item">
+              <strong class="uniform-title">프로젝트의 A-Z를 경험한 6주</strong>
+              <div class="uniform-content">
+                <p>
+                  6주간, 개발 포트폴리오를 만드는 프로젝트에 참가해, 프로젝트의
+                  A-Z를 경험하고 크게 배운 경험이 있습니다.
+                </p>
+                <p>
+                  작업 가능 기간, 서로 개발숙련도를 따져보기에 앞서, 어떤 상품을
+                  만들어야 할지, 공통된 의견 도출이 힘들었습니다. 다분히
+                  어려웠던 점을 팀원에게 요청할 수밖에 없었는데, 결국 중도하차
+                  인원이 발생했고, 다른 참가 팀 대비 진척도는 늦었습니다.
+                </p>
+
+                <ul class="numbered-list">
+                  <li class="numbered-item">
+                    <strong
+                      >첫째, 팀원은 제품에 대해 공통된 의견과 개념을 갖고 있어야
+                      합니다.</strong
+                    >
+                    즉 제품이 갖는 목적을 팀원이 공유해야, 관련된 디자인과 상품
+                    기능을 정의할 수 있기 때문입니다.
+                  </li>
+                  <li class="numbered-item">
+                    <strong
+                      >둘째, 프로젝트 이슈관리를 포함해 환경설정을 문서로
+                      정리합니다.</strong
+                    >
+                    백엔드 개발자의 프론트개발 환경셋업을 요청했는데, 당시
+                    정리된 내용이 없어, 원격으로 해결하느라 애를 먹은 적
+                    있습니다.
+                  </li>
+                  <li class="numbered-item">
+                    <strong
+                      >셋째, 프로젝트에 사용되는 개발언어 선택기준이 개인
+                      성숙도가 높고 성과를 빨리 만드는 언어를
+                      사용합니다.</strong
+                    >
+                    당시 타입스크립트를 학습 중이었는데, 프로젝트에서 테스트하고
+                    싶은 욕심이 있었습니다.
+                  </li>
+                  <li class="numbered-item">
+                    <strong
+                      >넷째, 어느 CEO의 말처럼, 글은 기록으로 남기 때문에 전달에
+                      오해가 생기지 않도록 심사숙고해 작성합니다.</strong
+                    >
+                    대화가 요구되는 영역에서는 말로 표현하는 것 효과적일 수
+                    있겠다고 생각했습니다.
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <strong class="section-title">성격의 장단점</strong>
+          <ul class="section-list">
+            <li class="uniform-item">
+              <strong class="uniform-title"
+                >알고 있는 지식의 원리를 설명하고 이해시키려고 애씁니다</strong
+              >
+              <div class="uniform-content">
+                <p>
+                  지식공유 활동이나 스터디처럼 개념의 원리를 알려주고 문제를
+                  해결하는 과정에 관심이 많습니다. 원리를 이해하고 습득하는
+                  과정은 낯설고, 어렵지만, 이를 통해 자기 것으로 만들었다는 자기
+                  자신감이 이런 성격을 갖게 된 동력입니다.
+                </p>
+              </div>
+            </li>
+
+            <li class="uniform-item">
+              <strong class="uniform-title"
+                >상대방에게 도움 주려는 좋은 의도와 잘하려는 욕심이 앞서게 되면,
+                주어진 일의 범위를 넘어서거나 불필요한 내용을 말붙이곤
+                합니다</strong
+              >
+              <div class="uniform-content">
+                <p>
+                  이러한 점은 해당 담당자의 업무 권한을 침해할 여지가 있고, 업무
+                  의도에 맞지 않아 다시 일해야 할 수 있습니다. 이것을 해결하기
+                  위해,
+                </p>
+
+                <ul class="numbered-list">
+                  <li class="numbered-item">
+                    첫째, 사람을 배제하고 일 자체가 달성할 업무 목적에
+                    집중합니다.
+                  </li>
+                  <li class="numbered-item">
+                    둘째, 첫째 목표가 달성된 이후, 개선 및 추가적인 여지가
+                    있으면, 담당자에게 해당 사항을 알려줍니다
+                  </li>
+                  <li class="numbered-item">
+                    마지막으로, 계속 업무가 필요하거나 그렇지 않을 때 따라
+                    작업을 진행합니다.
+                  </li>
+                </ul>
+                <p>위 순서를 유념하여 일합니다.</p>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <strong class="section-title">개발에 관심 두게 된 계기와 노력</strong>
+          <ul class="section-list">
+            <li class="uniform-item">
+              <strong class="uniform-title">개발에 관심 두게 된 계기</strong>
+              <div class="uniform-content">
+                <strong class="list-title"
+                  >"이거 내가 수정 할 수 있을까?"</strong
+                >
+                <p class="list-content">
+                  주말 평균 100명가량의 수강생이 찾는 학원에서, 회계 솔루션
+                  제품을 사용하며, 수납 업무 일한 적 있습니다. 일할 때 어려웠던
+                  점은, 사람마다 사정이 다양하게 있어 프로그램에 정의된 기능으로
+                  처리 불가한 사례가 종종 발생했습니다.
+                </p>
+                <p class="list-content">
+                  이런 경우 해당 내용을 메모해 두는 것으로 문제 해결했습니다.
+                  사용 중인 솔루션 콤보박스(Select)에 option 하나 더 추가 할 수
+                  있었다면, 굳이 수작업이 필요 없었습니다.
+                </p>
+              </div>
+            </li>
+
+            <li class="uniform-item">
+              <strong class="uniform-title"
+                >개발자로 성장하기 위해 어떤 노력</strong
+              >
+              <div class="uniform-content">
+                <strong class="list-title"
+                  >웹 퍼블리싱, 논리적 구조로 HTML 작성</strong
+                >
+                <p class="list-content">
+                  취업 성공 패키지를 수료 후, 첫 개발회사에서 마크업 업무를
+                  맡았습니다. 홈페이지의 일부 마크업 수정을 시작으로, 홈페이지
+                  리뉴얼, 이메일 뉴스레터 로 영역을 키워갔습니다.
+                </p>
+
+                <strong class="list-title"
+                  >HTML과 JQuery를 통해, 프론트 개발 업무 수행</strong
+                >
+                <p class="list-content">
+                  한국신용정보원 프로젝트를 통해, 주도적으로 프론트 개발업무를
+                  수행한 적 있습니다. 뷰(View) 관련 업무를 진행하면서, 마크업을
+                  설계하고 스크립트와 플러그인을 사용해, 동적 웹 페이지
+                  개발업무를 성공적으로 마무리했습니다.
+                </p>
+
+                <strong class="list-title"
+                  >프로젝트 별, 업무 관점 차이를 경험</strong
+                >
+                <p class="list-content">
+                  삼성카드 사이트 운영을 맡으면서 프로젝트의 형태가 구축/운영
+                  간, 업무 관점 차이가 존재함을 경험했습니다. 타 직무
+                  이해자(기획자/디자이너/프론트개발자)와 협업하면서 효과적으로
+                  의사소통하고 팀원으로 일하는 방법을 배웠고 고민했습니다.
+                </p>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <strong class="section-title">관심 있는 개발 분야</strong>
+          <ul class="section-list">
+            <li class="uniform-item">
+              <strong class="uniform-title"
+                >관심 있는 분야는 프론트 뷰(View) 개발자입니다</strong
+              >
+              <div class="uniform-content">
+                <p>
+                  다양한 프로젝트(구축 2건, 개선/유지보수 4건, 운영 1건)를
+                  경험하며, HTML로 의미 구조를 설계하고, 자바스크립트가 사용하기
+                  쉬운 마크업을 작성했습니다. 디자인 가이드 맞게 컴포넌트 마크업
+                  작업을 진행했습니다.
+                </p>
+              </div>
+            </li>
+
+            <li class="uniform-item">
+              <strong class="uniform-title"
+                >Vue프로젝트를 통해, 컴포넌트 마크업의 중요성을 배움</strong
+              >
+              <div class="uniform-content">
+                <p>
+                  1년가량의 삼성생명 VueJs 프로젝트에서, 공통 컴포넌트 설계를
+                  위해 프론트 개발자와 협업한 적이 있습니다. 퍼블리셔가 작성한
+                  마크업을, 프론트 개발자가 Vue컴포넌트로 변경하고, 완성된
+                  부품을 페이지로 조립하는 업무였습니다.
+                </p>
+              </div>
+            </li>
+
+            <li class="uniform-item">
+              <strong class="uniform-title"
+                >3개월 JQuery 토이 프로젝트를 통해, 컴포넌트 단위 개발 장점을
+                이해</strong
+              >
+              <div class="uniform-content">
+                <p>
+                  실무에서 정적(Static) 페이지를 구축하면서, HTML을 동적으로
+                  다루는 스크립트 역량에 관심 두게 되었습니다. 3개월 동안 JQuery
+                  토이 프로젝트를 만들며, DOM 제어하는 스크립트 작성과 프로젝트
+                  구조설계를 경험했습니다.
+                </p>
+              </div>
+            </li>
+
+            <li class="uniform-item">
+              <strong class="uniform-title"
+                >3개월 React 토이 프로젝트를 통해, 유지보수 관점의 코드설계
+                중요성을 이해</strong
+              >
+              <div class="uniform-content">
+                <p>
+                  데이터 CRUD를 연습하고, 리액트 학습 목적으로, 중고마켓을
+                  주제로 웹 서비스를 구축했습니다. 개발스택은 입문자들이 웹
+                  서비스를 구현하기 쉬운 MERN(MongoDB, ExpressJs, ReactJs,
+                  NodeJs)으로 선택했고, DB 설계와 배포까지 웹 개발 프로세스를
+                  경험했습니다.
+                </p>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <strong class="section-title">내가 생각하는 좋은 코드란</strong>
+          <ul class="section-list">
+            <li class="uniform-item">
+              <strong class="uniform-title"
+                >핵심 로직과 의도가 명확하게 읽히는 코드</strong
+              >
+              <div class="uniform-content">
+                <p>
+                  개발자는 코드로 의사소통하기 때문에, 핵심이 드러나도록
+                  작성합니다. 프로젝트 실무를 겪으며, 다른 사람의 코드를
+                  이해하는 것도 업무 일부라는 점을 경험했습니다. 핵심이 뚜렷하면
+                  개선 사항을 발견하기 쉽고, 팀원 간 피드백 주고받기 편합니다.
+                </p>
+              </div>
+            </li>
+
+            <li class="uniform-item">
+              <strong class="uniform-title"
+                >코드 흐름을 이해하기 좋은 구조로 작성</strong
+              >
+              <div class="uniform-content">
+                <p>
+                  기능을 정의하는 곳, 사용하는 곳을 구분해 입력할 경우,
+                  실행오류를 파악하기 쉽고 유지보수가 편하기 때문입니다.
+                </p>
+              </div>
+            </li>
+
+            <li class="uniform-item">
+              <strong class="uniform-title"
+                >값을 주고, 받을 때, 사라지는 값이 없고, 타입 안정성을 보장하는
+                코드</strong
+              >
+              <div class="uniform-content">
+                <p>
+                  함수 인자에서 스프레드 연산자로 값을 받는 경우, 스프레드
+                  연산자에서 인자값을 규정하는 조건이 없어, 값이 사라질 수
+                  있거나 다른 타입의 값을 받을 수 있다고 코드리뷰 받았습니다.
+                  null/undefined 처리 조건과 같은 방어코드를 작성하거나,
+                  타입스크립트 사용해 문제 해결할 수 있습니다.
+                </p>
+              </div>
+            </li>
+
+            <li class="uniform-item">
+              <strong class="uniform-title"
+                >외부 코드 사용할 때, 코드 신뢰성과 안정성을 체크</strong
+              >
+              <div class="uniform-content">
+                <p>
+                  주소 검색 모달을 구현할 때, 다음 주소 검색 라이브러리를 소개한
+                  블로그 코드를, 프로젝트에 그래도 적용 한 적 있습니다. 코드
+                  리뷰어 관점에서는 해당 구문을 더 쪼개어 표현할 수 있었는지,
+                  코드 안정성은 보장할 수 있는지, 신뢰할 수 있는 코드인지 점검이
+                  필요하다는 피드백 해주었습니다.
+                </p>
+              </div>
+            </li>
+
+            <li class="uniform-item">
+              <strong class="uniform-title">그 외</strong>
+              <div class="uniform-content">
+                <ul class="numbered-list">
+                  <li class="numbered-item">
+                    연산자를 연달아 중복해 쓰지 않는 코드
+                  </li>
+                  <li class="numbered-item">
+                    로직 의미를 유추할 수 있는 의미의 함수/변수 이름
+                  </li>
+                  <li class="numbered-item">테스트할 수 있는 코드</li>
+                  <li class="numbered-item">보안성을 고려한 코드</li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

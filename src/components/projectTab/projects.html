@@ -1,0 +1,2179 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      포트폴리오 프로젝트 | GSAP ScrollTrigger 카드 선택 + Swiper 시스템
+    </title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <style>
+      :root {
+        /* Primary Text Colors */
+        --text-primary: rgb(51, 51, 54);
+        --text-secondary: rgb(134, 142, 150);
+        --text-tertiary: rgba(134, 142, 150, 0.7);
+
+        /* Accent & Interactive Colors */
+        --accent-color: rgb(0, 113, 227);
+        --accent-hover: rgb(0, 92, 184);
+        --accent-light: rgba(0, 113, 227, 0.1);
+
+        /* Background Colors */
+        --bg-primary: rgb(245, 245, 247);
+        --bg-primary-rgb: 245, 245, 247;
+        --bg-card: white;
+        --bg-secondary: rgb(248, 249, 250);
+        --bg-tertiary: rgba(0, 0, 0, 0.05);
+
+        /* Border & Divider Colors */
+        --border-color: rgba(0, 0, 0, 0.05);
+        --border-secondary: rgba(0, 0, 0, 0.1);
+        --divider-color: rgba(0, 0, 0, 0.08);
+
+        /* Interactive States */
+        --hover-bg: rgba(0, 0, 0, 0.02);
+        --active-bg: rgba(0, 0, 0, 0.04);
+        --focus-ring: rgba(0, 113, 227, 0.3);
+
+        /* Shadow System */
+        --card-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+        --card-shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.1);
+        --card-shadow-focus: 0 0 0 4px var(--focus-ring);
+
+        /* Typography Scale - Base Mobile */
+        --font-size-xs: 0.7rem; /* 11.2px */
+        --font-size-sm: 0.8rem; /* 12.8px */
+        --font-size-base: 0.85rem; /* 13.6px */
+        --font-size-lg: 0.9rem; /* 14.4px */
+        --font-size-xl: 1rem; /* 16px */
+        --font-size-2xl: 1.1rem; /* 17.6px */
+        --font-size-3xl: 1.3rem; /* 20.8px */
+        --font-size-4xl: 1.5rem; /* 24px */
+        --font-size-5xl: 1.8rem; /* 28.8px */
+
+        /* Spacing Scale - Base Mobile */
+        --space-xs: 3px;
+        --space-sm: 6px;
+        --space-md: 12px;
+        --space-lg: 18px;
+        --space-xl: 24px;
+        --space-2xl: 30px;
+        --space-3xl: 36px;
+
+        /* Border Radius */
+        --radius-sm: 4px;
+        --radius-md: 8px;
+        --radius-lg: 12px;
+        --radius-xl: 16px;
+        --radius-full: 9999px;
+      }
+
+      /* Dark Theme */
+      [data-theme='dark'] {
+        /* Primary Text Colors */
+        --text-primary: rgb(242, 242, 247);
+        --text-secondary: rgb(174, 174, 178);
+        --text-tertiary: rgba(174, 174, 178, 0.7);
+
+        /* Background Colors */
+        --bg-primary: rgb(28, 28, 30);
+        --bg-primary-rgb: 28, 28, 30;
+        --bg-card: rgb(44, 44, 46);
+        --bg-secondary: rgb(58, 58, 60);
+        --bg-tertiary: rgba(255, 255, 255, 0.08);
+
+        /* Border & Divider Colors */
+        --border-color: rgba(255, 255, 255, 0.1);
+        --border-secondary: rgba(255, 255, 255, 0.15);
+        --divider-color: rgba(255, 255, 255, 0.12);
+
+        /* Interactive States */
+        --hover-bg: rgba(255, 255, 255, 0.05);
+        --active-bg: rgba(255, 255, 255, 0.08);
+
+        /* Shadow System */
+        --card-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+        --card-shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      /* 기본 스타일 - index.html과 동일하게 설정 */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        font-size: 16px;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          'Helvetica Neue', Arial, sans-serif;
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        font-size: var(--font-size-base);
+        line-height: 1.5;
+        font-weight: 400;
+        min-height: 100vh;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* 접근성 관련 스타일 */
+      .sr-only {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        padding: 0 !important;
+        margin: -1px !important;
+        overflow: hidden !important;
+        clip: rect(0, 0, 0, 0) !important;
+        white-space: nowrap !important;
+        border: 0 !important;
+      }
+
+      /* 메인 컨테이너 - 애니메이션 요소들은 기존 유지 */
+      .scroll-container {
+        height: 300vh;
+      }
+
+      .phone-container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        height: 500px;
+        overflow: hidden;
+      }
+
+      /* 상단 섹션 스타일 개선 */
+      .section-top {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 14px 35px 14px;
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+        margin-bottom: var(--space-lg);
+      }
+
+      .section-top strong {
+        color: var(--text-primary);
+        font-size: var(--font-size-lg);
+        font-weight: 600;
+      }
+
+      /* PDF 폴더 시스템 스타일 개선 */
+      .section-pdf {
+        display: flex;
+        align-items: center;
+        border-radius: var(--radius-md);
+        transition: all 0.3s ease;
+      }
+
+      .section-pdf:hover {
+        background: var(--hover-bg);
+        border-color: var(--border-secondary);
+      }
+
+      .pdf-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        gap: var(--space-sm);
+        align-items: center;
+        opacity: 0;
+        transform: translateX(-20px);
+        transition: all 0.4s ease;
+        max-width: 0;
+        overflow: hidden;
+      }
+
+      .pdf-list.visible {
+        opacity: 1;
+        transform: translateX(0);
+        max-width: 600px;
+      }
+
+      .pdf-list-item {
+        position: relative;
+        opacity: 0;
+        transform: scale(0.8);
+        transition: all 0.3s ease;
+      }
+
+      .pdf-list-item.visible {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .pdf-button-container {
+        position: relative;
+      }
+
+      .progress-bar {
+        position: absolute;
+        top: -2px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--bg-secondary);
+        border-radius: 1px;
+        overflow: hidden;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .progress-bar.active {
+        opacity: 1;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          var(--accent-color),
+          var(--accent-hover)
+        );
+        width: 0%;
+        border-radius: 1px;
+        transition: width 0.3s ease;
+        position: relative;
+      }
+
+      .progress-fill::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 6px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.5)
+        );
+        animation: shimmer 1.5s infinite;
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-6px);
+        }
+        100% {
+          transform: translateX(6px);
+        }
+      }
+
+      .pdf-item {
+        width: 140px;
+        height: 50px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: var(--space-sm);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        text-align: left;
+        position: relative;
+        flex-shrink: 0;
+        background: var(--bg-card);
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .pdf-item:hover {
+        transform: scale(1.02);
+        box-shadow: var(--card-shadow-hover);
+        border-color: var(--border-secondary);
+      }
+
+      .pdf-item:focus {
+        outline: 2px solid var(--accent-color);
+        outline-offset: 2px;
+      }
+
+      .pdf-item:active {
+        transform: scale(0.98);
+      }
+
+      .pdf-item:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+
+      .pdf-item.downloading {
+        background: var(--accent-light);
+        border: 1px solid var(--accent-color);
+      }
+
+      .pdf-item.completed {
+        background: rgba(34, 197, 94, 0.1);
+        border: 1px solid rgb(34, 197, 94);
+      }
+
+      .pdf-icon {
+        width: 24px;
+        height: 24px;
+        background-color: #dc2626;
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: var(--font-size-xs);
+        font-weight: bold;
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+      }
+
+      .pdf-item.downloading .pdf-icon {
+        background-color: var(--accent-color);
+        animation: pulse 1.5s infinite;
+      }
+
+      .pdf-item.completed .pdf-icon {
+        background-color: rgb(34, 197, 94);
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+
+      .pdf-info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .pdf-title {
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .pdf-item.downloading .pdf-title {
+        color: var(--accent-color);
+      }
+
+      .pdf-item.completed .pdf-title {
+        color: rgb(22, 101, 52);
+      }
+
+      .pdf-size {
+        font-size: var(--font-size-xs);
+        color: var(--text-secondary);
+        white-space: nowrap;
+      }
+
+      .folder-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(145deg, #ffd700, #ffb347);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: var(--card-shadow);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        flex-shrink: 0;
+      }
+
+      .folder-icon:hover {
+        transform: scale(1.05);
+        box-shadow: var(--card-shadow-hover);
+      }
+
+      .folder-icon:focus {
+        outline: 2px solid var(--accent-color);
+        outline-offset: 2px;
+      }
+
+      .folder-icon:active {
+        transform: scale(1.02);
+      }
+
+      .folder-label {
+        position: absolute;
+        bottom: -18px;
+        font-size: var(--font-size-xs);
+        font-weight: 500;
+        color: var(--text-secondary);
+        pointer-events: none;
+        white-space: nowrap;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .card-container {
+        position: relative;
+        z-index: 2;
+        height: 280px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .card-stack {
+        position: relative;
+        height: 140px;
+      }
+
+      .card {
+        position: absolute;
+        width: 100%;
+        height: 140px;
+        border-radius: var(--radius-lg);
+        display: flex;
+        flex-direction: column;
+        padding: 16px;
+        color: white;
+        cursor: pointer;
+        will-change: transform;
+        box-shadow: var(--card-shadow), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .card.selected {
+        z-index: 100 !important;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      }
+
+      .card-executive {
+        background: linear-gradient(135deg, #003049 0%, #003049 100%);
+        z-index: 1;
+        transform: translateY(-18px);
+      }
+
+      .card-gift {
+        background: linear-gradient(135deg, #d62828 0%, #d62828 100%);
+        z-index: 2;
+        transform: translateY(-12px);
+      }
+
+      .card-food {
+        background: linear-gradient(135deg, #f77f00 0%, #f77f00 100%);
+        z-index: 3;
+        transform: translateY(-8px);
+      }
+
+      .card-travel {
+        background: linear-gradient(135deg, #fcbf49 0%, #fcbf49 100%);
+        transform: translateY(-2px);
+        z-index: 4;
+        color: #003049;
+      }
+
+      .card-god {
+        background: linear-gradient(135deg, #eae2b7 0%, #eae2b7 100%);
+        z-index: 0;
+        transform: translateY(-20px);
+        color: #003049;
+      }
+
+      .card-brand {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        font-size: var(--font-size-base);
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        opacity: 0.9;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      }
+
+      .card.selected .card-brand {
+        transition: top 0.3s ease-out;
+      }
+
+      .card-logo {
+        width: 28px;
+        position: absolute;
+        top: 7px;
+        right: 25px;
+        transform-origin: top right;
+      }
+
+      .card.selected .card-logo {
+        animation: expandLogo 0.6s ease-out forwards;
+      }
+
+      @keyframes expandLogo {
+        0% {
+          transform: scale(1);
+        }
+        12.5% {
+          transform: scale(1.15);
+        }
+        25% {
+          transform: scale(1.4);
+        }
+        37.5% {
+          transform: scale(1.6);
+        }
+        50% {
+          transform: scale(1.75);
+        }
+        62.5% {
+          transform: scale(1.85);
+        }
+        75% {
+          transform: scale(1.92);
+        }
+        87.5% {
+          transform: scale(1.98);
+        }
+        100% {
+          transform: scale(2);
+        }
+      }
+
+      .card-logo-image {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .card-number {
+        font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        letter-spacing: 1px;
+        margin-top: 32px;
+        margin-bottom: 6px;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-bottom-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-top: auto;
+        margin-bottom: 6px;
+      }
+
+      .card-info {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .card-holder {
+        display: block;
+        font-size: var(--font-size-base);
+        opacity: 0.8;
+        margin-bottom: 2px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+
+      .card-name {
+        display: block;
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+      }
+
+      .card-expiry-section {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+
+      .card-expiry-label {
+        display: block;
+        font-size: var(--font-size-base);
+        opacity: 0.8;
+        margin-bottom: 1px;
+        letter-spacing: 0.3px;
+      }
+
+      .card-expiry {
+        font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        letter-spacing: 0.5px;
+      }
+
+      .animation-wrapper {
+        perspective: 1000px;
+        display: inline-block;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+
+      .flip-card {
+        position: relative;
+        width: 277px;
+        height: 55px;
+        transform-style: preserve-3d;
+        animation: flipBounce 3s ease-in-out infinite;
+        cursor: pointer;
+        transition: filter 0.3s ease;
+      }
+
+      .flip-card:hover {
+        filter: brightness(1.1);
+        animation-duration: 2s;
+      }
+
+      .card-face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-lg);
+        font-size: var(--font-size-base);
+        font-weight: 600;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+      }
+
+      .card-front {
+        background: var(--accent-color);
+        color: white;
+        transform: rotateY(0deg);
+        backdrop-filter: blur(10px);
+      }
+
+      .card-back {
+        background: var(--bg-card);
+        transform: rotateY(180deg);
+        backdrop-filter: blur(10px);
+      }
+
+      @keyframes flipBounce {
+        0% {
+          transform: rotateY(0deg) translateY(0px);
+        }
+        12.5% {
+          transform: rotateY(0deg) translateY(-15px);
+        }
+        25% {
+          transform: rotateY(180deg) translateY(-15px);
+        }
+        37.5% {
+          transform: rotateY(180deg) translateY(0px);
+        }
+        50% {
+          transform: rotateY(180deg) translateY(0px);
+        }
+        62.5% {
+          transform: rotateY(180deg) translateY(-15px);
+        }
+        75% {
+          transform: rotateY(0deg) translateY(-15px);
+        }
+        87.5% {
+          transform: rotateY(0deg) translateY(0px);
+        }
+        100% {
+          transform: rotateY(0deg) translateY(0px);
+        }
+      }
+
+      .scroll-guide-section {
+        position: absolute;
+        bottom: -118px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+      }
+
+      .scroll-indicator {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-md);
+        margin-top: var(--space-xl);
+      }
+
+      .scroll-arrow {
+        width: 30px;
+        height: 30px;
+        border-right: 3px solid var(--accent-color);
+        border-bottom: 3px solid var(--accent-color);
+        transform: rotate(45deg);
+        animation: bounce 2s ease-in-out infinite;
+        opacity: 0.8;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: rotate(45deg) translateY(0);
+          opacity: 0.8;
+        }
+        50% {
+          transform: rotate(45deg) translateY(10px);
+          opacity: 1;
+        }
+      }
+
+      /* Swiper Container Styles */
+      .swiper-section {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 280px;
+        transform: translateY(100%);
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1;
+        margin: 0 auto;
+        overflow: hidden;
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--card-shadow);
+      }
+
+      .swiper-section.visible {
+        transform: translateY(0);
+        padding: 0 20px;
+      }
+
+      .swiper-container {
+        width: 100%;
+        height: 100%;
+        padding-top: 100px;
+      }
+
+      .swiper-wrapper {
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+
+      .swiper-slide {
+        border-radius: var(--radius-md);
+        padding: var(--space-lg);
+        height: calc(100% - 76px);
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+      }
+
+      @keyframes slideIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .project-header {
+        margin-bottom: var(--space-md);
+        max-width: 330px;
+      }
+
+      .status-live {
+        background: #28a745;
+        color: #ffffff;
+      }
+
+      .status-code {
+        background: #6f42c1;
+        color: #ffffff;
+      }
+
+      .status-local {
+        background: #fd7e14;
+        color: #ffffff;
+      }
+
+      .status-preview {
+        background: #20c997;
+        color: #ffffff;
+      }
+
+      .project-title {
+        font-size: var(--font-size-lg);
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: var(--space-sm);
+        line-height: 1.4;
+      }
+
+      .project-type {
+        color: var(--accent-color);
+        font-weight: 600;
+        font-size: var(--font-size-sm);
+        margin-bottom: var(--space-md);
+      }
+
+      .project-tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-md);
+      }
+
+      .tech-tag {
+        background: var(--accent-color);
+        color: white;
+        font-size: var(--font-size-xs);
+        font-weight: 600;
+        border-radius: var(--radius-sm);
+        padding: var(--space-xs) var(--space-sm);
+      }
+
+      .project-description {
+        color: var(--text-secondary);
+        font-size: var(--font-size-sm);
+        line-height: 1.6;
+        margin-bottom: var(--space-md);
+      }
+
+      .project-links {
+        display: flex;
+        gap: var(--space-sm);
+        flex-wrap: wrap;
+      }
+
+      .project-link {
+        flex: 1;
+        text-align: center;
+        padding: var(--space-sm) var(--space-md);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: var(--font-size-sm);
+        border-radius: var(--radius-md);
+        transition: all 0.3s ease;
+        min-width: 80px;
+      }
+
+      .github-link {
+        background: var(--bg-card);
+        color: var(--accent-color);
+        border: 2px solid var(--accent-color);
+      }
+
+      .github-link:hover {
+        background: var(--accent-color);
+        color: white;
+      }
+
+      .demo-link {
+        background: var(--accent-color);
+        color: white;
+        border: 2px solid var(--accent-color);
+      }
+
+      .demo-link:hover {
+        background: var(--bg-card);
+        color: var(--accent-color);
+      }
+
+      /* Swiper Navigation */
+      .swiper-button-next,
+      .swiper-button-prev {
+        color: var(--accent-color) !important;
+        width: 25px !important;
+        height: 25px !important;
+        margin-top: -12px !important;
+      }
+
+      .swiper-button-next:after,
+      .swiper-button-prev:after {
+        font-size: var(--font-size-sm) !important;
+        font-weight: 900 !important;
+      }
+
+      /* Swiper Pagination */
+      .swiper-pagination-bullet {
+        background: var(--accent-color) !important;
+        opacity: 0.5 !important;
+      }
+
+      .swiper-pagination-bullet-active {
+        opacity: 1 !important;
+      }
+
+      .reset-button {
+        position: absolute;
+        right: 15px;
+        width: 30px;
+        height: 30px;
+        border: none;
+        border-radius: var(--radius-full);
+        background: var(--bg-card);
+        color: var(--text-primary);
+        font-size: var(--font-size-base);
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease;
+        z-index: 10;
+        transform: translateY(100%);
+        border: 1px solid var(--border-color);
+      }
+
+      .reset-button.visible {
+        display: flex;
+      }
+
+      .reset-button:hover {
+        background: var(--hover-bg);
+        box-shadow: var(--card-shadow-hover);
+      }
+
+      /* 홈으로 버튼 스타일 */
+      .home-button {
+        display: inline-block;
+        padding: var(--space-sm) var(--space-lg);
+        margin-bottom: var(--space-md);
+        background: var(--bg-card);
+        color: var(--accent-color);
+        text-decoration: none;
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        border: 2px solid var(--accent-color);
+        border-radius: var(--radius-md);
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        text-align: center;
+        min-width: 80px;
+      }
+
+      .home-button:hover {
+        background: var(--accent-color);
+        color: white;
+        box-shadow: var(--card-shadow-hover);
+        transform: translateY(-1px);
+      }
+
+      .home-button:focus {
+        outline: 2px solid var(--accent-color);
+        outline-offset: 2px;
+      }
+
+      .home-button:active {
+        transform: translateY(0);
+        box-shadow: var(--card-shadow);
+      }
+
+      /* 반응형 조정 */
+      @media (min-width: 360px) {
+        .home-button {
+          font-size: var(--font-size-base);
+          padding: var(--space-md) var(--space-xl);
+          margin: 10px 0;
+        }
+      }
+
+      @media (min-width: 375px) {
+        .home-button {
+          padding: var(--space-lg) var(--space-2xl);
+        }
+      }
+
+      /* 반응형 미디어쿼리 - index.html 스타일과 일치 */
+      @media (min-width: 360px) {
+        :root {
+          --font-size-xs: 0.72rem;
+          --font-size-sm: 0.82rem;
+          --font-size-base: 0.87rem;
+          --font-size-lg: 0.92rem;
+          --font-size-xl: 1.02rem;
+          --font-size-2xl: 1.12rem;
+          --font-size-3xl: 1.32rem;
+          --font-size-4xl: 1.52rem;
+          --font-size-5xl: 1.82rem;
+
+          --space-xs: 3.5px;
+          --space-sm: 7px;
+          --space-md: 13px;
+          --space-lg: 19px;
+          --space-xl: 25px;
+          --space-2xl: 31px;
+          --space-3xl: 37px;
+        }
+
+        body {
+          line-height: 1.52;
+        }
+
+        .phone-container {
+          width: 100%;
+          height: 100%;
+          padding: 20px;
+          box-sizing: border-box;
+        }
+
+        .card-container {
+          height: 320px;
+          margin: 18px;
+          margin-top: 50px;
+        }
+
+        .card-stack {
+          height: 160px;
+        }
+
+        .card {
+          height: 160px;
+          padding: 18px;
+          border-radius: var(--radius-xl);
+        }
+
+        .card-brand {
+          font-size: var(--font-size-lg);
+          top: 18px;
+          left: 18px;
+        }
+
+        .card.selected .card-brand {
+          top: 26px;
+        }
+
+        .card-number {
+          font-size: var(--font-size-base);
+        }
+
+        .project-header {
+          width: 100%;
+          max-width: 100%;
+        }
+      }
+
+      @media (min-width: 375px) {
+        :root {
+          --font-size-xs: 0.74rem;
+          --font-size-sm: 0.84rem;
+          --font-size-base: 0.89rem;
+          --font-size-lg: 0.94rem;
+          --font-size-xl: 1.04rem;
+          --font-size-2xl: 1.14rem;
+          --font-size-3xl: 1.34rem;
+          --font-size-4xl: 1.54rem;
+          --font-size-5xl: 1.84rem;
+
+          --space-xs: 4px;
+          --space-sm: 7.5px;
+          --space-md: 14px;
+          --space-lg: 20px;
+          --space-xl: 26px;
+          --space-2xl: 32px;
+          --space-3xl: 38px;
+        }
+
+        body {
+          line-height: 1.54;
+        }
+
+        .phone-container {
+          width: 100%;
+          height: 650px;
+          padding: 0 10px;
+        }
+
+        .card-container {
+          height: 350px;
+          margin: 20px;
+          margin-top: 55px;
+        }
+
+        .card-stack {
+          height: 180px;
+        }
+
+        .card {
+          height: 180px;
+          padding: 20px;
+          border-radius: var(--radius-xl);
+        }
+
+        .card-brand {
+          font-size: var(--font-size-xl);
+          top: 12px;
+          left: 20px;
+        }
+
+        .card.selected .card-brand {
+          top: 26px;
+        }
+
+        .card-number {
+          font-size: var(--font-size-lg);
+          margin-top: 40px;
+        }
+
+        .swiper-section {
+          height: 300px;
+        }
+      }
+
+      @media (min-width: 390px) {
+        .phone-container {
+          height: 100vh;
+        }
+
+        .card-container {
+          height: calc(100% - 500px);
+          margin: 22px;
+          margin-top: 58px;
+        }
+
+        .card-stack {
+          height: 200px;
+        }
+
+        .card {
+          height: 200px;
+          padding: 22px;
+        }
+
+        .card-brand {
+          font-size: var(--font-size-2xl);
+          top: 13px;
+          left: 22px;
+        }
+
+        .card.selected .card-brand {
+          top: 26px;
+        }
+
+        .card-number {
+          font-size: var(--font-size-xl);
+          margin-top: 45px;
+        }
+
+        .project-title {
+          font-size: var(--font-size-xl);
+        }
+
+        .project-description {
+          min-height: calc(100% - 200px);
+        }
+      }
+
+      @media (min-width: 430px) {
+        .phone-container {
+          height: 900px;
+          max-width: 1200px;
+          margin: 0 auto;
+          overflow: hidden;
+        }
+
+        .card-container {
+          width: 400px;
+          height: 468px;
+          margin: 70px auto 26px auto;
+        }
+
+        .card {
+          height: 230px;
+          padding: 26px;
+        }
+
+        .card-brand {
+          font-size: var(--font-size-3xl);
+          top: 9px;
+          left: 26px;
+        }
+
+        .card.selected .card-brand {
+          top: 26px;
+        }
+
+        .card-number {
+          font-size: var(--font-size-2xl);
+          margin-top: 60px;
+          letter-spacing: 2px;
+        }
+
+        .project-title {
+          font-size: var(--font-size-base);
+        }
+
+        .project-description {
+          min-height: 47px;
+        }
+
+        .reset-button.visible {
+          bottom: 391px;
+          right: 50%;
+          transform: translate(200px, 100%);
+        }
+      }
+
+      /* 접근성 및 사용성 개선 */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+
+      @media (prefers-contrast: high) {
+        :root {
+          --border-color: rgba(0, 0, 0, 0.3);
+          --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme='dark'] {
+          --border-color: rgba(255, 255, 255, 0.3);
+          --card-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+        }
+      }
+
+      /* 스크롤바 스타일 */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+        border-radius: var(--radius-sm);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--text-secondary);
+        border-radius: var(--radius-sm);
+        opacity: 0.5;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--accent-color);
+        opacity: 1;
+      }
+
+      html {
+        scrollbar-width: thin;
+        scrollbar-color: var(--text-secondary) var(--bg-secondary);
+      }
+
+      /* Selection 스타일 */
+      ::selection {
+        background-color: var(--accent-light);
+        color: var(--accent-color);
+      }
+
+      ::-moz-selection {
+        background-color: var(--accent-light);
+        color: var(--accent-color);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="scroll-container">
+      <div class="phone-container" id="phoneContainer">
+        <a href="../../../index.html" class="home-button">홈으로</a>
+        <div class="section-top">
+          <strong>포트폴리오</strong>
+          <div class="section-pdf">
+            <ul class="pdf-list" id="pdfList"></ul>
+            <div class="pdf-button-container">
+              <button type="button" class="folder-icon" id="folderIcon">
+                📁
+              </button>
+              <span class="folder-label">포트폴리오</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-container" id="cardContainer">
+          <div class="card-stack" id="cardStack">
+            <div
+              class="card card-executive"
+              data-card="executive"
+              data-index="3"
+            >
+              <strong class="card-brand">ChartJS</strong>
+              <div class="card-logo">
+                <img
+                  src="../../assets/logo_chart.png"
+                  alt="chartjs 로고 이미지"
+                  class="card-logo-image"
+                />
+              </div>
+              <p class="card-number">4532 1234 5678 9012</p>
+              <div class="card-bottom-section">
+                <div class="card-info">
+                  <span class="card-holder">Data Visualization</span>
+                  <span class="card-name">Chart Projects</span>
+                </div>
+                <div class="card-expiry-section">
+                  <span class="card-expiry-label">Valid</span>
+                  <span class="card-expiry">Always</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-gift" data-card="gift" data-index="2">
+              <strong class="card-brand">Vanilla JS</strong>
+              <div class="card-logo">
+                <img
+                  src="../../assets/logo_js.png"
+                  alt="javascript 로고 이미지"
+                  class="card-logo-image"
+                />
+              </div>
+              <p class="card-number">5412 3456 7890 1234</p>
+              <div class="card-bottom-section">
+                <div class="card-info">
+                  <span class="card-holder">Pure JavaScript</span>
+                  <span class="card-name">Vanilla Projects</span>
+                </div>
+                <div class="card-expiry-section">
+                  <span class="card-expiry-label">Valid</span>
+                  <span class="card-expiry">Always</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-food" data-card="food" data-index="1">
+              <strong class="card-brand">React</strong>
+              <div class="card-logo">
+                <img
+                  src="../../assets/logo_react.png"
+                  alt="react 로고 이미지"
+                  class="card-logo-image"
+                />
+              </div>
+              <p class="card-number">4716 5432 1098 7654</p>
+              <div class="card-bottom-section">
+                <div class="card-info">
+                  <span class="card-holder">Frontend Framework</span>
+                  <span class="card-name">React Projects</span>
+                </div>
+                <div class="card-expiry-section">
+                  <span class="card-expiry-label">Valid</span>
+                  <span class="card-expiry">Always</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-travel" data-card="travel" data-index="0">
+              <strong class="card-brand">GSAP</strong>
+              <div class="card-logo">
+                <img
+                  src="../../assets/logo_gsap.png"
+                  alt="gsap 로고 이미지"
+                  class="card-logo-image"
+                />
+              </div>
+              <p class="card-number">5301 9876 5432 1087</p>
+              <div class="card-bottom-section">
+                <div class="card-info">
+                  <span class="card-holder">Animation Library</span>
+                  <span class="card-name">GSAP Projects</span>
+                </div>
+                <div class="card-expiry-section">
+                  <span class="card-expiry-label">Valid</span>
+                  <span class="card-expiry">Always</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-god" data-card="god" data-index="4">
+              <strong class="card-brand">jQuery</strong>
+              <div class="card-logo">
+                <img
+                  src="../../assets/logo_jquery.png"
+                  alt="jquery 로고 이미지"
+                  class="card-logo-image"
+                />
+              </div>
+              <p class="card-number">3782 8224 6310 005</p>
+              <div class="card-bottom-section">
+                <div class="card-info">
+                  <span class="card-holder">Classic Library</span>
+                  <span class="card-name">jQuery Projects</span>
+                </div>
+                <div class="card-expiry-section">
+                  <span class="card-expiry-label">Valid</span>
+                  <span class="card-expiry">Always</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="animation-wrapper">
+            <div class="flip-card" id="flipCard">
+              <div class="card-face card-front">카드에 스크롤로 두고</div>
+              <div class="card-face card-back">위로 이동하세요</div>
+            </div>
+
+            <div class="scroll-guide-section">
+              <div class="scroll-indicator">
+                <div class="scroll-arrow"></div>
+                <div class="scroll-arrow" style="animation-delay: 0.2s"></div>
+                <div class="scroll-arrow" style="animation-delay: 0.4s"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="reset-button" id="resetButton">
+          ×
+          <span class="sr-only">카드 제자리로 이동</span>
+        </button>
+        <div class="swiper-section" id="swiperSection">
+          <div class="swiper-container" id="swiperContainer">
+            <div class="swiper-wrapper" id="swiperWrapper">
+              <!-- 동적으로 생성될 슬라이드들 -->
+            </div>
+            <!-- 네비게이션 -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <!-- 페이지네이션 -->
+            <div class="swiper-pagination"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      gsap.registerPlugin(ScrollTrigger);
+
+      // 전역 상태 관리
+      const appState = {
+        currentProgress: 0,
+        currentCardIndex: 0,
+        selectedCard: null,
+        isCardSelected: false,
+      };
+
+      // PDF 폴더 시스템 상태
+      const pdfState = {
+        isExpanded: false,
+        pdfElements: [],
+        downloadingFiles: new Set(),
+      };
+
+      // PDF 파일 데이터 - 하나만 남김
+      const pdfFiles = [{ id: 1, title: 'Portfolio.pdf', size: '185KB' }];
+
+      // PDF 시스템 DOM 요소들
+      const folderIcon = document.getElementById('folderIcon');
+      const pdfList = document.getElementById('pdfList');
+
+      // 포트폴리오 슬라이드 데이터
+      const slideContentData = {
+        travel: [
+          {
+            title: 'GSAP 애플 스크롤 애니메이션',
+            date: '2025.07 (2주)',
+            status: 'Web',
+            type: '개인 프로젝트 • 애니메이션 실험',
+            description:
+              'Apple 공식 홈페이지 스타일의 고급 스크롤 애니메이션을 GSAP로 구현한 연구 프로젝트. 순차적 애니메이션과 지능형 스크롤 반응 시스템',
+            techStack: ['GSAP', 'ScrollTrigger', 'HTML5', 'CSS3', 'JavaScript'],
+            links: {
+              github: 'https://github.com/searchme86/gsap_apple_pill',
+              demo: 'https://searchme86.github.io/gsap_apple_pill/',
+            },
+          },
+          {
+            title: '스크롤 시계 애니메이션',
+            date: '2025.08 (3주)',
+            status: 'Web',
+            type: '개인 프로젝트 • Apple Watch 스타일 구현',
+            description:
+              'Apple Watch 스타일 애니메이션의 완전한 기술적 구현과 디바이스별 반응형 좌표 시스템 분석. 실제 Apple Watch와 유사한 케이스, 크라운, 버튼 디테일과 동적 검은색 애니메이션을 포함한 종합적 구현 프로젝트',
+            techStack: ['GSAP', 'ScrollTrigger', 'HTML5', 'CSS3', 'JavaScript'],
+            links: {
+              github: 'https://github.com/searchme86/gsap_apple_watch',
+              demo: 'https://searchme86.github.io/gsap_apple_watch/',
+            },
+          },
+        ],
+        food: [
+          {
+            title: '리액트 멀티스텝 폼 블로그',
+            date: '2025.06~2025.08',
+            status: 'PREVIEW',
+            type: '개인 프로젝트 • 배포',
+            description:
+              '복잡한 다단계 폼을 단계별로 나누어 사용자 경험을 개선하고, 현대적인 빌드 도구 활용 연구',
+            techStack: ['TypeScript', 'Vite', 'Hook Form', 'Zod'],
+            links: {
+              github:
+                'https://github.com/searchme86/vite_multistepForm_preview',
+              demo: 'https://vite-multi-step-form.vercel.app/',
+            },
+          },
+          {
+            title: '리액트훅폼과 zod의 기능을 갖는 커스텀 컴포넌트 구현',
+            date: '2022.11~12 (2개월)',
+            status: 'CODE',
+            type: '개인 프로젝트 • 풀스택 리팩토링',
+            description:
+              '이전 프로젝트의 한계를 분석하고 개선한 풀스택 리팩토링 프로젝트. 재사용 가능한 커스텀 폼 모듈과 보안 강화된 인증 시스템 구축',
+            techStack: ['TypeScript', 'Node.js', 'React Query', 'Cloudinary'],
+            links: {
+              github:
+                'https://github.com/searchme86/Client-LOGIN-WITH-CUSTOM-REACT-HOOK-FORM-MODULES',
+              demo: '#',
+            },
+          },
+          {
+            title: 'NodeJs를 사용한 ReactJS 풀스택 프로젝트 구현',
+            date: '2022.06~08 (3개월)',
+            status: 'LIVE',
+            type: '개인 프로젝트 • 풀스택',
+            description:
+              'ReactJS와 NodeJS를 통해 DB Model 설계부터 개발 배포까지 전체 프로세스를 경험한 풀스택 프로젝트',
+            techStack: ['Redux', 'Node.js', 'MongoDB', 'Express'],
+            links: {
+              github: 'https://github.com/searchme86/App_Final_Deployed',
+              demo: 'https://fleamarketagora.herokuapp.com/',
+            },
+          },
+          {
+            title: '타입스크립트 적용한 팀 프로젝트',
+            date: '2022.01~03 (3개월)',
+            status: 'CODE',
+            type: '팀 프로젝트 • 백엔드 협업',
+            description:
+              'Backend 개발자와 협업하면서 React에 TypeScript를 적용해 타입 안정성과 팀 협업 경험을 쌓은 프로젝트',
+            techStack: ['TypeScript', 'Firebase', 'Styled-Components'],
+            links: {
+              github: 'https://github.com/searchme86/react-type-scaffolding',
+              demo: '#',
+            },
+          },
+        ],
+        gift: [
+          {
+            title: 'Vanilla JS 어플리케이션 구현',
+            date: '2023.10~12 (2개월)',
+            status: 'LIVE',
+            type: '개인 프로젝트 • React 없는 SPA',
+            description:
+              '"왜 React가 필요한가?" 질문에 답하기 위해 Vanilla JS로 SPA 수준의 복잡한 기능을 구현한 학습 프로젝트',
+            techStack: ['Vanilla JS', 'Vite', 'SCSS', 'Swiper', 'Web API'],
+            links: {
+              github: 'https://github.com/searchme86/vite-vanila',
+              demo: 'https://searchme86.github.io/vite-vanila/index.html',
+            },
+          },
+        ],
+        executive: [
+          {
+            title: 'chartJs를 이용한 커스텀 그래프 구현',
+            date: '2023.10 (1개월)',
+            status: 'LIVE',
+            type: '실무 프로토타입 • 데이터 시각화',
+            description:
+              '회사 상품 대시보드용 차트 프로토타입으로, Chart.js 기본 기능을 실무 요구사항에 맞게 커스터마이징한 프로젝트',
+            techStack: ['Vite', 'Canvas API', 'SCSS'],
+            links: {
+              github: 'https://github.com/searchme86/vite-chartjs',
+              demo: 'https://searchme86.github.io/vite-chartjs/',
+            },
+          },
+        ],
+        god: [
+          {
+            title: '제이쿼리를 활용한 어플리케이션 구현',
+            date: '2020.09 (1개월)',
+            status: 'LIVE',
+            type: '개인 프로젝트 • Clone Coding',
+            description:
+              'jQuery 학습을 위한 Clone Coding으로 동적 웹페이지 구현의 기초를 익히기 위한 프로젝트',
+            techStack: ['HTML', 'CSS', 'jQuery', '적응형 웹'],
+            links: {
+              github: 'https://github.com/searchme86/kafriends_clone',
+              demo: 'https://searchme86.github.io/kafriends_clone/',
+            },
+          },
+        ],
+      };
+
+      // DOM 요소들
+      const cards = document.querySelectorAll('.card');
+      const swiperSection = document.getElementById('swiperSection');
+      const swiperWrapper = document.getElementById('swiperWrapper');
+      const resetButton = document.getElementById('resetButton');
+
+      let scrollTriggerInstance;
+      let resetButtonTimer = null;
+      let swiperInstance = null;
+
+      console.log('GSAP ScrollTrigger + Swiper + PDF 시스템 통합 초기화 시작');
+
+      // PDF 시스템 함수들
+      function expandPdfFiles() {
+        if (pdfState.isExpanded) return;
+
+        pdfState.isExpanded = true;
+        folderIcon.style.transform = 'scale(0.95)';
+
+        pdfFiles.forEach((file, index) => {
+          createPdfElement(file, index);
+        });
+
+        setTimeout(() => {
+          pdfList.classList.add('visible');
+          // PDF 리스트가 펼쳐진 후 외부 클릭 이벤트 리스너 등록
+          setTimeout(() => {
+            document.addEventListener('click', handleOutsideClick);
+          }, 100);
+        }, 100);
+      }
+
+      function createPdfElement(file, index) {
+        const listItem = document.createElement('li');
+        listItem.className = 'pdf-list-item';
+
+        const progressBar = document.createElement('div');
+        progressBar.className = 'progress-bar';
+        progressBar.innerHTML = '<div class="progress-fill"></div>';
+
+        const pdfLink = document.createElement('a');
+        pdfLink.href = '../../documents/works/portfolio.html'; // 실제 PDF 다운로드 링크로 변경 가능
+        pdfLink.target = '_blank'; // 실제 PDF 다운로드 링크로 변경 가능
+        pdfLink.className = 'pdf-item';
+        pdfLink.setAttribute('data-file-id', file.id);
+        pdfLink.setAttribute('aria-label', `${file.title} 다운로드`);
+
+        pdfLink.innerHTML = `
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-info">
+            <div class="pdf-title">${file.title}</div>
+            <div class="pdf-size" title="${file.size}">${file.size}</div>
+          </div>
+        `;
+
+        listItem.appendChild(progressBar);
+        listItem.appendChild(pdfLink);
+        pdfList.appendChild(listItem);
+
+        pdfState.pdfElements.push({
+          listItem,
+          pdfLink,
+          progressBar: progressBar.querySelector('.progress-fill'),
+          file,
+        });
+
+        // PDF 링크 클릭 시 이벤트 버블링 중단
+        pdfLink.addEventListener('click', (event) => {
+          event.stopPropagation();
+          handlePdfClick(file, pdfLink, progressBar, listItem);
+        });
+
+        setTimeout(() => {
+          listItem.classList.add('visible');
+        }, index * 80 + 150);
+      }
+
+      function handlePdfClick(file, linkElement, progressBar, listItem) {
+        if (pdfState.downloadingFiles.has(file.id)) return;
+
+        pdfState.downloadingFiles.add(file.id);
+        linkElement.style.pointerEvents = 'none';
+        linkElement.classList.add('downloading');
+        listItem.querySelector('.progress-bar').classList.add('active');
+
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+          progress += Math.random() * 25 + 15;
+
+          if (progress >= 100) {
+            progress = 100;
+            clearInterval(progressInterval);
+
+            setTimeout(() => {
+              completeDownload(file, linkElement, listItem);
+            }, 200);
+          }
+
+          progressBar.style.width = progress + '%';
+        }, 250);
+      }
+
+      function completeDownload(file, linkElement, listItem) {
+        linkElement.classList.remove('downloading');
+        linkElement.classList.add('completed');
+
+        setTimeout(() => {
+          linkElement.style.pointerEvents = 'auto';
+          linkElement.classList.remove('completed');
+          listItem.querySelector('.progress-bar').classList.remove('active');
+          listItem.querySelector('.progress-fill').style.width = '0%';
+          pdfState.downloadingFiles.delete(file.id);
+        }, 1500);
+      }
+
+      function collapsePdfFiles() {
+        if (!pdfState.isExpanded) return;
+
+        pdfState.isExpanded = false;
+        pdfState.downloadingFiles.clear();
+
+        // 외부 클릭 이벤트 리스너 제거
+        document.removeEventListener('click', handleOutsideClick);
+
+        pdfList.classList.remove('visible');
+
+        setTimeout(() => {
+          pdfState.pdfElements.forEach(({ listItem }) => {
+            if (listItem.parentNode) {
+              listItem.parentNode.removeChild(listItem);
+            }
+          });
+
+          folderIcon.style.transform = 'scale(1)';
+          pdfState.pdfElements = [];
+        }, 400);
+      }
+
+      // 외부 클릭 감지 함수
+      function handleOutsideClick(event) {
+        // PDF 시스템 관련 요소들인지 확인
+        const isPdfSystemClick =
+          event.target.closest('.section-pdf') ||
+          event.target.closest('#folderIcon') ||
+          event.target.closest('#pdfList') ||
+          event.target.closest('.pdf-item') ||
+          event.target.closest('.pdf-list-item');
+
+        // PDF 시스템 외부를 클릭한 경우에만 닫기
+        if (!isPdfSystemClick && pdfState.isExpanded) {
+          console.log('외부 영역 클릭 감지 - PDF 리스트 닫기');
+          collapsePdfFiles();
+        }
+      }
+
+      // PDF 폴더 클릭 이벤트 (이벤트 버블링 중단 추가)
+      folderIcon.addEventListener('click', function (event) {
+        event.stopPropagation(); // 이벤트 버블링 중단
+
+        if (pdfState.isExpanded) {
+          collapsePdfFiles();
+        } else {
+          expandPdfFiles();
+        }
+      });
+
+      // 기존 GSAP ScrollTrigger 및 Swiper 함수들
+      function manageAnimationWrapperVisibility(progress, animationWrapper) {
+        const threshold = 0.005;
+
+        if (progress <= threshold) {
+          if (animationWrapper.style.display === 'none') {
+            console.log('모든 카드가 제자리로 복귀 - animation-wrapper 표시');
+            animationWrapper.style.display = 'flex';
+          }
+        } else {
+          if (animationWrapper.style.display !== 'none') {
+            console.log('스크롤 시작 - animation-wrapper 숨김');
+            animationWrapper.style.display = 'none';
+          }
+        }
+      }
+
+      function initScrollTrigger() {
+        scrollTriggerInstance = ScrollTrigger.create({
+          trigger: 'body',
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 1,
+          onUpdate: (self) => {
+            if (appState.isCardSelected) return;
+
+            const progress = self.progress;
+            const animationWrapper =
+              document.querySelector('.animation-wrapper');
+
+            manageAnimationWrapperVisibility(progress, animationWrapper);
+            appState.currentProgress = progress;
+
+            const cardAnimations = [
+              {
+                card: 'travel',
+                startProgress: 0,
+                endProgress: 0.2,
+                originalY: -2,
+                maxMove: 140,
+              },
+              {
+                card: 'food',
+                startProgress: 0.2,
+                endProgress: 0.4,
+                originalY: -8,
+                maxMove: 100,
+              },
+              {
+                card: 'gift',
+                startProgress: 0.5,
+                endProgress: 0.6,
+                originalY: -12,
+                maxMove: 60,
+              },
+              {
+                card: 'executive',
+                startProgress: 0.7,
+                endProgress: 1,
+                originalY: -18,
+                maxMove: 20,
+              },
+              {
+                card: 'god',
+                startProgress: 0.75,
+                endProgress: 1,
+                originalY: -20,
+                maxMove: -20,
+              },
+            ];
+
+            cardAnimations.forEach((anim, index) => {
+              const card = document.querySelector(`[data-card="${anim.card}"]`);
+              let translateY = anim.originalY;
+              let currentCardIndex = 0;
+
+              if (
+                progress >= anim.startProgress &&
+                progress <= anim.endProgress
+              ) {
+                const cardProgress =
+                  (progress - anim.startProgress) /
+                  (anim.endProgress - anim.startProgress);
+                translateY = anim.originalY + cardProgress * anim.maxMove;
+                currentCardIndex = index;
+                appState.currentCardIndex = currentCardIndex;
+              } else if (progress > anim.endProgress) {
+                translateY = anim.originalY + anim.maxMove;
+              }
+
+              gsap.set(card, {
+                y: translateY,
+                opacity: 1,
+                ease: 'none',
+              });
+            });
+
+            if (progress > 0.85) {
+              appState.currentCardIndex = 3;
+            }
+          },
+        });
+
+        console.log('GSAP ScrollTrigger 초기화 완료');
+      }
+
+      function getOptimalCardPosition(cardType) {
+        const optimalPositions = {
+          travel: 15,
+          food: 35,
+          gift: 55,
+          executive: 75,
+          god: 95,
+        };
+        return optimalPositions[cardType] || 0;
+      }
+
+      function calculateSwiperSectionHeight(selectedCard) {
+        const cardType = selectedCard.dataset.card;
+        const phoneContainer = document.querySelector('.phone-container');
+        const phoneRect = phoneContainer.getBoundingClientRect();
+
+        const cardHeight = selectedCard.offsetHeight;
+        const sectionTopHeight =
+          document.querySelector('.section-top').offsetHeight;
+        const cardContainer = document.querySelector('.card-container');
+        const cardContainerMarginTop = parseInt(
+          getComputedStyle(cardContainer).marginTop
+        );
+        const cardStackPosition =
+          document.querySelector('.card-stack').offsetTop;
+
+        const cardOriginalTop =
+          sectionTopHeight + cardContainerMarginTop + cardStackPosition;
+        const optimalPosition = getOptimalCardPosition(cardType);
+        const cardFinalTop = cardOriginalTop + optimalPosition;
+        const cardBottomPosition = cardFinalTop + cardHeight;
+
+        const phoneHeight = phoneRect.height;
+        const availableHeight = phoneHeight - cardBottomPosition;
+        const finalHeight = Math.max(250, availableHeight + 30);
+
+        swiperSection.style.height = `${finalHeight}px`;
+
+        showSlideContent(cardType);
+        const dd = finalHeight - 15;
+        resetButton.style.bottom = `${dd}px`;
+      }
+
+      // Swiper 인스턴스 생성 및 관리
+      function createSwiper(cardType) {
+        if (swiperInstance) {
+          swiperInstance.destroy(true, true);
+          swiperInstance = null;
+        }
+
+        const slides = slideContentData[cardType] || [];
+        swiperWrapper.innerHTML = '';
+
+        slides.forEach((slide, index) => {
+          const slideElement = document.createElement('div');
+          slideElement.className = 'swiper-slide';
+          slideElement.style.animationDelay = `${index * 0.1}s`;
+
+          const statusClass = `status-${slide.status.toLowerCase()}`;
+          const techStackHTML = slide.techStack
+            .map((tech) => `<span class="tech-tag">${tech}</span>`)
+            .join('');
+
+          slideElement.innerHTML = `
+            <div class="project-header">
+              <strong class="project-title">${slide.title}</strong>
+              <p class="project-type">${slide.type}</p>
+            </div>
+
+            <div class="project-tech-stack">
+              ${techStackHTML}
+            </div>
+
+            <p class="project-description">${slide.description}</p>
+
+            <div class="project-links">
+              <a href="${
+                slide.links.github
+              }" class="project-link github-link" rel="noopener" target="_blank">
+                GitHub
+              </a>
+              <a href="${
+                slide.links.demo
+              }" class="project-link demo-link" rel="noopener" target="_blank">
+                ${
+                  slide.status === 'LIVE'
+                    ? 'Live Demo'
+                    : slide.status === 'PREVIEW'
+                    ? 'Preview'
+                    : 'View Code'
+                }
+              </a>
+            </div>
+          `;
+
+          swiperWrapper.appendChild(slideElement);
+        });
+
+        setTimeout(() => {
+          swiperInstance = new Swiper('.swiper-container', {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            pagination: {
+              el: '.swiper-pagination',
+              clickable: true,
+              dynamicBullets: true,
+            },
+            navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            },
+            effect: 'slide',
+            speed: 600,
+            keyboard: {
+              enabled: true,
+            },
+            mousewheel: {
+              enabled: true,
+              sensitivity: 1,
+            },
+            breakpoints: {
+              430: {
+                slidesPerView: 3,
+                spaceBetween: 40,
+              },
+            },
+          });
+
+          console.log(
+            `${cardType} 카드용 Swiper 인스턴스 생성 완료. 슬라이드 수: ${slides.length}`
+          );
+        }, 100);
+      }
+
+      function showSlideContent(cardType) {
+        console.log(`슬라이드 표시: ${cardType} 카드`);
+
+        swiperSection.classList.add('visible');
+        createSwiper(cardType);
+      }
+
+      function handleCardClick(clickedCard) {
+        if (appState.isCardSelected) return;
+
+        // PDF 폴더 시스템 닫기
+        if (pdfState.isExpanded) {
+          collapsePdfFiles();
+        }
+
+        if (resetButtonTimer) {
+          clearTimeout(resetButtonTimer);
+        }
+
+        const animationWrapper = document.querySelector('.animation-wrapper');
+        animationWrapper.style.display = 'none';
+        console.log(`카드 선택됨: ${clickedCard.dataset.card}`);
+
+        appState.selectedCard = clickedCard;
+        appState.isCardSelected = true;
+
+        clickedCard.classList.add('selected');
+
+        const optimalPosition = getOptimalCardPosition(
+          clickedCard.dataset.card
+        );
+        console.log(
+          `${clickedCard.dataset.card} 카드 최적 위치로 이동: Y=${optimalPosition}px`
+        );
+
+        gsap.to(clickedCard, {
+          y: optimalPosition,
+          duration: 0.6,
+          ease: 'power2.out',
+          onComplete: () => {
+            console.log(
+              `애니메이션 완료: ${clickedCard.dataset.card} 카드 위치 측정 시작`
+            );
+            calculateSwiperSectionHeight(clickedCard);
+          },
+        });
+
+        cards.forEach((card) => {
+          if (card !== clickedCard) {
+            gsap.to(card, {
+              opacity: 0,
+              duration: 0.4,
+              ease: 'power2.out',
+            });
+          }
+        });
+
+        scrollTriggerInstance.disable();
+        resetButtonTimer = setTimeout(() => {
+          if (appState.isCardSelected) {
+            resetButton.classList.add('visible');
+          }
+          resetButtonTimer = null;
+        }, 1200);
+      }
+
+      function resetCardSelection() {
+        console.log('카드 선택 리셋');
+
+        if (resetButtonTimer) {
+          clearTimeout(resetButtonTimer);
+          resetButtonTimer = null;
+        }
+
+        if (swiperInstance) {
+          swiperInstance.destroy(true, true);
+          swiperInstance = null;
+        }
+
+        appState.selectedCard = null;
+        appState.isCardSelected = false;
+        appState.currentProgress = 0;
+        appState.currentCardIndex = 0;
+
+        const animationWrapper = document.querySelector('.animation-wrapper');
+        animationWrapper.style.display = 'flex';
+
+        ScrollTrigger.refresh();
+        window.scrollTo(0, 0);
+
+        swiperSection.style.height = '280px';
+
+        const animatedCards = [
+          { card: 'travel', y: -2 },
+          { card: 'food', y: -8 },
+          { card: 'gift', y: -12 },
+          { card: 'executive', y: -18 },
+          { card: 'god', y: -20 },
+        ];
+
+        animatedCards.forEach(({ card, y }) => {
+          const cardElement = document.querySelector(`[data-card="${card}"]`);
+          cardElement.classList.remove('selected');
+          gsap.set(cardElement, {
+            y: y,
+            opacity: 1,
+          });
+        });
+
+        swiperSection.classList.remove('visible');
+        resetButton.classList.remove('visible');
+
+        scrollTriggerInstance.enable();
+      }
+
+      // 이벤트 리스너 설정
+      cards.forEach((card) => {
+        card.addEventListener('click', () => handleCardClick(card));
+      });
+
+      resetButton.addEventListener('click', resetCardSelection);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          resetCardSelection();
+
+          if (pdfState.isExpanded) {
+            collapsePdfFiles();
+          }
+        }
+      });
+
+      // 초기화
+      gsap.set('.card', { opacity: 1 });
+
+      window.addEventListener('load', () => {
+        initScrollTrigger();
+      });
+
+      console.log(
+        'GSAP ScrollTrigger 카드 시스템과 Swiper + PDF 시스템 통합 완료'
+      );
+    </script>
+  </body>
+</html>

@@ -1,0 +1,371 @@
+/* /src/styles/responsive.css */
+
+.about-title {
+  padding: var(--space-md) var(--space-md) var(--space-sm);
+  font-size: var(--font-size-2xl);
+  text-align: center;
+}
+
+.accordion-tray,
+.accordion-icon {
+  transition: all 0.3s ease;
+}
+
+/* 1) ≥360px (Galaxy S 등 360 폭 계열) */
+@media (min-width: 360px) {
+  .about-title {
+    padding: var(--space-lg) var(--space-lg) var(--space-md);
+    font-size: var(--font-size-2xl);
+  }
+
+  .accordion-tray {
+    transition-duration: 350ms;
+  }
+
+}
+
+/* 2) ≥375px (iPhone 375 폭 계열) */
+@media (min-width: 375px) {
+  .about-title {
+    padding: var(--space-lg) var(--space-lg) var(--space-md);
+    font-size: var(--font-size-3xl);
+  }
+
+  .accordion-icon {
+    transition-duration: 300ms;
+    transform-origin: center;
+  }
+
+
+
+.content-area{
+  width: 100%;
+}
+
+
+}
+
+/* 3) ≥390px (iPhone Pro 390×844 계열) */
+@media (min-width: 390px) {
+  .about-title {
+    padding: var(--space-xl) var(--space-xl) var(--space-lg);
+    font-size: var(--font-size-3xl);
+    letter-spacing: -0.005em;
+  }
+
+  .accordion-tray {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .main-layout {
+    gap: var(--space-lg);
+  }
+
+  .portfolio-content {
+    padding: var(--space-md) 0;
+  }
+}
+
+/* 4) ≥393px (iPhone 16 / 일부 Android 393 폭) */
+@media (min-width: 393px) {
+  .about-title {
+    padding: var(--space-xl) var(--space-xl) var(--space-lg);
+    margin-bottom: var(--space-sm);
+  }
+
+  .accordion-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .main-layout {
+    gap: var(--space-xl);
+  }
+
+  .content-area {
+    gap: var(--space-xl);
+  }
+}
+
+/* 5) ≥402px (iPhone 16 Pro 402 폭) */
+@media (min-width: 402px) {
+  .about-title {
+    font-size: var(--font-size-4xl);
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-md);
+  }
+
+  .accordion-tray {
+    border-radius: var(--radius-lg);
+    transition-duration: 400ms;
+  }
+
+  .accordion-icon {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+
+  .portfolio-content {
+    padding: var(--space-lg) 0;
+  }
+}
+
+/* 6) ≥412px (Pixel/Android 다수 412 폭) */
+@media (min-width: 412px) {
+  .about-title {
+    padding: var(--space-2xl) var(--space-2xl) var(--space-xl);
+    font-size: var(--font-size-4xl);
+    margin-bottom: var(--space-lg);
+  }
+
+  .accordion-tray {
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .main-layout {
+    gap: var(--space-2xl);
+
+  }
+
+  .content-area {
+    gap: var(--space-2xl);
+  }
+
+  .portfolio-content {
+    padding: var(--space-xl) 0;
+  }
+}
+
+/* 7) ≥430px (iPhone Plus/Pro Max 430 폭) */
+@media (min-width: 430px) {
+  .about-title {
+    padding: var(--space-2xl) var(--space-2xl) var(--space-xl);
+    font-size: var(--font-size-5xl);
+    letter-spacing: -0.015em;
+    margin-bottom: var(--space-xl);
+  }
+
+  .accordion-tray {
+    transition-duration: 450ms;
+    border-radius: var(--radius-xl);
+  }
+
+  .accordion-icon {
+    width: 22px;
+    height: 22px;
+    transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .main-layout {
+    gap: var(--space-2xl);
+  }
+
+  .content-area {
+    gap: var(--space-2xl);
+  }
+
+  .portfolio-content {
+    padding: var(--space-2xl) 0;
+  }
+}
+
+/* 8) ≥440px (iPhone 16 Pro Max 440 폭) */
+@media (min-width: 440px) {
+  .about-title {
+    padding: var(--space-3xl) var(--space-3xl) var(--space-2xl);
+    font-size: var(--font-size-5xl);
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-xl);
+    text-align: left;
+  }
+
+  .accordion-tray {
+    transition-duration: 500ms;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .accordion-icon {
+    width: 24px;
+    height: 24px;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .main-layout {
+    gap: var(--space-3xl);
+  }
+
+  .content-area {
+    gap: var(--space-3xl);
+  }
+
+  .portfolio-content {
+    padding: var(--space-2xl) 0 var(--space-3xl);
+  }
+}
+
+@media (min-width: 481px) {
+  .about-title {
+    padding: var(--space-3xl) var(--space-3xl) var(--space-2xl);
+    font-size: var(--font-size-5xl);
+    text-align: left;
+  }
+
+  .main-layout {
+    flex-direction: column;
+    gap: var(--space-2xl);
+  }
+
+}
+
+@media (min-width: 768px) {
+  .about-title {
+    padding: var(--space-3xl) var(--space-3xl) var(--space-xl);
+    font-size: 2rem;
+    text-align: left;
+  }
+
+  .main-layout {
+    flex-direction: row;
+    gap: var(--space-3xl);
+  }
+
+  .accordion-tray {
+    transition-duration: 400ms;
+  }
+
+  .accordion-icon {
+    transition-duration: 400ms;
+  }
+}
+
+@media (min-width: 1012px) {
+  .main-layout {
+    flex-direction: row;
+    gap: var(--space-3xl);
+  }
+
+  .about-title {
+    font-size: 2.2rem;
+    letter-spacing: -0.025em;
+  }
+}
+
+@media (min-width: 1200px) {
+  .about-title {
+    padding: var(--space-3xl) var(--space-3xl) var(--space-2xl);
+    font-size: 2.5rem;
+  }
+
+  .main-layout {
+    gap: 3rem;
+  }
+
+  .accordion-tray {
+    transition-duration: 350ms;
+    border-radius: 20px;
+  }
+
+  .accordion-icon {
+    width: 26px;
+    height: 26px;
+    transition-duration: 350ms;
+  }
+}
+
+@media (min-width: 1400px) {
+  .about-title {
+    font-size: 2.8rem;
+    padding: 3rem 3rem 2.5rem;
+  }
+
+  .main-layout {
+    gap: 4rem;
+  }
+
+  .content-area {
+    gap: 3rem;
+  }
+
+  .portfolio-content {
+    padding: 3rem 0 4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordion-tray,
+  .accordion-icon {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .accordion-icon {
+    transition-duration: 0ms !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .about-title {
+    border-bottom: 2px solid var(--text-primary);
+  }
+
+  .accordion-tray {
+    border: 1px solid var(--border-secondary);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .accordion-icon:hover {
+    transform: scale(1.1);
+  }
+}
+
+@media (hover: none) {
+  .accordion-icon {
+    transform: none !important;
+  }
+}
+
+@media print {
+  .about-title {
+    font-size: 18pt !important;
+    padding: 0 0 12pt !important;
+    border-bottom: 1px solid black !important;
+    page-break-after: avoid;
+  }
+
+  .accordion-tray {
+    transition: none !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .main-layout {
+    flex-direction: column !important;
+    gap: 20pt !important;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .about-title {
+    font-size: var(--font-size-2xl);
+    padding: var(--space-md) var(--space-lg) var(--space-sm);
+  }
+
+  .portfolio-content {
+    padding: var(--space-sm) 0;
+  }
+
+  .main-layout {
+    gap: var(--space-md);
+  }
+}
+
+@media (min-resolution: 2dppx) {
+  .accordion-icon {
+    transform-origin: center;
+    will-change: transform;
+  }
+}

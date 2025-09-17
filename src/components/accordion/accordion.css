@@ -1,0 +1,309 @@
+/* /src/components/accordion/accordion.css */
+
+/* ============ APPLE-STYLE ACCORDION ============ */
+
+/* About Section - Apple Style Accordion */
+.about-section {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-xl);
+  padding: 0;
+  box-shadow: var(--card-shadow);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+[data-theme='dark'] .about-section {
+  box-shadow: var(--card-shadow);
+}
+
+.about-title {
+  font-size: var(--font-size-4xl);
+  font-weight: 600;
+  margin: 0;
+  padding: var(--space-2xl) var(--space-2xl) var(--space-lg);
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+/* Apple Accordion Wrapper */
+.accordion-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  position: relative;
+}
+
+/* Desktop Layout - Apple 방식 */
+@media (min-width: 1069px) {
+  .accordion-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    padding: 0;
+    background: transparent;
+    position: relative;
+  }
+
+  .accordion {
+    flex: 0 0 480px;
+    background-color: transparent;
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  .image-container-large {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 500px;
+    position: relative;
+    margin-left: 60px;
+    margin-top: 0;
+  }
+
+  /* 데스크탑에서 아코디언 내부 이미지 완전 숨김 */
+  .accordion-content .image-container {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+/* Mobile/Tablet Layout */
+@media (max-width: 1068px) {
+  .accordion-wrapper {
+    display: block;
+  }
+
+  .accordion {
+    background-color: transparent;
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  .image-container-large {
+    display: none;
+  }
+
+  /* 모바일에서 아코디언 내부 이미지 표시 */
+  .accordion-content .image-container {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-xl);
+    position: relative;
+    opacity: 1;
+    z-index: auto;
+  }
+}
+
+/* Accordion Styles */
+.accordion {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.accordion-item {
+  position: relative;
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* .accordion-item:last-child {
+  border-bottom: none;
+} */
+
+.accordion-item.expanded {
+  background-color: var(--bg-primary);
+}
+
+[data-theme='dark'] .accordion-item.expanded {
+  background-color: var(--bg-card);
+}
+
+/* Accordion Button */
+.accordion-button {
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-xl) var(--accordion-side-padding);
+  transition: background-color 0.3s ease;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+@media (max-width: 1068px) {
+  .accordion-button {
+    padding: var(--space-lg) var(--space-xl);
+  }
+}
+
+@media (max-width: 734px) {
+  .accordion-button {
+    padding: var(--space-lg) var(--space-lg);
+  }
+}
+
+.accordion-button:hover {
+  background-color: var(--hover-bg);
+}
+
+.accordion-button:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* Accordion Title */
+.accordion-title-text {
+  font-size: var(--font-size-4xl);
+  line-height: 1.1428571429;
+  font-weight: 600;
+  letter-spacing: 0.007em;
+  color: var(--text-primary);
+}
+
+@media (max-width: 1068px) {
+  .accordion-title-text {
+    font-size: var(--font-size-3xl);
+    line-height: 1.1666666667;
+    letter-spacing: 0.009em;
+  }
+}
+
+@media (max-width: 734px) {
+  .accordion-title-text {
+    font-size: var(--font-size-2xl);
+    line-height: 1.1904761905;
+    letter-spacing: 0.011em;
+  }
+}
+
+/* Accordion Icon */
+.accordion-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.accordion-icon svg {
+  width: 100%;
+  height: 100%;
+  color: var(--text-secondary);
+  stroke-width: 1.5;
+}
+
+.accordion-item.expanded .accordion-icon {
+  transform: rotate(180deg);
+}
+
+/* Accordion Tray */
+.accordion-tray {
+  overflow: hidden;
+  transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 0;
+  will-change: height;
+}
+
+/* Accordion Content */
+.accordion-content {
+  /* padding: 0 var(--accordion-side-padding) var(--space-2xl); */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+@media (max-width: 1068px) {
+  /* .accordion-content {
+    padding: 0 var(--space-xl) var(--space-xl);
+  } */
+}
+
+@media (max-width: 734px) {
+  /* .accordion-content {
+    padding: 0 var(--space-lg) var(--space-lg);
+  } */
+}
+
+.accordion-paragraph-text {
+  font-size: var(--font-size-lg);
+  line-height: 1.4705882353;
+  font-weight: 400;
+  letter-spacing: -0.022em;
+  color: var(--text-secondary);
+  margin-bottom: 0;
+}
+
+@media (max-width: 734px) {
+  .accordion-paragraph-text {
+    font-size: var(--font-size-base);
+    line-height: 1.4285714286;
+    letter-spacing: -0.016em;
+  }
+}
+
+/* 이미지 컨테이너 스타일 */
+.accordion-content .image-container img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+}
+
+/* Desktop Large Image Container */
+.image-container-large {
+  position: relative;
+  pointer-events: none;
+}
+
+.template-image-large {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  max-width: 100%;
+  height: auto;
+}
+
+.template-image-large:not(.hidden) {
+  opacity: 1;
+}
+
+.template-image-large.loaded:not(.hidden) {
+  opacity: 1;
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+}
+
+/* ============ CAREER ACCORDION STYLES ============ */
+
+/* Career Accordion Item Spacing */
+.career-accordion-item:not(:last-child) {
+  margin-bottom: 40px;
+}
+
+/* Performance Optimizations */
+.accordion-icon {
+  will-change: transform;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .accordion-tray,
+  .accordion-icon {
+    transition: none;
+  }
+}

@@ -1,0 +1,101 @@
+/* /src/components/hero/hero.css */
+
+/* === 🚀 Hero 섹션 전체 스타일 === */
+
+/* Hero 섹션 기본 설정 */
+.hero-section {
+  position: relative;
+  width: 100%;
+  background: #fff;
+  overflow: hidden;
+}
+
+.hero-section .container {
+  width: 100%;
+  background: #fff;
+  position: relative;
+}
+
+.shrinking-background {
+  width: 100%;
+  height: 100vh;
+  transition: height 0.1s ease;
+  position: relative;
+  z-index: 1;
+  will-change: transform;
+}
+
+.content {
+  width: 100%;
+  height: 100vh;
+  background: #fff;
+  position: relative;
+  padding: 0 1em; /* 📱 모바일 기본 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-div {
+  width: 100%;
+  height: 40vh; /* 📱 모바일 기본 */
+  max-height: 250px;
+  background-color: red;
+  clip-path: inset(0%);
+  border-radius: 0px;
+  transition: clip-path 0.1s ease-out, border-radius 0.15s ease-out;
+  position: relative;
+  transform: scaleX(0);
+  overflow: hidden;
+  /* z-index: 2; */
+}
+
+/* === 📱 Hero 섹션 반응형 미디어 쿼리 === */
+
+/* 360px+ */
+@media (min-width: 360px) {
+  .content {
+    padding: 0 1.2em;
+  }
+
+  .hero-div {
+    height: 42vh;
+    max-height: 270px;
+  }
+}
+
+/* 375px+ */
+@media (min-width: 375px) {
+  .hero-div {
+    height: 45vh;
+    max-height: 290px;
+  }
+}
+
+/* 412px+ */
+@media (min-width: 412px) {
+  .hero-div {
+    height: 55vh;
+    max-height: 380px;
+  }
+}
+
+/* 768px+ */
+@media (min-width: 768px) {
+  .content {
+    padding: 0 4em;
+  }
+
+  .hero-div {
+    height: 70vh;
+    max-height: 600px;
+  }
+}
+
+/* 1000px+ */
+@media (min-width: 1000px) {
+  .hero-div {
+    height: 80vh;
+    max-height: none;
+  }
+}

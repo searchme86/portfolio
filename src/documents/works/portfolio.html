@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>토이프로젝트 포트폴리오</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .offscreen {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, system-ui, Roboto,
+          sans-serif;
+        line-height: 1.6;
+        color: #000000;
+        background: #f8f9fa;
+        padding: 0;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+
+      /* 모바일 헤더 네비게이션 */
+      .mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        background: #ffffff;
+        border-bottom: 2px solid #000000;
+        position: relative;
+        z-index: 1000;
+      }
+
+      .home-link {
+        color: #000000;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: color 0.2s;
+      }
+
+      .home-link:hover {
+        color: #f39c12;
+      }
+
+      .hamburger-button {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #000000;
+        cursor: pointer;
+        padding: 5px;
+        transition: color 0.2s;
+      }
+
+      .hamburger-button:hover {
+        color: #f39c12;
+      }
+
+      .hamburger-button:focus {
+        outline: 2px solid #f39c12;
+        outline-offset: 2px;
+      }
+
+      /* 모바일 사이드바 오버레이 */
+      .mobile-sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1001;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .mobile-sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .mobile-sidebar {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100%;
+        background: #ffffff;
+        z-index: 1002;
+        transition: right 0.3s ease;
+        overflow-y: auto;
+        padding: 20px;
+        border-left: 2px solid #000000;
+      }
+
+      .mobile-sidebar.active {
+        right: 0;
+      }
+
+      .mobile-sidebar-close {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+      }
+
+      .close-button {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #000000;
+        cursor: pointer;
+        padding: 5px;
+        transition: color 0.2s;
+      }
+
+      .close-button:hover {
+        color: #f39c12;
+      }
+
+      .close-button:focus {
+        outline: 2px solid #f39c12;
+        outline-offset: 2px;
+      }
+
+      .container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .sidebar {
+        background: #ffffff;
+        padding: 15px;
+        color: #000000;
+        border-top: 2px solid #000000;
+        display: none;
+      }
+
+      .profile-info {
+        margin-bottom: 25px;
+      }
+
+      .name {
+        font-size: 1.3rem;
+        font-weight: 800;
+        margin-bottom: 5px;
+        color: #000000;
+      }
+
+      .role {
+        font-size: 0.9rem;
+        color: #000000;
+        font-weight: 400;
+        margin-bottom: 10px;
+      }
+
+      .tagline {
+        font-size: 0.8rem;
+        color: #f39c12;
+        line-height: 1.5;
+      }
+
+      .contact-section,
+      .skills-section {
+        border-top: 1px solid #000000;
+        padding-top: 15px;
+        margin-bottom: 25px;
+      }
+
+      .sidebar-title {
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: #000000;
+      }
+
+      .contact-item {
+        display: block;
+        color: #000000;
+        text-decoration: none;
+        margin-bottom: 8px;
+        font-size: 0.8rem;
+        transition: color 0.2s;
+      }
+
+      .contact-item:hover {
+        color: #f39c12;
+      }
+
+      .skills-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .skill-item {
+        margin-bottom: 8px;
+        font-size: 0.8rem;
+        color: #000000;
+        position: relative;
+        padding-left: 12px;
+      }
+
+      .skill-item::before {
+        content: '•';
+        position: absolute;
+        left: 0;
+        color: #f39c12;
+        font-weight: bold;
+      }
+
+      .main-content {
+        background: #f8f9fa;
+        padding: 15px;
+        flex: 1;
+      }
+
+      .page-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 30px 20px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
+
+      /* 페이지 헤더 홈 링크 네비게이션 - 추가된 스타일 */
+      .page-header-navigation {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        display: none; /* 모바일에서는 숨김 */
+      }
+
+      .page-header-home-link {
+        color: #000000;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        padding: 8px 16px;
+        border: 1px solid #e9ecef;
+        border-radius: 6px;
+        background: #f8f9fa;
+        display: inline-block;
+      }
+
+      .page-header-home-link:hover {
+        color: #f39c12;
+        border-color: #f39c12;
+        background: rgba(243, 156, 18, 0.1);
+      }
+
+      .page-header-home-link:focus {
+        outline: 2px solid #f39c12;
+        outline-offset: 2px;
+      }
+
+      .page-title {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #000000;
+        margin-bottom: 8px;
+      }
+
+      .page-subtitle {
+        font-size: 0.9rem;
+        color: #f39c12;
+        font-weight: 500;
+      }
+
+      .section {
+        margin-bottom: 30px;
+      }
+
+      .section-title {
+        display: inline-block;
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: #000000;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #000000;
+        padding-bottom: 8px;
+      }
+
+      /* 프로젝트 정보 섹션들 */
+      .project-info-section {
+        margin-bottom: 20px;
+      }
+
+      .projects-count {
+        background: #fff3cd;
+        padding: 12px;
+        border-radius: 6px;
+        color: #000000;
+        border-left: 4px solid #f39c12;
+        font-weight: 600;
+        font-size: 0.8rem;
+        margin: 0;
+      }
+
+      .usage-info-section {
+        margin-bottom: 20px;
+      }
+
+      .usage-guide {
+        background: #e8f5e8;
+        padding: 12px;
+        border-radius: 6px;
+        color: #2d5a2d;
+        border-left: 4px solid #28a745;
+        font-size: 0.8rem;
+        font-weight: 500;
+        margin: 0;
+      }
+
+      /* 프로젝트 컨테이너 */
+      .projects-container {
+        margin-bottom: 30px;
+      }
+
+      /* 뷰 옵션 (모든 뷰포트에서 표시) */
+      .view-options {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        padding: 8px;
+      }
+
+      .view-options-list {
+        display: flex;
+        list-style: none;
+        width: 215px;
+        margin: 0;
+        padding: 0;
+        gap: 10px;
+      }
+
+      .view-option-item {
+        flex: 1;
+      }
+
+      .view-option-button {
+        width: 100%;
+        padding: 8px 16px;
+        background: transparent;
+        border: none;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #6c757d;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+
+      .view-option-button:hover {
+        background: rgba(243, 156, 18, 0.1);
+        color: #f39c12;
+      }
+
+      .view-option-button.active {
+        background: #f39c12;
+        color: #ffffff;
+      }
+
+      .view-option-button:focus {
+        outline: 2px solid #f39c12;
+        outline-offset: 2px;
+      }
+
+      /* 프로젝트 목록 - 기본 그리드 뷰 */
+      .projects-grid {
+        display: flex;
+        gap: 20px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .projects-grid > li {
+        list-style: none;
+        width: 100%;
+      }
+
+      /* 그리드 뷰 - 채용공고 형식 카드 스타일 (Grid에서 Flex로 변경) */
+      .projects-grid.grid-view {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        width: 100%;
+      }
+
+      .projects-grid.grid-view .project-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+        background: #ffffff;
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        padding: 14px;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s ease;
+        position: relative;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        height: 100%;
+      }
+
+      .projects-grid.grid-view .project-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        border-color: #f39c12;
+      }
+
+      .projects-grid.grid-view .company-header {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .projects-grid.grid-view .company-logo {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+        color: white;
+        margin-bottom: 10px;
+      }
+
+      .projects-grid.grid-view .company-info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .projects-grid.grid-view .company-name {
+        width: 100%;
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-size: 18px;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 4px;
+        line-height: 1.3;
+      }
+
+      .projects-grid.grid-view .company-type {
+        display: block;
+        font-size: 0.85rem;
+        color: #6c757d;
+        font-weight: 500;
+        width: 163px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .projects-grid.grid-view .company-description {
+        color: #495057;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        min-height: 85px;
+      }
+
+      .projects-grid.grid-view .company-stats {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .projects-grid.grid-view .position-count {
+        background: #f8f9fa;
+        color: #495057;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: -1px;
+      }
+
+      .projects-grid.grid-view .project-status-badge {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .projects-grid.grid-view .status-live {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .projects-grid.grid-view .status-local {
+        background: #fff3cd;
+        color: #856404;
+      }
+
+      .projects-grid.grid-view .status-preview {
+        background: #d1ecf1;
+        color: #0c5460;
+      }
+
+      .projects-grid.grid-view .status-code {
+        background: #e2e3f1;
+        color: #383d41;
+      }
+
+      /* 리스트 뷰 스타일 */
+      .projects-grid.list-view {
+        gap: 12px;
+      }
+
+      .projects-grid.list-view .project-card {
+        min-height: auto;
+        border-radius: 6px;
+        border: 1px solid #e9ecef;
+        transition: all 0.2s ease;
+        padding: 12px;
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        background: #ffffff;
+      }
+
+      .projects-grid.list-view .project-card:hover {
+        transform: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-color: #f39c12;
+      }
+
+      .projects-grid.list-view .project-summary {
+        padding: 0;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0;
+        display: flex;
+      }
+
+      .projects-grid.list-view .project-header {
+        margin-bottom: 0;
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        line-height: 1;
+      }
+
+      .projects-grid.list-view .project-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .projects-grid.list-view .project-type {
+        font-size: 0.8rem;
+        margin-bottom: 0;
+        color: #6c757d;
+        width: 244px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+
+      .projects-grid.list-view .project-date {
+        display: inline-block;
+        min-width: 129px;
+        font-size: 0.7rem;
+        padding: 3px 8px;
+        background: #f39c12;
+        color: white;
+        border-radius: 4px;
+        margin: 0 8px 0 0;
+      }
+
+      .projects-grid.list-view .project-status {
+        margin-bottom: 0;
+        font-size: 0.7rem;
+        padding: 3px 8px;
+        border-radius: 4px;
+        display: inline-block;
+        min-width: 85px;
+      }
+
+      .projects-grid.list-view .status-live {
+        background: #28a745;
+        color: #ffffff;
+      }
+
+      .projects-grid.list-view .status-code {
+        background: #6f42c1;
+        color: #ffffff;
+      }
+
+      .projects-grid.list-view .status-local {
+        background: #fd7e14;
+        color: #ffffff;
+      }
+
+      .projects-grid.list-view .status-preview {
+        background: #20c997;
+        color: #ffffff;
+      }
+
+      /* 뷰 옵션 컨테이너 */
+      .view-options {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        padding: 8px;
+      }
+
+      .view-option-button:hover {
+        background: rgba(243, 156, 18, 0.1);
+        color: #f39c12;
+      }
+
+      .view-option-button:focus {
+        outline: 2px solid #f39c12;
+        outline-offset: 2px;
+      }
+
+      /* 버튼 내부 컨텐츠 레이아웃 */
+      .view-button-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+
+      .view-button-icon {
+        display: inline-block;
+        font-size: 1rem;
+        position: relative;
+        top: -2px;
+      }
+
+      .view-button-text {
+        display: inline-block;
+        font-size: 0.85rem;
+      }
+
+      /* 1) ≥360px (Galaxy S 등 360 폭 계열) */
+      @media (min-width: 360px) {
+        .mobile-header {
+          padding: 20px;
+        }
+
+        .main-content {
+          padding: 18px;
+        }
+
+        .page-title {
+          font-size: 1.4rem;
+        }
+
+        .projects-grid > li {
+          width: calc(50% - 8px);
+        }
+        .projects-grid.list-view > li {
+          width: 100%;
+        }
+
+        .projects-grid.list-view .project-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+
+        .projects-grid.list-view {
+          display: block;
+        }
+
+        .projects-grid.list-view > li:not(:last-child) {
+          margin-bottom: 8px;
+        }
+
+        .projects-grid.list-view .project-date,
+        .projects-grid.list-view .project-status {
+          min-width: auto;
+        }
+
+        .projects-grid.grid-view .company-name {
+          font-size: 15px;
+        }
+
+        .projects-grid.grid-view .company-stats {
+          flex-direction: column;
+          gap: 8px;
+          align-items: flex-start;
+        }
+        .projects-grid.grid-view .company-type {
+          width: 100%;
+        }
+      }
+
+      /* 2) ≥430px (iPhone Plus/Pro Max 430 폭) - Grid에서 Flex로 변경 */
+      @media (min-width: 430px) {
+        .projects-grid.grid-view {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 20px;
+        }
+
+        .projects-grid.grid-view > li {
+          width: calc(50% - 10px);
+        }
+      }
+
+      /* 3) ≥440px (iPhone 16 Pro Max 440 폭) */
+      @media (min-width: 440px) {
+        .main-content {
+          padding: 20px;
+        }
+      }
+
+      /* 태블릿 및 데스크톱 */
+      @media (min-width: 768px) {
+        /* 모바일 헤더 숨김 */
+        .mobile-header {
+          display: none;
+        }
+
+        /* 모바일 사이드바 관련 요소들 숨김 */
+        .mobile-sidebar-overlay,
+        .mobile-sidebar {
+          display: none;
+        }
+
+        /* 페이지 헤더 홈 링크 표시 - 추가된 미디어 쿼리 */
+        .page-header-navigation {
+          display: block;
+        }
+
+        /* 데스크톱 레이아웃 */
+        .container {
+          display: grid;
+          grid-template-columns: 300px 1fr;
+          gap: 0;
+        }
+
+        .sidebar {
+          display: block;
+          position: sticky;
+          top: 0;
+          height: 100vh;
+          overflow-y: auto;
+          border-top: none;
+          border-right: 2px solid #000000;
+          padding: 25px;
+          background: #ffffff;
+        }
+
+        .main-content {
+          padding: 30px;
+        }
+
+        .section-title {
+          font-size: 1.6rem;
+        }
+
+        /* Grid에서 Flex로 변경 */
+        .projects-grid.grid-view {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 25px;
+        }
+
+        .projects-grid.grid-view > li {
+          width: calc(33.333% - 20px);
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .container {
+          grid-template-columns: 350px 1fr;
+        }
+
+        .main-content {
+          padding: 40px;
+        }
+
+        .sidebar {
+          padding: 30px;
+        }
+
+        .section-title {
+          font-size: 1.8rem;
+        }
+
+        /* 페이지 헤더 홈 링크 위치 조정 - 추가된 미디어 쿼리 */
+        .page-header-navigation {
+          top: 25px;
+          left: 25px;
+        }
+
+        .page-header-home-link {
+          font-size: 1rem;
+          padding: 10px 20px;
+        }
+
+        /* Grid에서 Flex로 변경 */
+        .projects-grid.grid-view {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 30px;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+
+        .main-content {
+          padding: 50px;
+        }
+
+        .sidebar {
+          padding: 40px;
+        }
+
+        /* 페이지 헤더 홈 링크 위치 조정 - 추가된 미디어 쿼리 */
+        .page-header-navigation {
+          top: 30px;
+          left: 30px;
+        }
+
+        .projects-grid.grid-view {
+          margin: 0 -18px;
+        }
+      }
+
+      /* Focus styles for accessibility */
+      .project-card:focus {
+        outline: 3px solid #f39c12;
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="mobile-header">
+      <a href="../../../index.html" class="home-link">홈으로</a>
+      <button type="button" class="hamburger-button" aria-label="메뉴 열기">
+        ☰
+      </button>
+    </header>
+
+    <div class="mobile-sidebar-overlay"></div>
+    <nav class="mobile-sidebar">
+      <div class="mobile-sidebar-close">
+        <button type="button" class="close-button" aria-label="메뉴 닫기">
+          ✕
+        </button>
+      </div>
+
+      <div class="skills-section">
+        <strong class="sidebar-title">Core Skills</strong>
+        <ul class="skills-list">
+          <li class="skill-item">HTML5 / CSS3</li>
+          <li class="skill-item">SASS/SCSS</li>
+          <li class="skill-item">JavaScript (ES5/ES6+)</li>
+          <li class="skill-item">jQuery</li>
+          <li class="skill-item">반응형 웹 디자인</li>
+          <li class="skill-item">크로스 브라우징</li>
+          <li class="skill-item">BEM 방법론</li>
+        </ul>
+      </div>
+
+      <div class="skills-section">
+        <strong class="sidebar-title">Growing Skills</strong>
+        <ul class="skills-list">
+          <li class="skill-item">ReactJS</li>
+          <li class="skill-item">TypeScript</li>
+          <li class="skill-item">GSAP</li>
+          <li class="skill-item">React Hook Form</li>
+        </ul>
+      </div>
+
+      <div class="skills-section">
+        <strong class="sidebar-title">Experienced</strong>
+        <ul class="skills-list">
+          <li class="skill-item">VueJS</li>
+          <li class="skill-item">Redux / Redux Toolkit</li>
+          <li class="skill-item">React Query</li>
+          <li class="skill-item">Node.js / Express.js</li>
+          <li class="skill-item">MongoDB / Mongoose</li>
+          <li class="skill-item">Firebase</li>
+          <li class="skill-item">Styled-Components</li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <aside class="sidebar">
+        <div class="skills-section">
+          <strong class="sidebar-title">Core Skills</strong>
+          <ul class="skills-list">
+            <li class="skill-item">HTML5 / CSS3</li>
+            <li class="skill-item">SASS/SCSS</li>
+            <li class="skill-item">JavaScript (ES5/ES6+)</li>
+            <li class="skill-item">jQuery</li>
+            <li class="skill-item">반응형 웹 디자인</li>
+            <li class="skill-item">크로스 브라우징</li>
+            <li class="skill-item">BEM 방법론</li>
+          </ul>
+        </div>
+
+        <div class="skills-section">
+          <strong class="sidebar-title">Growing Skills</strong>
+          <ul class="skills-list">
+            <li class="skill-item">ReactJS</li>
+            <li class="skill-item">TypeScript</li>
+            <li class="skill-item">GSAP</li>
+            <li class="skill-item">React Hook Form</li>
+          </ul>
+        </div>
+
+        <div class="skills-section">
+          <strong class="sidebar-title">Experienced</strong>
+          <ul class="skills-list">
+            <li class="skill-item">VueJS</li>
+            <li class="skill-item">Redux / Redux Toolkit</li>
+            <li class="skill-item">React Query</li>
+            <li class="skill-item">Node.js / Express.js</li>
+            <li class="skill-item">MongoDB / Mongoose</li>
+            <li class="skill-item">Firebase</li>
+            <li class="skill-item">Styled-Components</li>
+          </ul>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <section class="page-header">
+          <div class="page-header-navigation">
+            <a
+              href="../../../index.html"
+              class="page-header-home-link"
+              aria-label="메인 페이지로 이동"
+            >
+              홈으로
+            </a>
+          </div>
+          <h1 class="page-title">토이프로젝트 포트폴리오</h1>
+        </section>
+
+        <section class="section">
+          <div class="projects-container">
+            <div class="view-options">
+              <ul class="view-options-list">
+                <li class="view-option-item">
+                  <button
+                    type="button"
+                    class="view-option-button active"
+                    data-view="grid"
+                  >
+                    <div class="view-button-content">
+                      <span class="view-button-icon"
+                        >⊞
+                        <span class="offscreen"
+                          >그리드 형태를 보여주는 아이콘</span
+                        >
+                      </span>
+                      <span class="view-button-text">그리드뷰</span>
+                    </div>
+                  </button>
+                </li>
+                <li class="view-option-item">
+                  <button
+                    type="button"
+                    class="view-option-button"
+                    data-view="list"
+                  >
+                    <div class="view-button-content">
+                      <span class="view-button-icon"
+                        >☰<span class="offscreen"
+                          >리스트 형태를 보여주는 아이콘</span
+                        >
+                      </span>
+                      <span class="view-button-text">리스트뷰</span>
+                    </div>
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            <ul class="projects-grid grid-view">
+              <li>
+                <a
+                  href="./project1_gsap_apple_scroll_detail.html"
+                  class="project-card"
+                >
+                  <div class="company-header">
+                    <span class="company-logo">🎯</span>
+                    <div class="company-info">
+                      <strong class="company-name">GSAP 애니메이션</strong>
+                      <span class="company-type">개인 프로젝트</span>
+                    </div>
+                  </div>
+                  <p class="company-description">
+                    Apple 공식 홈페이지 스타일의 고급 스크롤 애니메이션을 GSAP로
+                    구현한 연구 프로젝트. 순차적 애니메이션과 지능형 스크롤 반응
+                    시스템을 통한 사용자 경험 최적화
+                  </p>
+                  <div class="company-stats">
+                    <span class="position-count">스크롤 애니메이션</span>
+                    <span class="project-status-badge status-local">배포</span>
+                  </div>
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="./project2-upperdate-animation.html"
+                  class="project-card"
+                >
+                  <div class="company-header">
+                    <span class="company-logo">⌚</span>
+                    <div class="company-info">
+                      <strong class="company-name"
+                        >스크롤 시계 애니메이션</strong
+                      >
+                      <span class="company-type"
+                        >스크롤에 따라 시계화면이 워치로 변경</span
+                      >
+                    </div>
+                  </div>
+                  <p class="company-description">
+                    시계 화면이 스크롤에 따라서 워치로 변경되는 애니메이션
+                  </p>
+                  <div class="company-stats">
+                    <span class="position-count">스크롤 애니메이션</span>
+                    <span class="project-status-badge status-local">배포</span>
+                  </div>
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="./project3-vite-multistep-form.html"
+                  class="project-card"
+                >
+                  <div class="company-header">
+                    <span class="company-logo">📋</span>
+                    <div class="company-info">
+                      <strong class="company-name"
+                        >리액트 멀티스텝 폼 블로그
+                      </strong>
+                      <span class="company-type"
+                        >리액트훅폼을 이용한 멀티스텝폼 구현</span
+                      >
+                    </div>
+                  </div>
+                  <p class="company-description">
+                    리액트 훅 폼을 이용해 멀티스텝폼 구현, 블로그를 작성하는데
+                    필요한 컨텐츠를 각 스텝에서 추가하여 모든 내용을 미리보기로
+                    확인
+                  </p>
+                  <div class="company-stats">
+                    <span class="position-count">리액트 훅 폼</span>
+                    <span class="project-status-badge status-preview"
+                      >배포</span
+                    >
+                  </div>
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="./project4-vanilla-js-component.html"
+                  class="project-card"
+                >
+                  <div class="company-header">
+                    <span class="company-logo">⚡</span>
+                    <div class="company-info">
+                      <strong class="company-name"
+                        >Vanilla JS 어플리케이션 구현</strong
+                      >
+                      <span class="company-type">프레임워크 없는 SPA</span>
+                    </div>
+                  </div>
+                  <p class="company-description">
+                    React를 학습하기 전, Vanilla JS로 어플리케이션을 만들어보는
+                    토이 학습 프로젝트
+                  </p>
+                  <div class="company-stats">
+                    <span class="position-count">vanilaJS</span>
+                    <span class="project-status-badge status-live"
+                      >라이브 배포</span
+                    >
+                  </div>
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="./project5_chartjs_dashboard.html"
+                  class="project-card"
+                >
+                  <div class="company-header">
+                    <span class="company-logo">📊</span>
+                    <div class="company-info">
+                      <strong class="company-name"
+                        >chartJs를 이용한 커스텀 그래프 구현</strong
+                      >
+                      <span class="company-type">프로토타입 목적</span>
+                    </div>
+                  </div>
+                  <p class="company-description">
+                    구글차트 도입을 위해, 구글차트 장단점을 비교 목적의 차트
+                    프로토타입 구현
+                  </p>
+                  <div class="company-stats">
+                    <span class="position-count">실무 적용 기술</span>
+                    <span class="project-status-badge status-live">배포</span>
+                  </div>
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="./project6-react-hookform-zod.html"
+                  class="project-card"
+                >
+                  <div class="company-header">
+                    <span class="company-logo">🔧</span>
+                    <div class="company-info">
+                      <strong class="company-name"
+                        >리액트훅폼과 zod의 기능을 갖는 커스텀 컴포넌트
+                        구현</strong
+                      >
+                      <span class="company-type">커스텀 컴포넌트 구현</span>
+                    </div>
+                  </div>
+                  <p class="company-description">
+                    이전 프로젝트의 한계를 분석하고 개선할 목적으로 시작한 개인
+                    프로젝트, 리액트 훅 폼과 zod 라는 폼 유효성 기능을 갖는
+                    커스텀 컴포넌트 구현을 목적
+                  </p>
+                  <div class="company-stats">
+                    <span class="position-count">리액트훅폼</span>
+                    <span class="project-status-badge status-code">코드</span>
+                  </div>
+                </a>
+              </li>
+
+              <li>
+                <a href="./project7-react-fullstack.html" class="project-card">
+                  <div class="company-header">
+                    <span class="company-logo">🚀</span>
+                    <div class="company-info">
+                      <strong class="company-name"
+                        >NodeJs를 사용한 ReactJS 풀스택 프로젝트 구현</strong
+                      >
+                      <span class="company-type">개인 풀스택 프로젝트</span>
+                    </div>
+                  </div>
+                  <p class="company-description">
+                    중고거래 플랫폼을 주제로 ReactJS와 NodeJS를 통해 DB Model
+                    설계부터 개발 배포까지 전체 프로세스를 경험한 종합적인 웹
+                    개발 프로젝트
+                  </p>
+                  <div class="company-stats">
+                    <span class="position-count"
+                      >NodeJs를 활용한 백앤드 연결</span
+                    >
+                    <span class="project-status-badge status-live">코드</span>
+                  </div>
+                </a>
+              </li>
+
+              <li>
+                <a href="./project8_react_typescript.html" class="project-card">
+                  <div class="company-header">
+                    <span class="company-logo">💻</span>
+                    <div class="company-info">
+                      <strong class="company-name"
+                        >타입스크립트 적용한 팀 프로젝트</strong
+                      >
+                      <span class="company-type">팀 협업 프로젝트</span>
+                    </div>
+                  </div>
+                  <p class="company-description">
+                    Backend 개발자와 협업하면서 React에 TypeScript를 적용한
+                    프로젝트 경험
+                  </p>
+                  <div class="company-stats">
+                    <span class="position-count">팀 협업 경험</span>
+                    <span class="project-status-badge status-code">코드</span>
+                  </div>
+                </a>
+              </li>
+
+              <li>
+                <a href="./project9-jquery-web.html" class="project-card">
+                  <div class="company-header">
+                    <span class="company-logo">🌐</span>
+                    <div class="company-info">
+                      <strong class="company-name"
+                        >제이쿼리를 활용한 어플리케이션 구현</strong
+                      >
+                      <span class="company-type">클론 코딩 프로젝트</span>
+                    </div>
+                  </div>
+                  <p class="company-description">
+                    JQuery 학습을 목적으로, 동적 웹페이지 구현의 기초를 익히고
+                    DOM 조작과 이벤트 처리 방식을 학습할 목적으로 시작함
+                  </p>
+                  <div class="company-stats">
+                    <span class="position-count">Jquery</span>
+                    <span class="project-status-badge status-live"
+                      >라이브 배포</span
+                    >
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      // 뷰 모드 관리 시스템
+      function initializeViewToggle() {
+        const viewButtons = document.querySelectorAll('.view-option-button');
+        const projectsGrid = document.querySelector('.projects-grid');
+
+        function setViewMode(mode) {
+          // 버튼 활성화 상태 업데이트
+          viewButtons.forEach((button) => {
+            const buttonMode = button.dataset.view;
+            if (buttonMode === mode) {
+              button.classList.add('active');
+            } else {
+              button.classList.remove('active');
+            }
+          });
+
+          // 프로젝트 그리드 클래스 업데이트
+          if (mode === 'list') {
+            projectsGrid.classList.remove('grid-view');
+            projectsGrid.classList.add('list-view');
+
+            // 리스트 뷰에서는 다른 HTML 구조 사용
+            updateProjectsForListView();
+          } else {
+            projectsGrid.classList.remove('list-view');
+            projectsGrid.classList.add('grid-view');
+
+            // 그리드 뷰에서는 공고 형식 HTML 구조 사용
+            updateProjectsForGridView();
+          }
+
+          console.log(`View mode changed to: ${mode}`);
+        }
+
+        function updateProjectsForListView() {
+          const projectsGrid = document.querySelector('.projects-grid');
+          projectsGrid.innerHTML = `
+
+            <li>
+              <a href="./project1_gsap_apple_scroll_detail.html" class="project-card">
+                <div class="project-summary">
+                  <div class="project-header">
+                    <span class="project-date">2025.07 (2주)</span>
+                    <span class="project-status status-local">🛾 LOCAL</span>
+                    <strong class="project-title">GSAP 애플 스크롤 애니메이션</strong>
+                    <span class="project-type">개인 프로젝트 • 애니메이션 실험</span>
+                  </div>
+                </div>
+              </a>
+            </li>
+
+
+            <li>
+              <a href="./project2-upperdate-animation.html" class="project-card">
+                <div class="project-summary">
+                  <div class="project-header">
+                    <span class="project-date">2025.08 (3주)</span>
+                    <span class="project-status status-local">🛾 LOCAL</span>
+                    <strong class="project-title">스크롤 시계 애니메이션</strong>
+                    <span class="project-type">개인 프로젝트 • Apple Watch 스타일 구현</span>
+                  </div>
+                </div>
+              </a>
+            </li>
+
+            <li>
+              <a href="./project3-vite-multistep-form.html" class="project-card">
+                <div class="project-summary">
+                  <div class="project-header">
+                    <span class="project-date">2025.06~2025.08</span>
+                    <span class="project-status status-preview">🚧 PREVIEW</span>
+                    <strong class="project-title">리액트 멀티스텝 폼 블로그</strong>
+                    <span class="project-type">개인 프로젝트 • 배포</span>
+                  </div>
+                </div>
+              </a>
+            </li>
+
+            <li>
+              <a href="./project4-vanilla-js-component.html" class="project-card">
+                <div class="project-summary">
+                  <div class="project-header">
+                    <span class="project-date">2023.10~12 (2개월)</span>
+                    <span class="project-status status-live">🌐 LIVE</span>
+                    <strong class="project-title">Vanilla JS 어플리케이션 구현</strong>
+                    <span class="project-type">개인 프로젝트 • React 없는 SPA</span>
+                  </div>
+                </div>
+              </a>
+            </li>
+
+            <li>
+              <a href="./project5_chartjs_dashboard.html" class="project-card">
+                <div class="project-summary">
+                  <div class="project-header">
+                    <span class="project-date">2023.10 (1개월)</span>
+                    <span class="project-status status-live">🌐 LIVE</span>
+                    <strong class="project-title">chartJs를 이용한 커스텀 그래프 구현</strong>
+                    <span class="project-type">프로토타입 목적 • 데이터 시각화</span>
+                  </div>
+                </div>
+              </a>
+            </li>
+
+            <li>
+              <a href="./project6-react-hookform-zod.html" class="project-card">
+                <div class="project-summary">
+                  <div class="project-header">
+                    <span class="project-date">2022.11~12 (2개월)</span>
+                    <span class="project-status status-code">📋 CODE</span>
+                    <strong class="project-title">리액트훅폼과 zod의 기능을 갖는 커스텀 컴포넌트 구현</strong>
+                    <span class="project-type">개인 프로젝트 • 풀스택 리팩토링</span>
+                  </div>
+                </div>
+              </a>
+            </li>
+
+            <li>
+              <a href="./project7-react-fullstack.html" class="project-card">
+                <div class="project-summary">
+                  <div class="project-header">
+                    <span class="project-date">2022.06~08 (3개월)</span>
+                    <span class="project-status status-live">🌐 LIVE</span>
+                    <strong class="project-title">NodeJs를 사용한 ReactJS 풀스택 프로젝트 구현</strong>
+                    <span class="project-type">개인 프로젝트 • 풀스택</span>
+                  </div>
+                </div>
+              </a>
+            </li>
+
+            <li>
+              <a href="./project8_react_typescript.html" class="project-card">
+                <div class="project-summary">
+                  <div class="project-header">
+                    <span class="project-date">2022.01~03 (3개월)</span>
+                    <span class="project-status status-code">📋 CODE</span>
+                    <strong class="project-title">타입스크립트 적용한 팀 프로젝트</strong>
+                    <span class="project-type">팀 프로젝트 • 백엔드 협업</span>
+                  </div>
+                </div>
+              </a>
+            </li>
+
+            <li>
+              <a href="./project9-jquery-web.html" class="project-card">
+                <div class="project-summary">
+                  <div class="project-header">
+                    <span class="project-date">2020.09 (1개월)</span>
+                    <span class="project-status status-live">🌐 LIVE</span>
+                    <strong class="project-title">제이쿼리를 활용한 어플리케이션 구현</strong>
+                    <span class="project-type">개인 프로젝트 • Clone Coding</span>
+                  </div>
+                </div>
+              </a>
+            </li>
+          `;
+        }
+
+        function updateProjectsForGridView() {
+          const projectsGrid = document.querySelector('.projects-grid');
+          projectsGrid.innerHTML = `
+
+            <li>
+              <a href="./project1_gsap_apple_scroll_detail.html" class="project-card">
+                <div class="company-header">
+                  <span class="company-logo">🎯</span>
+                  <div class="company-info">
+                    <strong class="company-name">GSAP 애니메이션</strong>
+                    <span class="company-type">개인 프로젝트</span>
+                  </div>
+                </div>
+                <p class="company-description">
+                  Apple 공식 홈페이지 스타일의 고급 스크롤 애니메이션을 GSAP로
+                    구현한 연구 프로젝트. 순차적 애니메이션과 지능형 스크롤 반응
+                    시스템을 통한 사용자 경험 최적화
+                </p>
+                <div class="company-stats">
+                  <span class="position-count">스크롤 애니메이션</span>
+                  <span class="project-status-badge status-local">배포</span>
+                </div>
+              </a>
+            </li>
+
+
+            <li>
+              <a href="./project2-upperdate-animation.html" class="project-card">
+                <div class="company-header">
+                  <span class="company-logo">⌚</span>
+                  <div class="company-info">
+                    <strong class="company-name">스크롤 시계 애니메이션</strong>
+                    <span class="company-type">스크롤에 따라 시계화면이 워치로 변경</span>
+                  </div>
+                </div>
+                <p class="company-description">
+                  시계 화면이 스크롤에 따라서 워치로 변경되는 애니메이션
+                </p>
+                <div class="company-stats">
+                  <span class="position-count">스크롤 애니메이션</span>
+                  <span class="project-status-badge status-local">배포</span>
+                </div>
+              </a>
+            </li>
+
+
+            <li>
+              <a href="./project3-vite-multistep-form.html" class="project-card">
+                <div class="company-header">
+                  <span class="company-logo">📋</span>
+                  <div class="company-info">
+                    <strong class="company-name">리액트 멀티스텝 폼 블로그 </strong>
+                    <span class="company-type">리액트훅폼을 이용한 멀티스텝폼 구현</span>
+                  </div>
+                </div>
+                <p class="company-description">
+                  리액트 훅 폼을 이용해 멀티스텝폼 구현, 블로그를 작성하는데 필요한 컨텐츠를 각 스텝에서 추가하여 모든 내용을 미리보기로 확인
+                </p>
+                <div class="company-stats">
+                  <span class="position-count">리액트 훅 폼</span>
+                  <span class="project-status-badge status-preview">배포</span>
+                </div>
+              </a>
+            </li>
+
+
+            <li>
+              <a href="./project4-vanilla-js-component.html" class="project-card">
+                <div class="company-header">
+                  <span class="company-logo">⚡</span>
+                  <div class="company-info">
+                    <strong class="company-name">Vanilla JS 어플리케이션 구현</strong>
+                    <span class="company-type">프레임워크 없는 SPA</span>
+                  </div>
+                </div>
+                <p class="company-description">
+                 React를 학습하기 전, Vanilla JS로 어플리케이션을 만들어보는 토이 학습 프로젝트
+                </p>
+                <div class="company-stats">
+                  <span class="position-count">vanilaJS</span>
+                  <span class="project-status-badge status-live">라이브 배포</span>
+                </div>
+              </a>
+            </li>
+
+
+            <li>
+              <a href="./project5_chartjs_dashboard.html" class="project-card">
+                <div class="company-header">
+                  <span class="company-logo">📊</span>
+                  <div class="company-info">
+                    <strong class="company-name">chartJs를 이용한 커스텀 그래프 구현</strong>
+                    <span class="company-type">프로토타입 목적</span>
+                  </div>
+                </div>
+                <p class="company-description">구글차트 도입을 위해, 구글차트 장단점을 비교 목적의 차트 프로토타입 구현
+                </p>
+                <div class="company-stats">
+                  <span class="position-count">실무 적용 기술</span>
+                  <span class="project-status-badge status-live">라이브 배포</span>
+                </div>
+              </a>
+            </li>
+
+
+            <li>
+              <a href="./project6-react-hookform-zod.html" class="project-card">
+                <div class="company-header">
+                  <span class="company-logo">🔧</span>
+                  <div class="company-info">
+                    <strong class="company-name">리액트훅폼과 zod의 기능을 갖는 커스텀 컴포넌트 구현</strong>
+                    <span class="company-type">커스텀 컴포넌트 구현</span>
+                  </div>
+                </div>
+                <p class="company-description">
+                    이전 프로젝트의 한계를 분석하고 개선할 목적으로 시작한 개인
+                    프로젝트, 리액트 훅 폼과 zod 라는 폼 유효성 기능을 갖는
+                    커스텀 컴포넌트 구현을 목적</p>
+                <div class="company-stats">
+                  <span class="position-count">리팩토링 전략</span>
+                  <span class="project-status-badge status-code">코드</span>
+                </div>
+              </a>
+            </li>
+
+
+            <li>
+              <a href="./project7-react-fullstack.html" class="project-card">
+                <div class="company-header">
+                  <span class="company-logo">🚀</span>
+                  <div class="company-info">
+                    <strong class="company-name">NodeJs를 사용한 ReactJS 풀스택 프로젝트 구현</strong>
+                    <span class="company-type">개인 풀스택 프로젝트</span>
+                  </div>
+                </div>
+                <p class="company-description">중고거래 플랫폼을 주제로 ReactJS와 NodeJS를 통해 DB Model
+                    설계부터 개발 배포까지 전체 프로세스를 경험한 종합적인 웹
+                    개발 프로젝트</p>
+                <div class="company-stats">
+                  <span class="position-count">NodeJs를 활용한 백앤드 연결</span>
+                  <span class="project-status-badge status-live">코드</span>
+                </div>
+              </a>
+            </li>
+
+
+            <li>
+              <a href="./project8_react_typescript.html" class="project-card">
+                <div class="company-header">
+                  <span class="company-logo">💻</span>
+                  <div class="company-info">
+                    <strong class="company-name">타입스크립트 적용한 팀 프로젝트</strong>
+                    <span class="company-type">팀 협업 프로젝트</span>
+                  </div>
+                </div>
+                <p class="company-description">Backend 개발자와 협업하면서 React에 TypeScript를 적용한
+                    프로젝트 경험</p>
+                <div class="company-stats">
+                  <span class="position-count">팀 협업 경험</span>
+                  <span class="project-status-badge status-code">코드</span>
+                </div>
+              </a>
+            </li>
+
+
+            <li>
+              <a href="./project9-jquery-web.html" class="project-card">
+                <div class="company-header">
+                  <span class="company-logo">🌐</span>
+                  <div class="company-info">
+                    <strong class="company-name">제이쿼리를 활용한 어플리케이션 구현</strong>
+                    <span class="company-type">클론 코딩 프로젝트</span>
+                  </div>
+                </div>
+                <p class="company-description">
+                    JQuery 학습을 목적으로, 동적 웹페이지 구현의 기초를 익히고
+                    DOM 조작과 이벤트 처리 방식을 학습할 목적으로 시작함
+                  </p>
+                <div class="company-stats">
+                  <span class="position-count">Jquery</span>
+                  <span class="project-status-badge status-live">라이브 배포</span>
+                </div>
+              </a>
+            </li>
+          `;
+        }
+
+        // 뷰 버튼 이벤트 리스너
+        viewButtons.forEach((button) => {
+          button.addEventListener('click', () => {
+            const viewMode = button.dataset.view;
+            setViewMode(viewMode);
+          });
+        });
+
+        // setViewMode 함수를 외부에서 호출할 수 있도록 반환
+        return { setViewMode };
+      }
+
+      // 모바일 메뉴 관리 시스템
+      function initializeMobileMenu() {
+        const hamburgerButton = document.querySelector('.hamburger-button');
+        const closeButton = document.querySelector('.close-button');
+        const mobileOverlay = document.querySelector('.mobile-sidebar-overlay');
+        const mobileSidebar = document.querySelector('.mobile-sidebar');
+
+        function openMobileMenu() {
+          mobileOverlay.classList.add('active');
+          mobileSidebar.classList.add('active');
+          document.body.style.overflow = 'hidden';
+          closeButton.focus();
+        }
+
+        function closeMobileMenu() {
+          mobileOverlay.classList.remove('active');
+          mobileSidebar.classList.remove('active');
+          document.body.style.overflow = '';
+          hamburgerButton.focus();
+        }
+
+        hamburgerButton.addEventListener('click', openMobileMenu);
+        closeButton.addEventListener('click', closeMobileMenu);
+        mobileOverlay.addEventListener('click', closeMobileMenu);
+
+        document.addEventListener('keydown', (event) => {
+          if (
+            event.key === 'Escape' &&
+            mobileSidebar.classList.contains('active')
+          ) {
+            closeMobileMenu();
+          }
+        });
+
+        console.log('Mobile menu system initialized');
+      }
+
+      function initializePageAnimation() {
+        const projectCards = document.querySelectorAll('.project-card');
+        projectCards.forEach((card, index) => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(30px)';
+          setTimeout(() => {
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, index * 150);
+        });
+      }
+
+      function initializeLinkTracking() {
+        document.addEventListener('click', (event) => {
+          if (event.target.closest('.project-card')) {
+            const projectTitle = event.target
+              .closest('.project-card')
+              .querySelector('.company-name, .project-title');
+            if (projectTitle) {
+              console.log(`Project clicked: ${projectTitle.textContent}`);
+            }
+          }
+        });
+      }
+
+      // 전체 초기화
+      document.addEventListener('DOMContentLoaded', () => {
+        const viewToggle = initializeViewToggle();
+
+        // 기본으로 그리드뷰로 초기화
+        setTimeout(() => {
+          viewToggle.setViewMode('grid');
+          console.log('Default grid view mode applied on load');
+        }, 0);
+
+        initializeMobileMenu();
+        initializePageAnimation();
+        initializeLinkTracking();
+
+        console.log(
+          'Complete portfolio system initialized with DEFAULT GRID VIEW'
+        );
+      });
+    </script>
+  </body>
+</html>

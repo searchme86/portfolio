@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Apple - Think Different</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍎</text></svg>"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+          'Helvetica Neue', Helvetica, Arial, sans-serif;
+        overflow-x: hidden;
+        background: #ffffff;
+        scroll-behavior: smooth;
+      }
+
+      section {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .horizontal-container {
+        background: linear-gradient(
+            180deg,
+            #f8fafc 0%,
+            #ffffff 30%,
+            #f1f5f9 70%,
+            #e2e8f0 100%
+          ),
+          radial-gradient(
+            circle at 20% 20%,
+            rgba(59, 130, 246, 0.05) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 80% 80%,
+            rgba(139, 92, 246, 0.05) 0%,
+            transparent 40%
+          );
+
+        position: relative;
+      }
+
+      .horizontal-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.3) 50%,
+            transparent 100%
+          ),
+          radial-gradient(
+            circle at 50% 30%,
+            rgba(99, 102, 241, 0.03) 0%,
+            transparent 60%
+          );
+        pointer-events: none;
+      }
+
+      .hidden {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        padding: 0 !important;
+        margin: -1px !important;
+        overflow: hidden !important;
+        clip: rect(0, 0, 0, 0) !important;
+        white-space: nowrap !important;
+        border: 0 !important;
+      }
+
+      .titles {
+        /* position: absolute;
+        top: 0%;
+        left: 100%; */
+        width: 400vw;
+        height: 100vh;
+        display: flex;
+        will-change: transform;
+        transform: translate3d(0, 0, 0);
+      }
+
+      .section-horizontal-animation {
+        position: relative;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(
+          180deg,
+          rgba(248, 250, 252, 0.8) 0%,
+          rgba(255, 255, 255, 0.9) 50%,
+          rgba(241, 245, 249, 0.8) 100%
+        );
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .title {
+        font-size: clamp(48px, 12vw, 200px);
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        line-height: 0.9;
+        text-align: center;
+        background: linear-gradient(
+          135deg,
+          #1e293b 0%,
+          #0f172a 50%,
+          #1e293b 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        will-change: opacity;
+        transition: opacity 0.1s ease-out;
+        position: relative;
+        text-shadow: 0 0 40px rgba(59, 130, 246, 0.1);
+      }
+
+      .title::before {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(59, 130, 246, 0.6) 0%,
+          rgba(147, 51, 234, 0.6) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: -1;
+      }
+
+      .title:hover::before {
+        opacity: 0.7;
+      }
+
+      .outro {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #000000;
+        color: #ffffff;
+      }
+
+      .outro h1 {
+        font-size: clamp(32px, 6vw, 80px);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .outro p {
+        font-size: clamp(16px, 2vw, 24px);
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.9);
+        text-align: center;
+        max-width: 600px;
+        line-height: 1.5;
+      }
+
+      @media (max-width: 768px) {
+        .title {
+          font-size: 12vw;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- /components/animations/오른쪽에서_왼쪽으로_텍스트스크롤_애니메이션.html -->
+
+    <section class="horizontal-container">
+      <h1 class="hidden">Apple Style Horizontal Animation</h1>
+      <div class="titles">
+        <div class="section-horizontal-animation">
+          <strong class="title" data-text="iPhone">iPhone</strong>
+        </div>
+        <div class="section-horizontal-animation">
+          <strong class="title" data-text="iPad">iPad</strong>
+        </div>
+        <div class="section-horizontal-animation">
+          <strong class="title" data-text="Mac">Mac</strong>
+        </div>
+        <div class="section-horizontal-animation">
+          <strong class="title" data-text="Vision Pro">Vision Pro</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="outro">
+      <h1>Designed by Apple.</h1>
+      <p>
+        Every detail crafted to perfection.<br />
+        This is only the beginning.
+      </p>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+      const RightToLeftScrollAnimation = (() => {
+        const TOTAL_SECTIONS = 4;
+        // const SCROLL_DISTANCE_MULTIPLIER = 2;
+        const RESIZE_DEBOUNCE_MS = 250;
+        const STATE_SAVE_THROTTLE_MS = 50;
+
+        const DEFAULT_VIEWPORT = { WIDTH: 1200, HEIGHT: 800 };
+        const SAFE_TRANSFORM_RANGE = { MIN: -200000, MAX: 200000 };
+        const STORAGE_CONFIG = {
+          KEY: 'rightToLeftAnimationState',
+          MAX_AGE_MS: 24 * 60 * 60 * 1000,
+        };
+
+        let saveStateTimeout = null;
+        let FADE_ZONE_SIZE = 150;
+        let cachedElements = null;
+
+        const getCachedDomElements = () => {
+          if (!cachedElements) {
+            const titlesContainer = document.querySelector('.titles');
+            const horizontalContainer = document.querySelector(
+              '.horizontal-container'
+            );
+            const titleElements = Array.from(
+              document.querySelectorAll('.title')
+            );
+
+            cachedElements = {
+              titlesContainer,
+              horizontalContainer,
+              titleElements,
+              isValid: !!(
+                titlesContainer &&
+                horizontalContainer &&
+                titleElements.length > 0
+              ),
+            };
+          }
+          return cachedElements;
+        };
+
+        const setOpacityFadeZone = (size) => {
+          FADE_ZONE_SIZE = size;
+        };
+
+        const getResponsiveFadeZone = () => {
+          const { innerWidth: currentViewportWidth = DEFAULT_VIEWPORT.WIDTH } =
+            window;
+          const baseViewportWidth = 1920;
+          const scaleFactor = currentViewportWidth / baseViewportWidth;
+          const minFadeZone = 50;
+          const calculatedFadeZone = Math.max(
+            minFadeZone,
+            FADE_ZONE_SIZE * scaleFactor
+          );
+          return calculatedFadeZone;
+        };
+
+        const calculateTextOpacity = (textElement, fadeZoneSize) => {
+          if (!textElement) return { opacity: 0 };
+
+          const textRect = textElement.getBoundingClientRect();
+          const { left: textLeft = 0, width: textWidth = 0 } = textRect;
+          const textCenterX = textLeft + textWidth / 2;
+          const { innerWidth: viewportWidth = DEFAULT_VIEWPORT.WIDTH } = window;
+
+          const leftBoundary = fadeZoneSize;
+          const rightBoundary = viewportWidth - fadeZoneSize;
+
+          if (textCenterX < leftBoundary) {
+            const distanceFromLeft = Math.max(0, leftBoundary - textCenterX);
+            const fadeProgress = Math.min(1, distanceFromLeft / fadeZoneSize);
+            const opacity = 1 - fadeProgress;
+            return { opacity: Math.max(0, opacity) };
+          }
+
+          if (textCenterX > rightBoundary) {
+            const distanceFromRight = Math.max(0, textCenterX - rightBoundary);
+            const fadeProgress = Math.min(1, distanceFromRight / fadeZoneSize);
+            const opacity = 1 - fadeProgress;
+            return { opacity: Math.max(0, opacity) };
+          }
+
+          return { opacity: 1.0 };
+        };
+
+        const updateAllTextOpacity = () => {
+          const { titleElements = [] } = getCachedDomElements();
+          if (!titleElements.length) return;
+
+          const currentFadeZone = getResponsiveFadeZone();
+
+          titleElements.forEach((textElement) => {
+            const { opacity } = calculateTextOpacity(
+              textElement,
+              currentFadeZone
+            );
+            gsap.set(textElement, { opacity });
+          });
+        };
+
+        const createStateManager = () => {
+          const isStorageAvailable = () => {
+            try {
+              const testKey = '__test__';
+              localStorage.setItem(testKey, 'test');
+              localStorage.removeItem(testKey);
+              return true;
+            } catch {
+              return false;
+            }
+          };
+
+          const saveAnimationState = (stateData) => {
+            if (!isStorageAvailable()) return false;
+
+            try {
+              const { transformX = 0, scrollY = 0, progress = 0 } = stateData;
+              const {
+                innerWidth = DEFAULT_VIEWPORT.WIDTH,
+                innerHeight = DEFAULT_VIEWPORT.HEIGHT,
+              } = window;
+
+              const coreState = {
+                transformX,
+                scrollY,
+                progress,
+                timestamp: Date.now(),
+                viewportWidth: innerWidth,
+                viewportHeight: innerHeight,
+              };
+
+              localStorage.setItem(
+                STORAGE_CONFIG.KEY,
+                JSON.stringify(coreState)
+              );
+              return true;
+            } catch (error) {
+              console.warn('상태 저장 실패:', error.message);
+              return false;
+            }
+          };
+
+          const loadAnimationState = () => {
+            if (!isStorageAvailable()) return null;
+
+            try {
+              const savedData = localStorage.getItem(STORAGE_CONFIG.KEY);
+              if (!savedData) return null;
+
+              const parsedState = JSON.parse(savedData);
+              const { transformX, scrollY, timestamp } = parsedState;
+
+              const isValid =
+                parsedState &&
+                typeof transformX === 'number' &&
+                typeof scrollY === 'number' &&
+                Date.now() - timestamp < STORAGE_CONFIG.MAX_AGE_MS;
+
+              if (!isValid) {
+                localStorage.removeItem(STORAGE_CONFIG.KEY);
+                return null;
+              }
+
+              return parsedState;
+            } catch (error) {
+              console.warn('상태 로드 실패:', error.message);
+              localStorage.removeItem(STORAGE_CONFIG.KEY);
+              return null;
+            }
+          };
+
+          return { saveAnimationState, loadAnimationState };
+        };
+
+        const createStateThrottler = () => {
+          return (saveFunction, stateData) => {
+            if (saveStateTimeout) {
+              clearTimeout(saveStateTimeout);
+            }
+
+            saveStateTimeout = setTimeout(() => {
+              saveFunction(stateData);
+              saveStateTimeout = null;
+            }, STATE_SAVE_THROTTLE_MS);
+          };
+        };
+
+        const configureGsapSettings = () => {
+          if (typeof gsap === 'undefined') {
+            throw new Error('GSAP 라이브러리가 로드되지 않았습니다.');
+          }
+
+          gsap.config({
+            force3D: true,
+            nullTargetWarn: false,
+          });
+        };
+
+        const getSafeViewportDimensions = () => {
+          const { innerWidth: rawWidth = 0, innerHeight: rawHeight = 0 } =
+            window;
+
+          const safeWidth =
+            rawWidth > 0 && rawWidth < 50000
+              ? rawWidth
+              : DEFAULT_VIEWPORT.WIDTH;
+          const safeHeight =
+            rawHeight > 0 && rawHeight < 50000
+              ? rawHeight
+              : DEFAULT_VIEWPORT.HEIGHT;
+
+          return { width: safeWidth, height: safeHeight };
+        };
+
+        const calculateAnimationValues = () => {
+          const { width: viewportWidth, height: viewportHeight } =
+            getSafeViewportDimensions();
+
+          // const totalMoveDistance = viewportWidth * (TOTAL_SECTIONS + 2);
+          // const totalMoveDistance = viewportWidth * TOTAL_SECTIONS;
+          const totalMoveDistance = viewportWidth * TOTAL_SECTIONS;
+          // let scrollHeight =
+          //   viewportHeight * SCROLL_DISTANCE_MULTIPLIER * TOTAL_SECTIONS;
+          let scrollHeight = viewportHeight * TOTAL_SECTIONS;
+
+          const safeMoveDistance = Math.max(
+            1000,
+            Math.min(50000, totalMoveDistance)
+          );
+          const safeScrollHeight = Math.max(800, Math.min(50000, scrollHeight));
+
+          return {
+            // moveDistance: safeMoveDistance,
+            moveDistance: totalMoveDistance,
+            // scrollHeight: safeScrollHeight,
+            scrollHeight: totalMoveDistance,
+            viewportWidth,
+          };
+        };
+
+        const calculateSafeProgress = (rawProgress) => {
+          const validProgress =
+            typeof rawProgress === 'number' && !isNaN(rawProgress)
+              ? rawProgress
+              : 0;
+          return Math.max(0, Math.min(1, validProgress));
+        };
+
+        const calculateRightToLeftPosition = (
+          moveDistance,
+          scrollProgress,
+          viewportWidth
+        ) => {
+          const safeMoveDistance =
+            typeof moveDistance === 'number' && !isNaN(moveDistance)
+              ? moveDistance
+              : 0;
+          const safeScrollProgress =
+            typeof scrollProgress === 'number' && !isNaN(scrollProgress)
+              ? scrollProgress
+              : 0;
+          const safeViewportWidth =
+            typeof viewportWidth === 'number' && !isNaN(viewportWidth)
+              ? viewportWidth
+              : DEFAULT_VIEWPORT.WIDTH;
+
+          const startPosition = safeViewportWidth;
+          const endPosition = -(safeMoveDistance + safeViewportWidth);
+          const rawTransform =
+            startPosition + (endPosition - startPosition) * safeScrollProgress;
+
+          return Math.max(
+            SAFE_TRANSFORM_RANGE.MIN,
+            Math.min(SAFE_TRANSFORM_RANGE.MAX, rawTransform)
+          );
+        };
+
+        const createPerfectScrollTrigger = (
+          elements,
+          values,
+          storageManager
+        ) => {
+          const { titlesContainer, horizontalContainer } = elements;
+          const { moveDistance, scrollHeight, viewportWidth } = values;
+
+          if (typeof ScrollTrigger === 'undefined') {
+            throw new Error('ScrollTrigger 플러그인이 로드되지 않았습니다.');
+          }
+
+          if (!titlesContainer || !horizontalContainer) {
+            throw new Error('필수 DOM 요소가 유효하지 않습니다.');
+          }
+
+          const throttleStateSave = createStateThrottler();
+
+          return ScrollTrigger.create({
+            trigger: horizontalContainer,
+            start: 'top top',
+            end: `+=${scrollHeight}px`,
+            pin: horizontalContainer,
+            scrub: 1,
+            onUpdate: (self) => {
+              try {
+                const { progress: rawProgress } = self;
+                const scrollProgress = calculateSafeProgress(rawProgress);
+                const textXPosition = calculateRightToLeftPosition(
+                  moveDistance,
+                  scrollProgress,
+                  viewportWidth
+                );
+
+                gsap.set(titlesContainer, {
+                  x: textXPosition,
+                  force3D: true,
+                });
+
+                updateAllTextOpacity();
+
+                const currentState = {
+                  transformX: textXPosition,
+                  scrollY: window.scrollY || 0,
+                  progress: scrollProgress,
+                };
+
+                throttleStateSave(
+                  storageManager.saveAnimationState,
+                  currentState
+                );
+              } catch (error) {
+                console.warn('애니메이션 업데이트 오류:', error.message);
+              }
+            },
+            onRefresh: () => {
+              updateAllTextOpacity();
+            },
+          });
+        };
+
+        const restorePerfectState = (elements, savedState) => {
+          const { titlesContainer } = elements;
+
+          if (!titlesContainer || !savedState) return false;
+
+          try {
+            const { width: currentViewportWidth } = getSafeViewportDimensions();
+            const {
+              transformX,
+              scrollY,
+              viewportWidth: savedViewportWidth,
+            } = savedState;
+
+            let finalTransformX = transformX;
+            let finalScrollY = scrollY;
+
+            const viewportRatio =
+              currentViewportWidth /
+              (savedViewportWidth || currentViewportWidth);
+            if (Math.abs(viewportRatio - 1) > 0.1) {
+              finalTransformX = transformX * viewportRatio;
+              finalScrollY = scrollY * viewportRatio;
+            }
+
+            gsap.set(titlesContainer, {
+              x: finalTransformX,
+              force3D: true,
+            });
+
+            setTimeout(() => {
+              updateAllTextOpacity();
+            }, 150);
+
+            setTimeout(() => {
+              window.scrollTo({
+                top: finalScrollY,
+                behavior: 'auto',
+              });
+            }, 100);
+
+            return true;
+          } catch (error) {
+            console.warn('상태 복원 오류:', error.message);
+            return false;
+          }
+        };
+
+        const createResizeHandler = () => {
+          let resizeTimeout = null;
+
+          return () => {
+            if (resizeTimeout) {
+              clearTimeout(resizeTimeout);
+            }
+
+            resizeTimeout = setTimeout(() => {
+              try {
+                cachedElements = null;
+
+                if (
+                  typeof ScrollTrigger !== 'undefined' &&
+                  ScrollTrigger.refresh
+                ) {
+                  ScrollTrigger.refresh();
+                }
+                updateAllTextOpacity();
+              } catch (error) {
+                console.warn('리사이즈 처리 오류:', error.message);
+              }
+            }, RESIZE_DEBOUNCE_MS);
+          };
+        };
+
+        const setupEventListeners = (resizeHandler) => {
+          if (typeof resizeHandler !== 'function') return () => {};
+
+          try {
+            window.addEventListener('resize', resizeHandler);
+          } catch (error) {
+            console.warn('이벤트 리스너 설정 실패:', error.message);
+            return () => {};
+          }
+
+          return () => {
+            try {
+              window.removeEventListener('resize', resizeHandler);
+            } catch (error) {
+              console.warn('이벤트 리스너 제거 실패:', error.message);
+            }
+          };
+        };
+
+        const initialize = () => {
+          return new Promise(async (resolve, reject) => {
+            try {
+              const storageManager = createStateManager();
+              configureGsapSettings();
+
+              const elements = getCachedDomElements();
+              if (!elements.isValid) {
+                throw new Error('필수 DOM 요소를 찾을 수 없습니다.');
+              }
+
+              const values = calculateAnimationValues();
+
+              await new Promise((resolve) => {
+                const { readyState } = document;
+                if (readyState === 'complete') {
+                  resolve();
+                } else {
+                  window.addEventListener('load', resolve);
+                }
+              });
+
+              const savedState = storageManager.loadAnimationState();
+              if (savedState) {
+                const restorationSuccess = restorePerfectState(
+                  elements,
+                  savedState
+                );
+                if (!restorationSuccess) {
+                  console.log('상태 복원 실패, 초기 상태로 시작합니다.');
+                }
+              }
+
+              const scrollTriggerInstance = createPerfectScrollTrigger(
+                elements,
+                values,
+                storageManager
+              );
+
+              const resizeHandler = createResizeHandler();
+              const cleanup = setupEventListeners(resizeHandler);
+
+              if (!savedState) {
+                updateAllTextOpacity();
+              }
+
+              const result = {
+                scrollTriggerInstance,
+                storageManager,
+                cleanup,
+                setFadeZone: setOpacityFadeZone,
+                destroy: () => {
+                  try {
+                    cleanup();
+
+                    if (saveStateTimeout) {
+                      clearTimeout(saveStateTimeout);
+                      saveStateTimeout = null;
+                    }
+
+                    if (scrollTriggerInstance?.kill) {
+                      scrollTriggerInstance.kill();
+                    }
+
+                    cachedElements = null;
+
+                    if ('scrollRestoration' in history) {
+                      history.scrollRestoration = 'auto';
+                    }
+                  } catch (error) {
+                    console.warn('시스템 정리 오류:', error.message);
+                  }
+                },
+              };
+
+              resolve(result);
+            } catch (error) {
+              console.error('시스템 초기화 실패:', error.message);
+              reject(error);
+            }
+          });
+        };
+
+        return {
+          initialize,
+          setFadeZone: setOpacityFadeZone,
+        };
+      })();
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          const animationInstance =
+            await RightToLeftScrollAnimation.initialize();
+
+          if (animationInstance) {
+            window.addEventListener('beforeunload', () => {
+              if (animationInstance?.destroy) {
+                animationInstance.destroy();
+              }
+            });
+
+            document.addEventListener('visibilitychange', () => {
+              const { hidden } = document;
+              if (!hidden && typeof ScrollTrigger !== 'undefined') {
+                setTimeout(() => ScrollTrigger.refresh(), 100);
+              }
+            });
+
+            console.info(
+              '🎯 오른쪽에서 왼쪽으로 텍스트 스크롤 애니메이션이 성공적으로 초기화되었습니다.'
+            );
+          } else {
+            throw new Error('애니메이션 인스턴스 생성 실패');
+          }
+        } catch (error) {
+          console.error(
+            '🚨 애니메이션 시스템 초기화 중 오류 발생:',
+            error.message
+          );
+
+          try {
+            const { style: bodyStyle } = document.body;
+            bodyStyle.overflow = '';
+            if ('scrollRestoration' in history) {
+              history.scrollRestoration = 'auto';
+            }
+          } catch (fallbackError) {
+            console.error('폴백 처리 실패:', fallbackError.message);
+          }
+        }
+      });
+
+      window.setFadeZone = (size) => {
+        RightToLeftScrollAnimation.setFadeZone(size);
+      };
+    </script>
+  </body>
+</html>

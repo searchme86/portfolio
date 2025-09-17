@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>스크롤 시계 애니메이션 - 완전 분석 가이드</title>
+    <style>
+      /* 파일 위치: device-specific-upperdate-coordinates-animation-guide.html */
+
+      /* 0) Base: 공통(모바일 퍼스트) 스타일 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: #0a0a0a;
+        color: #f5f5f7;
+        line-height: 1.6;
+      }
+
+      .main-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem;
+      }
+
+      .accordion-list {
+        list-style: none;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(17, 17, 17, 0.8);
+      }
+
+      .accordion-item {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 0;
+      }
+
+      .accordion-item:last-child {
+        border-bottom: none;
+      }
+
+      .accordion-header {
+        background: rgba(41, 151, 255, 0.1);
+        padding: 1rem 1.5rem;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+        border: none;
+        width: 100%;
+        text-align: left;
+      }
+
+      .accordion-header:hover {
+        background: rgba(41, 151, 255, 0.15);
+      }
+
+      .accordion-title {
+        color: #2997ff;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .accordion-subtitle {
+        color: #86868b;
+        font-size: 0.8rem;
+        font-weight: 400;
+        margin-top: 0.25rem;
+      }
+
+      .accordion-arrow {
+        color: #2997ff;
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+        transform: rotate(0deg);
+      }
+
+      .accordion-item.active .accordion-arrow {
+        transform: rotate(180deg);
+      }
+
+      .accordion-content {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+
+      .accordion-item.active .accordion-content {
+        max-height: 10000px;
+      }
+
+      .content-wrapper {
+        padding: 1rem;
+      }
+
+      .visual-demo {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 6px;
+        padding: 1rem;
+        margin: 1rem 0;
+        border: 2px dashed rgba(41, 151, 255, 0.3);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .info-box {
+        padding: 1rem;
+        border-radius: 6px;
+        margin: 1rem 0;
+      }
+
+      .info-box.blue {
+        background: rgba(41, 151, 255, 0.1);
+        border: 1px solid rgba(41, 151, 255, 0.3);
+      }
+      .info-box.green {
+        background: rgba(52, 199, 89, 0.1);
+        border: 1px solid rgba(52, 199, 89, 0.3);
+      }
+      .info-box.orange {
+        background: rgba(255, 159, 10, 0.1);
+        border: 1px solid rgba(255, 159, 10, 0.3);
+      }
+      .info-box.red {
+        background: rgba(255, 59, 48, 0.1);
+        border: 1px solid rgba(255, 59, 48, 0.3);
+      }
+      .info-box.purple {
+        background: rgba(175, 82, 222, 0.1);
+        border: 1px solid rgba(175, 82, 222, 0.3);
+      }
+      .info-box.dark {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 1.5rem;
+      }
+
+      .info-box h4 {
+        margin-bottom: 0.6rem;
+        font-size: 1rem;
+      }
+      .info-box.blue h4 {
+        color: #2997ff;
+      }
+      .info-box.green h4 {
+        color: #34c759;
+      }
+      .info-box.orange h4 {
+        color: #ff9f0a;
+      }
+      .info-box.red h4 {
+        color: #ff3b30;
+      }
+      .info-box.purple h4 {
+        color: #af52de;
+      }
+      .info-box.dark h4 {
+        color: #2997ff;
+      }
+
+      .info-box p {
+        color: #a3a3a3;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin: 0;
+      }
+
+      .improvement-tag {
+        display: inline-block;
+        background: rgba(52, 199, 89, 0.2);
+        color: #34c759;
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+      }
+
+      .problem-tag {
+        display: inline-block;
+        background: rgba(255, 59, 48, 0.2);
+        color: #ff3b30;
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+      }
+
+      .concept-cards {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+        margin: 1rem 0;
+      }
+
+      .concept-card {
+        background: rgba(41, 151, 255, 0.05);
+        border: 1px solid rgba(41, 151, 255, 0.2);
+        border-radius: 6px;
+        padding: 0.8rem;
+        text-align: center;
+      }
+
+      .concept-emoji {
+        font-size: 1.2rem;
+        margin-bottom: 0.4rem;
+        display: block;
+      }
+
+      .concept-title {
+        color: #2997ff;
+        font-weight: 600;
+        font-size: 0.8rem;
+        margin-bottom: 0.2rem;
+      }
+
+      .concept-desc {
+        color: #a3a3a3;
+        font-size: 0.7rem;
+      }
+
+      .timeline {
+        position: relative;
+        padding-left: 1.5rem;
+        margin: 1rem 0;
+      }
+
+      .timeline::before {
+        content: '';
+        position: absolute;
+        left: 0.4rem;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(to bottom, #2997ff, transparent);
+      }
+
+      .timeline-item {
+        position: relative;
+        margin-bottom: 0.8rem;
+        padding: 0.4rem 0;
+      }
+
+      .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -1.4rem;
+        top: 0.6rem;
+        width: 6px;
+        height: 6px;
+        background: #2997ff;
+        border-radius: 50%;
+        box-shadow: 0 0 0 2px rgba(41, 151, 255, 0.2);
+      }
+
+      .timeline-time {
+        color: #2997ff;
+        font-size: 0.7rem;
+        font-weight: 600;
+      }
+
+      .timeline-desc {
+        color: #a3a3a3;
+        margin-top: 0.2rem;
+        font-size: 0.75rem;
+      }
+
+      .code-block {
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        padding: 1rem;
+        margin: 1rem 0;
+        font-family: 'SF Mono', Monaco, 'Consolas', monospace;
+        font-size: 0.75rem;
+        overflow-x: auto;
+      }
+
+      .code-block pre {
+        margin: 0;
+        color: #a3a3a3;
+      }
+
+      .code-highlight {
+        color: #2997ff;
+        font-weight: 600;
+      }
+
+      .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      .before-after {
+        padding: 0.8rem;
+        border-radius: 6px;
+      }
+
+      .before {
+        background: rgba(255, 59, 48, 0.1);
+        border: 1px solid rgba(255, 59, 48, 0.3);
+      }
+
+      .after {
+        background: rgba(52, 199, 89, 0.1);
+        border: 1px solid rgba(52, 199, 89, 0.3);
+      }
+
+      .before h5 {
+        color: #ff3b30;
+        margin-bottom: 0.4rem;
+        font-size: 0.9rem;
+      }
+
+      .after h5 {
+        color: #34c759;
+        margin-bottom: 0.4rem;
+        font-size: 0.9rem;
+      }
+
+      .flow-chart {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        margin: 1.5rem 0;
+      }
+
+      .flow-step {
+        text-align: center;
+        flex: 1;
+        min-width: 100px;
+      }
+
+      .flow-step-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 0.4rem;
+        font-weight: 600;
+        border: 2px solid;
+        font-size: 0.8rem;
+      }
+
+      .flow-step:nth-child(1) .flow-step-icon {
+        background: rgba(41, 151, 255, 0.2);
+        border-color: #2997ff;
+        color: #2997ff;
+      }
+      .flow-step:nth-child(3) .flow-step-icon {
+        background: rgba(52, 199, 89, 0.2);
+        border-color: #34c759;
+        color: #34c759;
+      }
+      .flow-step:nth-child(5) .flow-step-icon {
+        background: rgba(255, 159, 10, 0.2);
+        border-color: #ff9f0a;
+        color: #ff9f0a;
+      }
+      .flow-step:nth-child(7) .flow-step-icon {
+        background: rgba(255, 59, 48, 0.2);
+        border-color: #ff3b30;
+        color: #ff3b30;
+      }
+
+      .flow-arrow {
+        color: #2997ff;
+        font-size: 1.2rem;
+        align-self: center;
+      }
+
+      .flow-step p {
+        color: #a3a3a3;
+        font-size: 0.7rem;
+      }
+
+      .external-link {
+        color: #2997ff;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(41, 151, 255, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .external-link:hover {
+        border-bottom-color: #2997ff;
+      }
+
+      .small-desc {
+        font-size: 0.7rem;
+        color: #86868b;
+        margin-left: 0.3rem;
+      }
+
+      .device-mockup {
+        width: 80px;
+        height: 50px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        transition: transform 0.3s ease;
+        position: relative;
+        font-size: 0.7rem;
+        margin: 0.5rem;
+      }
+
+      .watch-demo {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(
+          135deg,
+          #000000 0%,
+          #1c1c1e 50%,
+          #000000 100%
+        );
+        border-radius: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        position: relative;
+        margin: 1rem auto;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+
+      .watch-demo::before {
+        content: '';
+        position: absolute;
+        top: 20%;
+        right: -3px;
+        width: 6px;
+        height: 6px;
+        background: #5a5a5a;
+        border-radius: 50%;
+      }
+
+      .watch-demo::after {
+        content: '';
+        position: absolute;
+        top: 40%;
+        right: -2px;
+        width: 4px;
+        height: 12px;
+        background: #5a5a5a;
+        border-radius: 2px;
+      }
+
+      .coordinate-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      .coordinate-demo {
+        text-align: center;
+        padding: 1rem;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .coordinate-demo h5 {
+        color: #2997ff;
+        margin-bottom: 0.5rem;
+        font-size: 0.8rem;
+      }
+
+      .coordinate-demo .values {
+        color: #a3a3a3;
+        font-size: 0.7rem;
+      }
+
+      .arrow {
+        font-size: 1.5rem;
+        color: #2997ff;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.5;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      .fade-in {
+        animation: fadeIn 0.8s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(15px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* 반응형 스타일 */
+      @media (min-width: 375px) {
+        .accordion-header {
+          padding: 1.2rem 1.8rem;
+        }
+        .accordion-title {
+          font-size: 1.2rem;
+        }
+        .concept-cards {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (min-width: 430px) {
+        .comparison-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .coordinate-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      @media (min-width: 768px) {
+        .main-container {
+          padding: 2rem;
+        }
+        .content-wrapper {
+          padding: 2rem;
+        }
+        .accordion-title {
+          font-size: 1.4rem;
+        }
+        .concept-cards {
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+        .info-box {
+          padding: 1.5rem;
+        }
+        .code-block {
+          padding: 1.5rem;
+          font-size: 0.9rem;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .flow-chart {
+          flex-direction: row;
+        }
+        .flow-step {
+          min-width: 150px;
+        }
+        .flow-step-icon {
+          width: 60px;
+          height: 60px;
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-container">
+      <header style="text-align: center; margin-bottom: 2rem">
+        <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem">
+          스크롤 시계 애니메이션
+        </h1>
+        <p style="color: #86868b; font-size: 0.9rem">
+          Apple Watch 스타일 애니메이션의 완전한 기술적 구현과 디바이스별 반응형
+          좌표 시스템 분석
+        </p>
+      </header>
+
+      <ul class="accordion-list">
+        <!-- 1. 전체 시스템 개요 -->
+        <li class="accordion-item active">
+          <button
+            type="button"
+            class="accordion-header"
+            onclick="toggleAccordion(this)"
+          >
+            <div>
+              <div class="accordion-title">전체 시스템 개요</div>
+              <div class="accordion-subtitle">
+                Apple Watch 애니메이션의 핵심 구조와 기술적 특징
+              </div>
+            </div>
+            <span class="accordion-arrow">▲</span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-wrapper">
+              <div class="concept-cards">
+                <div class="concept-card">
+                  <span class="concept-emoji">⌚</span>
+                  <div class="concept-title">Apple Watch 모형</div>
+                  <div class="concept-desc">
+                    실제 Apple Watch와 유사한 케이스, 크라운, 버튼 디테일
+                  </div>
+                </div>
+                <div class="concept-card">
+                  <span class="concept-emoji">📱</span>
+                  <div class="concept-title">반응형 좌표 시스템</div>
+                  <div class="concept-desc">
+                    디바이스별 최적화된 upperDate 위치 계산
+                  </div>
+                </div>
+                <div class="concept-card">
+                  <span class="concept-emoji">🖤</span>
+                  <div class="concept-title">동적 검은색 애니메이션</div>
+                  <div class="concept-desc">
+                    펄스, 쉬머 효과로 생동감 있는 케이스 표현
+                  </div>
+                </div>
+                <div class="concept-card">
+                  <span class="concept-emoji">🕐</span>
+                  <div class="concept-title">실시간 시계</div>
+                  <div class="concept-desc">
+                    현재 시간 표시와 콜론 깜빡임 효과
+                  </div>
+                </div>
+              </div>
+
+              <div class="info-box blue">
+                <h4>🎯 핵심 기술 스택</h4>
+                <p>
+                  <strong>GSAP + ScrollTrigger</strong>: 고성능 스크롤 기반
+                  애니메이션<br />
+                  <strong>CSS Variables</strong>: JavaScript와 CSS 간 동적 값
+                  연동<br />
+                  <strong>Responsive Breakpoints</strong>: 375px, 768px, 1024px
+                  기준점<br />
+                  <strong>Transform 3D</strong>: GPU 가속 활용한 부드러운
+                  애니메이션<br />
+                  <strong>CSS Grid & Flexbox</strong>: 모던 레이아웃 시스템
+                </p>
+              </div>
+
+              <div class="visual-demo">
+                <div class="watch-demo">
+                  <div style="text-align: center">
+                    <div style="font-size: 0.7rem; margin-bottom: 0.2rem">
+                      08:43
+                    </div>
+                    <div style="font-size: 0.5rem; opacity: 0.8">01일 (금)</div>
+                  </div>
+                </div>
+                <p
+                  style="
+                    text-align: center;
+                    color: #86868b;
+                    font-size: 0.75rem;
+                    margin-top: 0.5rem;
+                  "
+                >
+                  Apple Watch 모형 예시 (케이스, 크라운, 버튼 포함)
+                </p>
+              </div>
+
+              <div class="info-box green">
+                <h4>🔍 파일 구조와 명명 규칙</h4>
+                <p>
+                  <strong>메인 파일</strong>: final_ver24.html<br />
+                  <strong>CSS 클래스</strong>: BEM 방법론 + Apple 디자인 용어<br />
+                  <strong>JavaScript 함수</strong>: camelCase + 기능별 prefix<br />
+                  <strong>CSS 변수</strong>: --applewatch-*, --dynamic-black-*
+                  네임스페이스<br />
+                  <strong>상수 객체</strong>: DYNAMIC_BLACK_ANIMATION_CONFIG
+                </p>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- 2. Apple Watch 모형 구조 -->
+        <li class="accordion-item">
+          <button
+            type="button"
+            class="accordion-header"
+            onclick="toggleAccordion(this)"
+          >
+            <div>
+              <div class="accordion-title">Apple Watch 모형 구조</div>
+              <div class="accordion-subtitle">
+                HTML 구조와 CSS 스타일링의 디테일한 구현
+              </div>
+            </div>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-wrapper">
+              <div class="info-box blue">
+                <h4>🔧 HTML DOM 구조 분석</h4>
+                <p>
+                  <strong>1. 메인 컨테이너</strong>: .watch-element (전체
+                  애니메이션 대상)<br />
+                  <strong>2. 워치 케이스</strong>: .watch-main (22%/18% 라운드
+                  처리)<br />
+                  <strong>3. 디스플레이</strong>: .watch-screen (OLED 스크린
+                  시뮬레이션)<br />
+                  <strong>4. 하드웨어 요소</strong>: 크라운, 사이드 버튼, 밴드
+                  커넥터<br />
+                  <strong>5. UI 요소</strong>: 시간 표시, upperDate 컴플리케이션
+                </p>
+              </div>
+
+              <div class="code-block">
+                <pre>
+<span class="code-highlight">// 📁 HTML 구조: Apple Watch 모형</span>
+<span class="code-highlight">// 🎯 실제 Apple Watch의 물리적 구조를 최대한 재현</span>
+
+&lt;div class="watch-element" id="watchElement"&gt;
+  <span class="code-highlight">&lt;!-- 🎨 Apple Watch 스포츠 밴드 (상단) --&gt;</span>
+  &lt;div class="apple-watch-sport-band-top"&gt;&lt;/div&gt;
+
+  <span class="code-highlight">&lt;!-- 🔗 밴드 연결부 (상단) --&gt;</span>
+  &lt;div class="apple-watch-band-connector-top"&gt;&lt;/div&gt;
+
+  <span class="code-highlight">&lt;!-- 🎨 메인 워치 케이스 --&gt;</span>
+  &lt;div class="watch-main" id="watchMain"&gt;
+    <span class="code-highlight">&lt;!-- ⚙️ 디지털 크라운 --&gt;</span>
+    &lt;div class="apple-watch-digital-crown"&gt;&lt;/div&gt;
+
+    <span class="code-highlight">&lt;!-- 🔘 사이드 버튼 --&gt;</span>
+    &lt;div class="apple-watch-side-button"&gt;&lt;/div&gt;
+
+    <span class="code-highlight">&lt;!-- 📱 OLED 디스플레이 --&gt;</span>
+    &lt;div class="watch-screen" id="watchScreen"&gt;
+      &lt;div class="time-section"&gt;
+        <span class="code-highlight">&lt;!-- 📅 upperDate 컴플리케이션 --&gt;</span>
+        &lt;p class="upperDate" id="upperDate"&gt;...&lt;/p&gt;
+
+        <span class="code-highlight">&lt;!-- 🕐 메인 시간 표시 --&gt;</span>
+        &lt;p class="time-display" id="timeDisplay"&gt;...&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  <span class="code-highlight">&lt;!-- 🔗 밴드 연결부 + 스포츠 밴드 (하단) --&gt;</span>
+  &lt;div class="apple-watch-band-connector-bottom"&gt;&lt;/div&gt;
+  &lt;div class="apple-watch-sport-band-bottom"&gt;&lt;/div&gt;
+&lt;/div&gt;
+                            </pre>
+              </div>
+
+              <div class="coordinate-grid">
+                <div class="coordinate-demo">
+                  <h5>디지털 크라운</h5>
+                  <div class="values">
+                    top: 20%<br />
+                    right: -6px<br />
+                    크기: 12px
+                  </div>
+                </div>
+                <div class="coordinate-demo">
+                  <h5>사이드 버튼</h5>
+                  <div class="values">
+                    top: 40%<br />
+                    right: -4px<br />
+                    크기: 8×24px
+                  </div>
+                </div>
+                <div class="coordinate-demo">
+                  <h5>밴드 커넥터</h5>
+                  <div class="values">
+                    상하단 중앙<br />
+                    크기: 20×6px<br />
+                    색상: #3c3c3c
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- 3. 디바이스별 좌표 시스템 -->
+        <li class="accordion-item">
+          <button
+            type="button"
+            class="accordion-header"
+            onclick="toggleAccordion(this)"
+          >
+            <div>
+              <div class="accordion-title">디바이스별 좌표 시스템</div>
+              <div class="accordion-subtitle">
+                upperDate 요소의 반응형 좌표 분리와 정밀 위치 계산
+              </div>
+            </div>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-wrapper">
+              <div class="info-box blue">
+                <h4>🎯 디바이스별 좌표 분리 시스템</h4>
+                <p>
+                  <strong>핵심 아이디어</strong>: 같은 upperDate 요소라도
+                  디바이스 크기에 따라 최적 위치가 다름<br />
+                  <strong>구현 방법</strong>: CSS 변수 + JavaScript 동적 계산 +
+                  미디어쿼리<br />
+                  <strong>반응 기준점</strong>: 375px(소형), 768px(태블릿),
+                  데스크톱<br />
+                  <strong>좌표 단위</strong>: 상대적 퍼센트(%) + 절대값 픽셀(px)
+                  혼용
+                </p>
+              </div>
+
+              <div class="coordinate-grid">
+                <div class="coordinate-demo">
+                  <h5>데스크톱</h5>
+                  <div class="values">
+                    top: -50%<br />
+                    left: 70%<br />
+                    font-size: 35px
+                  </div>
+                </div>
+                <div class="coordinate-demo">
+                  <h5>모바일 (768px 이하)</h5>
+                  <div class="values">
+                    top: -70%<br />
+                    left: 56%<br />
+                    font-size: 10px
+                  </div>
+                </div>
+                <div class="coordinate-demo">
+                  <h5>소형 모바일 (375px 이하)</h5>
+                  <div class="values">
+                    left: 57%<br />
+                    font-size: 20px<br />
+                    padding: 3px 6px
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- 4. 동적 검은색 애니메이션 시스템 -->
+        <li class="accordion-item">
+          <button
+            type="button"
+            class="accordion-header"
+            onclick="toggleAccordion(this)"
+          >
+            <div>
+              <div class="accordion-title">동적 검은색 애니메이션</div>
+              <div class="accordion-subtitle">
+                펄스와 쉬머 효과를 통한 생동감 있는 워치 케이스 표현
+              </div>
+            </div>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-wrapper">
+              <div class="info-box blue">
+                <h4>🖤 동적 검은색 시스템 개요</h4>
+                <p>
+                  Apple Watch의 고급스러운 검은색 케이스를 재현하기 위해 여러
+                  검은색 톤을 조합하고, 펄스(맥박)와 쉬머(반짝임) 애니메이션을
+                  통해 정적인 색상이 아닌 살아있는 느낌을 구현합니다.
+                </p>
+              </div>
+
+              <div class="concept-cards">
+                <div class="concept-card">
+                  <span class="concept-emoji">💗</span>
+                  <div class="concept-title">Pulse 효과</div>
+                  <div class="concept-desc">
+                    4초 주기 맥박 리듬으로 색상과 그림자 변화
+                  </div>
+                </div>
+                <div class="concept-card">
+                  <span class="concept-emoji">✨</span>
+                  <div class="concept-title">Shimmer 효과</div>
+                  <div class="concept-desc">
+                    3초 주기 좌우 이동하는 메탈릭 반사광
+                  </div>
+                </div>
+                <div class="concept-card">
+                  <span class="concept-emoji">🎭</span>
+                  <div class="concept-title">하이브리드 모드</div>
+                  <div class="concept-desc">
+                    Pulse + Shimmer 동시 적용 최고급 효과
+                  </div>
+                </div>
+                <div class="concept-card">
+                  <span class="concept-emoji">🔄</span>
+                  <div class="concept-title">진행률 연동</div>
+                  <div class="concept-desc">
+                    스크롤 진행에 따른 단계적 효과 변화
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- 5. 순차적 애니메이션 체인 시스템 -->
+        <li class="accordion-item">
+          <button
+            type="button"
+            class="accordion-header"
+            onclick="toggleAccordion(this)"
+          >
+            <div>
+              <div class="accordion-title">순차적 애니메이션 체인</div>
+              <div class="accordion-subtitle">
+                ScrollTrigger 기반 단계별 애니메이션 실행과 상태 관리
+              </div>
+            </div>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-wrapper">
+              <div class="info-box blue">
+                <h4>🔗 애니메이션 체인 시스템</h4>
+                <p>
+                  복잡한 애니메이션을 여러 단계로 나누어 순차적으로 실행하는
+                  시스템입니다. 각 단계는 이전 단계의 완료를 전제로 하여
+                  자연스러운 흐름을 만듭니다.
+                </p>
+              </div>
+
+              <div class="visual-demo">
+                <h4 style="color: #2997ff; margin-bottom: 1rem">
+                  애니메이션 타이밍 체인
+                </h4>
+                <div class="timeline">
+                  <div class="timeline-item">
+                    <div class="timeline-time">0~20% 구간</div>
+                    <div class="timeline-desc">
+                      Watch 스케일 4.0 → 1.0, 텍스트 요소 준비
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-time">20~45% 구간</div>
+                    <div class="timeline-desc">
+                      upperDate 컴플리케이션 페이드인 (25% 구간)
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-time">70~100% 구간</div>
+                    <div class="timeline-desc">
+                      데스크톱 Watch 이동, 텍스트 레이아웃 변경
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-time">85~100% 구간</div>
+                    <div class="timeline-desc">
+                      Product 텍스트 등장 (15% 페이드인)
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- 6. 실시간 시계 시스템 -->
+        <li class="accordion-item">
+          <button
+            type="button"
+            class="accordion-header"
+            onclick="toggleAccordion(this)"
+          >
+            <div>
+              <div class="accordion-title">실시간 시계 시스템</div>
+              <div class="accordion-subtitle">
+                현재 시간 표시와 콜론 깜빡임 효과 구현
+              </div>
+            </div>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-wrapper">
+              <div class="info-box blue">
+                <h4>🕐 실시간 시계의 구성 요소</h4>
+                <p>
+                  Apple Watch의 실제 시계 인터페이스를 재현하여 현재 시간을
+                  표시하고, 콜론(:) 깜빡임 효과로 생동감을 더합니다.
+                </p>
+              </div>
+
+              <div class="concept-cards">
+                <div class="concept-card">
+                  <span class="concept-emoji">⏰</span>
+                  <div class="concept-title">시간 업데이트</div>
+                  <div class="concept-desc">1초마다 현재 시간 갱신</div>
+                </div>
+                <div class="concept-card">
+                  <span class="concept-emoji">📅</span>
+                  <div class="concept-title">날짜 표시</div>
+                  <div class="concept-desc">일(날짜)과 요일 한글 표시</div>
+                </div>
+                <div class="concept-card">
+                  <span class="concept-emoji">💫</span>
+                  <div class="concept-title">콜론 깜빡임</div>
+                  <div class="concept-desc">1초 주기로 : 투명도 토글</div>
+                </div>
+                <div class="concept-card">
+                  <span class="concept-emoji">🔤</span>
+                  <div class="concept-title">타이포그래피</div>
+                  <div class="concept-desc">SF Pro Display 폰트 적용</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- 7. 반응형 처리 시스템 -->
+        <li class="accordion-item">
+          <button
+            type="button"
+            class="accordion-header"
+            onclick="toggleAccordion(this)"
+          >
+            <div>
+              <div class="accordion-title">반응형 처리 시스템</div>
+              <div class="accordion-subtitle">
+                다양한 디바이스와 뷰포트 변화에 대응하는 적응형 레이아웃
+              </div>
+            </div>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-wrapper">
+              <div class="info-box blue">
+                <h4>📐 반응형 시스템의 핵심 구조</h4>
+                <p>
+                  디바이스 크기별로 완전히 다른 레이아웃과 애니메이션을 제공하는
+                  적응형 시스템입니다. 단순한 크기 조정이 아닌 각 디바이스에
+                  최적화된 경험을 제공합니다.
+                </p>
+              </div>
+
+              <div class="concept-cards">
+                <div class="concept-card">
+                  <span class="concept-emoji">🖥️</span>
+                  <div class="concept-title">데스크톱 (1024px+)</div>
+                  <div class="concept-desc">
+                    수평 레이아웃, 워치 이동 애니메이션
+                  </div>
+                </div>
+                <div class="concept-card">
+                  <span class="concept-emoji">📱</span>
+                  <div class="concept-title">태블릿 (768px)</div>
+                  <div class="concept-desc">중간 크기, 터치 최적화</div>
+                </div>
+                <div class="concept-card">
+                  <span class="concept-emoji">📱</span>
+                  <div class="concept-title">모바일 (430px)</div>
+                  <div class="concept-desc">
+                    수직 레이아웃, 모든 요소 중앙 정렬
+                  </div>
+                </div>
+                <div class="concept-card">
+                  <span class="concept-emoji">📱</span>
+                  <div class="concept-title">소형 모바일 (375px)</div>
+                  <div class="concept-desc">특별 최적화, 크기 재조정</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- 8. 전체 실행 플로우와 통합 시스템 -->
+        <li class="accordion-item">
+          <button
+            type="button"
+            class="accordion-header"
+            onclick="toggleAccordion(this)"
+          >
+            <div>
+              <div class="accordion-title">전체 실행 플로우</div>
+              <div class="accordion-subtitle">
+                모든 시스템이 통합된 완전한 애니메이션 아키텍처
+              </div>
+            </div>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-wrapper">
+              <div class="info-box dark">
+                <h4>🎯 전체 시스템 아키텍처</h4>
+                <div class="flow-chart">
+                  <div class="flow-step">
+                    <div class="flow-step-icon">1</div>
+                    <p>DOM 준비<br />상태 확인</p>
+                  </div>
+                  <div class="flow-arrow">→</div>
+                  <div class="flow-step">
+                    <div class="flow-step-icon">2</div>
+                    <p>매니저 객체<br />생성 및 초기화</p>
+                  </div>
+                  <div class="flow-arrow">→</div>
+                  <div class="flow-step">
+                    <div class="flow-step-icon">3</div>
+                    <p>애니메이션 시스템<br />구동</p>
+                  </div>
+                  <div class="flow-arrow">→</div>
+                  <div class="flow-step">
+                    <div class="flow-step-icon">4</div>
+                    <p>실시간 모니터링<br />및 동기화</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="info-box green">
+                <h4>💡 핵심 설계 철학</h4>
+                <p>
+                  <strong>모듈화된 아키텍처</strong><br />
+                  • 각 매니저가 독립적 책임을 가지며 느슨하게 결합<br />
+                  • DirectControl, Animation, Keyboard, Viewport 매니저 분리<br /><br />
+
+                  <strong>성능 최적화 우선</strong><br />
+                  • GPU 가속, requestAnimationFrame, 디바운스 활용<br />
+                  • 필요 시에만 DOM 조작, 메모리 누수 방지<br /><br />
+
+                  <strong>Apple 스타일 UX</strong><br />
+                  • 정밀한 타이밍, 자연스러운 easing, 디테일한 시각적 피드백<br />
+                  • 디바이스별 최적화된 인터랙션 패턴
+                </p>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <script>
+      // 📁 파일 위치: device-specific-upperdate-coordinates-animation-guide.html
+
+      // 🎯 아코디언 토글 함수
+      function toggleAccordion(header) {
+        const item = header.parentElement;
+        const isActive = item.classList.contains('active');
+
+        // 모든 아코디언 닫기
+        document
+          .querySelectorAll('.accordion-item')
+          .forEach((accordionItem) => {
+            accordionItem.classList.remove('active');
+          });
+
+        // 클릭된 아이템이 비활성화 상태였다면 활성화
+        if (!isActive) {
+          item.classList.add('active');
+        }
+      }
+
+      // 🚀 페이드인 애니메이션
+      document.addEventListener('DOMContentLoaded', function () {
+        // 각 아코디언 아이템에 페이드인 효과 적용
+        const elements = document.querySelectorAll('.accordion-item');
+        elements.forEach((el, index) => {
+          setTimeout(() => {
+            el.classList.add('fade-in');
+          }, index * 100);
+        });
+
+        console.log('[DEBUG] 스크롤 시계 애니메이션 가이드 로드 완료');
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,3808 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multi-Step Blog Creation Platform - 프로젝트 상세</title>
+    <style>
+      :root {
+        --rui-fixed-black: #000000;
+        --rui-fixed-white: #ffffff;
+        --rui-bg100: #ffffff;
+        --rui-bg300: #e0e0e0;
+        --rui-contents000: #000000;
+        --rui-contents200: #666666;
+        --rui-contents150: #999999;
+        --rui-divider: #e0e0e0;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #fff;
+        overflow-x: hidden;
+        font-size: 14px;
+      }
+      .header-stack {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 10000;
+      }
+      .info-header {
+        width: 100%;
+        height: 60px;
+        background: white;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        transform: translateY(-100%);
+        transition: transform 0.4s ease;
+        display: none;
+        align-items: center;
+      }
+      .info-header.show {
+        display: flex;
+        transform: translateY(0);
+      }
+      .info-content {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 15px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .info-project-details {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+      }
+      .info-project-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+      }
+      .info-details {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1;
+      }
+      .info-project-name {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+        line-height: 1.3;
+      }
+      .info-project-link {
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+      }
+      .info-link-text {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica
+      Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #667eea;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: opacity 0.2s;
+      }
+      .info-link-text:hover {
+        opacity: 0.8;
+      }
+      .info-bookmark-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 4px;
+        transition: background 0.2s;
+        flex-shrink: 0;
+      }
+      .info-bookmark-btn:hover {
+        background: rgba(245, 245, 245, 0.8);
+      }
+      .info-bookmark-icon-wrapper {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .main-header {
+        width: 100%;
+        min-height: 60px;
+        height: 60px;
+        box-sizing: border-box;
+        align-items: center;
+        background-color: var(--rui-fixed-black);
+        overflow: hidden;
+        font-size: 14px;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 15px;
+      }
+      .header-logo {
+        color: var(--rui-fixed-white);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1rem;
+      }
+      .header-nav {
+        display: none;
+      }
+      .nav-link {
+        color: var(--rui-fixed-white);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.8rem;
+        transition: opacity 0.2s;
+      }
+      .nav-link:hover {
+        opacity: 0.8;
+      }
+      .page {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        margin-top: 60px;
+      }
+      .container {
+        display: flex;
+        max-width: 900px;
+      }
+      .project-intro-section {
+        padding: 120px 0 50px 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 8px;
+        height: 400px;
+      }
+      .project-header-content {
+        text-align: center;
+      }
+      .project-category {
+        font-size: 0.8rem;
+        opacity: 0.9;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .project-main-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        line-height: 1.2;
+      }
+      .project-subtitle {
+        font-size: 1rem;
+        opacity: 0.9;
+        margin-bottom: 25px;
+        line-height: 1.4;
+      }
+      .main-content-section {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        position: relative;
+      }
+      .content-body {
+        flex: 1;
+      }
+      .mobile-sidebar {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      .mobile-sidebar .project-intro-section {
+        height: 300px;
+      }
+      .mobile-sidebar .project-main-title {
+        font-size: 1.5rem;
+      }
+      .mobile-sidebar .sidebar-inner {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .navigation-container {
+        position: relative;
+        margin-bottom: 24px;
+      }
+      .navigation-menu {
+        background: white;
+        position: relative;
+        z-index: 900;
+        transition: all 0.3s ease;
+        height: 60px;
+      }
+      .navigation-menu.sticky {
+        position: fixed;
+        top: 60px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .menu-list {
+        display: flex;
+        justify-content: space-between;
+        -moz-box-align: center;
+        align-items: center;
+        background-color: #fff;
+        overflow-x: auto;
+        max-width: 100%;
+        padding-top: 24px;
+        white-space: nowrap;
+        scrollbar-width: none;
+        list-style: none;
+        height: 100%;
+        /* 스크롤바 숨김 처리 */
+        -ms-overflow-style: none;
+      }
+      .menu-list::-webkit-scrollbar {
+        display: none;
+      }
+      .menu-list.dragging {
+        cursor: grabbing;
+      }
+      .menu-item {
+        cursor: pointer;
+        flex-shrink: 0;
+        -moz-box-flex: 1;
+        flex-grow: 1;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        min-width: 0;
+      }
+      .menu-item:hover {
+        background-color: #f8f9fa;
+      }
+      .menu-item.active {
+        border-bottom: 2px solid #667eea;
+      }
+      .menu-link {
+        display: inline-block;
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple
+      SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji',
+          'Segoe
+      UI Emoji', 'Segoe UI Symbol', sans-serif;
+        font-size: 14px;
+        line-height: 1.3;
+        font-weight: 600;
+        color: #bdbdbd;
+        padding: 0px 12px 4px;
+        text-align: center;
+        width: 100%;
+        white-space: nowrap;
+        text-decoration: none;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .menu-item.active .menu-link {
+        color: #667eea;
+      }
+      .content-section {
+        margin-bottom: 100px;
+      }
+      .section-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #333;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #667eea;
+        margin-bottom: 24px;
+      }
+      .section-content {
+        list-style: none;
+        padding: 0;
+        margin-top: 24px;
+      }
+      .content-item {
+        margin-bottom: 24px;
+        padding: 0;
+      }
+      .content-title {
+        display: block;
+        font-weight: 600;
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 8px;
+        line-height: 1.4;
+      }
+      .content-description {
+        font-size: 15px;
+        color: #555;
+        line-height: 1.6;
+        margin: 0;
+        padding-left: 0;
+      }
+      .content-sub-list {
+        list-style: none;
+        padding: 0;
+        margin: 8px 0 0 0;
+      }
+      .sub-list-item {
+        position: relative;
+        font-size: 15px;
+        color: #555;
+        line-height: 1.6;
+        list-style-type: disc;
+        margin-left: 20px;
+        display: list-item;
+      }
+      .sub-list-item::marker {
+        color: #667eea;
+        font-size: 1em;
+      }
+      .tech-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin: 25px 0;
+      }
+      .tech-category {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 6px;
+        border-left: 4px solid #667eea;
+      }
+      .tech-category h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: #333;
+      }
+      .tech-list {
+        list-style: none;
+      }
+      .tech-list li {
+        padding: 4px 0;
+        color: #666;
+        position: relative;
+        padding-left: 12px;
+        font-size: 0.9rem;
+      }
+      .tech-list li::before {
+        content: '▸';
+        position: absolute;
+        left: 0;
+        color: #667eea;
+        font-weight: bold;
+      }
+      .code-block {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 16px;
+        margin: 16px 0;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 13px;
+        line-height: 1.5;
+        overflow-x: auto;
+      }
+      .highlight-box {
+        background: linear-gradient(135deg, #667eea10, #764ba210);
+        border-left: 4px solid #667eea;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 0 8px 8px 0;
+      }
+      .workflow-step {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 16px 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .step-number {
+        background: #667eea;
+        color: white;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 600;
+        margin-right: 12px;
+      }
+      .sidebar {
+        width: 100%;
+        position: relative;
+        padding: 20px;
+        box-sizing: border-box;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+        transition: transform;
+      }
+      .sidebar.move {
+        transform: translateY(60px);
+      }
+      .sidebar-button {
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 18px;
+        width: 100%;
+        transition: background 0.3s;
+        margin-bottom: 10px;
+        height: 51px;
+        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+      }
+      .sidebar-button:hover {
+        background: #5a6fd8;
+      }
+      .related-projects-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 24px;
+        color: #333;
+        text-align: left;
+      }
+      .job-style-projects-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .job-style-project-item {
+        margin: 0;
+        width: calc(50% - 8px);
+        flex-shrink: 0;
+      }
+      .job-style-project-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        height: 100%;
+      }
+      .job-style-project-card {
+        width: 100%;
+        background: white;
+        border-radius: 8px;
+        padding: 16px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      .job-style-project-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+      .project-image-container {
+        position: relative;
+        margin-bottom: 12px;
+        border: 1px solid var(--rui-divider);
+        border-radius: 4px;
+        overflow: hidden;
+        aspect-ratio: 1.5 / 1;
+      }
+      .project-thumbnail {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+      }
+      .bookmark-button-container {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        appearance: none;
+        padding: 7px;
+        cursor: pointer;
+      }
+      .bookmark-button {
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 4px;
+        padding: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+      }
+      .bookmark-button:hover {
+        background: rgba(255, 255, 255, 1);
+      }
+      .bookmark-icon {
+        width: 16px;
+        height: 16px;
+        color: #666;
+      }
+      .project-header-info {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: 8px;
+        position: relative;
+      }
+      .project-title-main {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica
+      Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji',
+          'Segoe UI Symbol', sans-serif;
+        font-size: 14px;
+        line-height: 1.3;
+        font-weight: 600;
+        color: var(--rui-contents000);
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        word-break: break-all;
+        margin-bottom: 2px;
+      }
+      .project-company-name {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple
+      SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji',
+          'Segoe
+      UI Emoji', 'Segoe UI Symbol', sans-serif;
+        font-size: 12px;
+        line-height: 1.45;
+        font-weight: 400;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        word-break: break-all;
+        color: var(--rui-contents150);
+        text-align: left;
+      }
+      .project-tags-container {
+        display: flex;
+        gap: 4px;
+        width: 100%;
+        min-width: 0px;
+        align-items: center;
+        flex-wrap: wrap;
+        white-space: normal;
+        overflow-x: visible;
+        scrollbar-width: none;
+      }
+      .project-tag-wrapper {
+        box-sizing: border-box;
+        display: flex;
+        width: auto;
+        height: auto;
+        gap: 0px;
+        align-items: center;
+        justify-content: center;
+        flex-flow: row;
+      }
+      .project-tag {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji',
+          'Segoe UI Symbol', sans-serif;
+        font-size: 12px;
+        line-height: 1.35;
+        font-weight: 500;
+        color: var(--rui-contents150);
+        background: var(--rui-bg300);
+        padding: 4px 6px;
+        border-radius: 4px;
+      }
+      .bottom-navigation {
+        padding: 30px 0;
+        border-top: 1px solid #e0e0e0;
+        background: #f8f9fa;
+      }
+      .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 20px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+      }
+      .back-button:hover {
+        background: #f8f9fa;
+        border-color: #ccc;
+      }
+      .position-skills-section {
+        margin: 40px 0;
+        padding: 20px 0;
+        border-top: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      .skills-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .skills-title {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        line-height: 1.4;
+      }
+      .skills-tags-wrapper {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .skill-tag-item {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .skill-tag-text {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #666;
+        background: #f1f3f4;
+        padding: 8px 12px;
+        border-radius: 6px;
+        white-space: nowrap;
+      }
+      .company-info-section {
+        margin: 40px 0;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        overflow: hidden;
+      }
+      .company-info-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px;
+        position: relative;
+      }
+      .company-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex: 1;
+      }
+      .company-logo-wrapper {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .company-logo-placeholder {
+        font-size: 24px;
+        color: white;
+      }
+      .company-details {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1;
+      }
+      .company-name {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        line-height: 1.3;
+      }
+      .company-info-link {
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+      }
+      .info-link-text {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #667eea;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: opacity 0.2s;
+      }
+      .info-link-text:hover {
+        opacity: 0.8;
+      }
+      .company-bookmark-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 4px;
+        transition: background 0.2s;
+        flex-shrink: 0;
+      }
+      .company-bookmark-btn:hover {
+        background: #f5f5f5;
+      }
+      .bookmark-icon-wrapper {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .project-header-introduction-section {
+        background: #ffffff;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      .company-logo-and-name-container {
+        display: flex;
+        align-items: center;
+      }
+      .company-profile-link {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        transition: opacity 0.2s ease;
+      }
+      .company-profile-link:hover {
+        opacity: 0.8;
+      }
+      .company-logo-image-container {
+        width: 22px;
+        height: 22px;
+        border-radius: 4px;
+        overflow: hidden;
+        flex-shrink: 0;
+        background: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .company-logo-image {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      .company-name-and-arrow-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .project-company-and-title-wrapper {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .company-name-text {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple
+      SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #666;
+        line-height: 1.4;
+      }
+      .company-link-arrow-icon {
+        color: #666;
+        flex-shrink: 0;
+      }
+      .job-posting-title-container {
+        display: flex;
+        flex-direction: column;
+      }
+      .job-posting-main-title {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple
+      SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: #333;
+        line-height: 1.3;
+        margin: 0;
+        word-break: keep-all;
+      }
+      .project-list .project-item {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .project-list .project-item:not(:last-child) {
+        margin-bottom: 8px;
+      }
+      .project-list .project-item .project-subject,
+      .project-list .project-item .project-content {
+        font-size: 14px;
+        font-size: 14px;
+        line-height: 1.45;
+        font-weight: 400;
+      }
+      .project-util .box-list {
+        gap: 8px;
+        list-style: none;
+      }
+      .scroll-to-top-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px) scale(0.8);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+      }
+      .scroll-to-top-button:hover {
+        background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        transform: translateY(-2px) scale(1);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      }
+      .scroll-to-top-button:active {
+        transform: translateY(0) scale(0.95);
+        transition: all 0.1s ease;
+      }
+      .scroll-to-top-button.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+      }
+      .scroll-to-top-icon {
+        width: 20px;
+        height: 20px;
+        color: white;
+        stroke-width: 2.5;
+      }
+      .scroll-to-top-text {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+          sans-serif;
+        font-size: 10px;
+        font-weight: 600;
+        color: white;
+        line-height: 1;
+        letter-spacing: 0.5px;
+      }
+
+      /* 모바일 퍼스트 미디어쿼리 */
+
+      @media (min-width: 360px) {
+        body {
+          font-size: 15px;
+        }
+        .scroll-to-top-button {
+          bottom: 110px;
+          right: 15px;
+          width: 45px;
+          height: 45px;
+        }
+        .scroll-to-top-icon {
+          width: 16px;
+          height: 16px;
+        }
+        .scroll-to-top-text {
+          font-size: 8px;
+        }
+        .menu-link {
+          font-size: 12px;
+          padding: 0px 8px 4px;
+        }
+        .main-header {
+          height: 60px;
+          min-height: 60px;
+          padding: 0 18px;
+        }
+        .header-logo {
+          font-size: 1.1rem;
+        }
+        .info-content {
+          padding: 0 18px;
+        }
+        .info-project-name {
+          font-size: 14px;
+        }
+        .info-link-text {
+          font-size: 0.85rem;
+        }
+        .project-main-title {
+          font-size: 2rem;
+        }
+        .container {
+          flex-direction: column-reverse;
+          padding: 0 20px;
+        }
+        .mobile-sidebar {
+          padding-top: 24px;
+          gap: 16px;
+        }
+        .project-header-introduction-section {
+          padding-bottom: 0;
+        }
+        .mobile-sidebar .sidebar-inner {
+          background: #fff;
+          margin-bottom: 0;
+        }
+        .project-util {
+          z-index: 1000;
+          position: fixed;
+          left: 0px;
+          right: 0px;
+          bottom: 0px;
+          width: 100vw;
+          box-sizing: border-box;
+          padding: 0px 24px;
+          background: linear-gradient(
+            0deg,
+            var(--rui-bg100) 87.5%,
+            rgba(255, 255, 255, 0.3) 100.54%
+          );
+          height: 100px;
+          display: flex;
+          flex-grow: 1;
+          align-items: center;
+          justify-content: center;
+        }
+        .box-list {
+          display: flex;
+          width: 100vw;
+          flex-direction: row-reverse;
+          justify-content: center;
+          align-items: center;
+        }
+        .box-item {
+          flex-grow: 1;
+        }
+        .box-item.preview {
+          width: 116px;
+          background-color: #fff;
+        }
+        .box-item.preview .sidebar-button {
+          background-color: #fff;
+          border: 1px solid rgb(212, 212, 212);
+          color: #000;
+        }
+        .box-item.source-code {
+          width: calc(100% - ((24px * 2) + 116px + 8px));
+        }
+        .project-header-content {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          padding: 0 15px;
+        }
+        .project-intro-section {
+          padding: 0;
+        }
+        .content-section {
+          margin-bottom: 50px;
+        }
+        .bottom-navigation {
+          padding: 10px 0 110px 0;
+        }
+        .job-style-project-item {
+          width: calc(50% - 8px);
+        }
+      }
+      @media (min-width: 412px) {
+        body {
+          font-size: 16px;
+        }
+        .header-nav {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+        }
+        .info-project-details {
+          gap: 16px;
+        }
+        .info-project-name {
+          font-size: 1.1rem;
+        }
+        .info-link-text {
+          font-size: 0.9rem;
+        }
+      }
+      @media (min-width: 768px) {
+        .container {
+          margin: 0 auto;
+        }
+
+        .scroll-to-top-button {
+          bottom: 120px;
+          right: 20px;
+          width: 50px;
+          height: 50px;
+        }
+        .scroll-to-top-icon {
+          width: 18px;
+          height: 18px;
+        }
+        .scroll-to-top-text {
+          font-size: 9px;
+        }
+        .menu-link {
+          font-size: 13px;
+          padding: 0px 10px 4px;
+        }
+      }
+      @media (min-width: 768px) {
+        .main-header {
+          padding: 0 30px;
+        }
+        .header-nav {
+          display: flex;
+          gap: 24px;
+        }
+        .nav-link {
+          font-size: 0.9rem;
+        }
+        .info-content {
+          padding: 0 30px;
+        }
+        .info-project-icon {
+          width: 44px;
+          height: 44px;
+          font-size: 1.3rem;
+        }
+        .info-project-name {
+          font-size: 1.2rem;
+        }
+        .info-link-text {
+          font-size: 1rem;
+        }
+        .info-bookmark-btn {
+          padding: 10px;
+        }
+        .info-bookmark-icon-wrapper {
+          width: 26px;
+          height: 26px;
+        }
+        .main-content-section {
+          flex-direction: row;
+          gap: 40px;
+        }
+        .content-body {
+          padding: 40px 40px 40px 0;
+          width: 555px;
+          overflow: hidden;
+        }
+        .sidebar {
+          display: block;
+          width: 265px;
+          position: sticky;
+          top: 100px;
+          height: fit-content;
+          margin-top: 0;
+        }
+        .sidebar-inner {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          gap: 18px;
+        }
+        .tech-grid {
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 20px;
+        }
+        .tech-category {
+          flex: 1;
+          min-width: calc(50% - 10px);
+        }
+        .job-style-projects-grid {
+          gap: 20px;
+        }
+        .job-style-project-item {
+          width: calc(50% - 10px);
+        }
+        .related-projects-title {
+          font-size: 1.4rem;
+        }
+        .company-name-text {
+          font-size: 16px;
+        }
+        .job-posting-main-title {
+          font-size: 20px;
+        }
+        .container {
+          display: flex;
+          flex-direction: row;
+        }
+        .project-header-introduction-section {
+          padding-bottom: 24px;
+        }
+        .project-util {
+          position: relative;
+          width: 100%;
+          height: auto;
+          padding: 0;
+          z-index: auto;
+          left: auto;
+          right: auto;
+          bottom: auto;
+        }
+        .box-list {
+          flex-direction: column;
+          width: 100%;
+        }
+        .box-item.source-code,
+        .box-item.preview {
+          width: 100%;
+        }
+        .bottom-navigation {
+          padding: 10px 0;
+        }
+      }
+      @media (min-width: 1024px) {
+        .project-main-title {
+          font-size: 2.5rem;
+        }
+        .info-project-details {
+          gap: 18px;
+        }
+        .info-project-name {
+          font-size: 16px;
+        }
+        .tech-grid {
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 20px;
+        }
+        .tech-category {
+          flex: 1;
+          min-width: 200px;
+        }
+        .job-style-projects-grid {
+          gap: 24px;
+        }
+        .job-style-project-item {
+          width: calc(50% - 12px);
+        }
+      }
+      @media (min-width: 1200px) {
+        .container {
+          max-width: 900px;
+        }
+        .info-content {
+          max-width: 900px;
+        }
+      } /* 접근성 개선 */
+      @media (prefers-reduced-motion: reduce) {
+        .scroll-to-top-button {
+          transition: opacity 0.2s ease;
+        }
+        .scroll-to-top-button:hover {
+          transform: none;
+        }
+      } /* 고대비 모드 지원 */
+      @media (prefers-contrast: high) {
+        .scroll-to-top-button {
+          background: #000;
+          border: 2px solid #fff;
+        }
+        .scroll-to-top-button:hover {
+          background: #333;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header-stack" id="headerStack">
+      <div class="info-header" id="infoHeader">
+        <div class="info-content">
+          <div class="info-project-details">
+            <div class="info-project-icon">📋</div>
+            <div class="info-details">
+              <div class="info-project-name">
+                Multi-Step Blog Creation Platform
+              </div>
+              <a
+                href="https://github.com/searchme86/vite_multistepForm_preview"
+                class="info-project-link"
+              >
+                <div class="info-link-text">
+                  해당 프로젝트로 이동하기
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    height="16"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="m21 16-9.65 10L10 24.6l8.298-8.6L10 7.4 11.35 6z"
+                    ></path>
+                  </svg>
+                </div>
+              </a>
+            </div>
+          </div>
+          <button type="button" class="info-bookmark-btn">
+            <div class="info-bookmark-icon-wrapper">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M12 17.25L18.75 21V3.75H5.25V21L12 17.25ZM6.75 18.4507L12 15.5341L17.25 18.4507V5.25H6.75V18.4507Z"
+                  fill="#CDCCC6"
+                ></path>
+              </svg>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div class="main-header" id="mainHeader">
+        <a href="./portfolio.html" class="header-logo">포트폴리오 메인</a>
+      </div>
+    </header>
+
+    <div class="page">
+      <section class="main-content-section">
+        <div class="container">
+          <div class="content-body">
+            <section class="project-header-introduction-section">
+              <div class="project-company-and-title-wrapper">
+                <div class="section-company">
+                  <div class="company-logo-and-name-container">
+                    <a
+                      href="#"
+                      class="company-profile-link"
+                      aria-label="React 카테고리 정보"
+                    >
+                      <div class="company-logo-wrapper">
+                        <div class="company-logo-image-container">
+                          <img src="" alt="" class="company-logo-image" />
+                        </div>
+                        <div class="company-name-and-arrow-wrapper">
+                          <p class="company-name-text">React(카테고리)</p>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 32 32"
+                            class="company-link-arrow-icon"
+                            width="16"
+                            height="16"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fill="currentColor"
+                              d="m21 16-9.65 10L10 24.6l8.298-8.6L10 7.4 11.35 6z"
+                            ></path>
+                          </svg>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <div class="job-posting-title-container">
+                  <h1 id="posting-detail-title" class="job-posting-main-title">
+                    Multi-Step Blog Creation Platform
+                  </h1>
+                </div>
+              </div>
+            </section>
+
+            <nav class="navigation-container">
+              <div class="navigation-menu" id="navigationMenu">
+                <ul class="menu-list" id="menuList">
+                  <li class="menu-item active" data-target="overview">
+                    <a href="#overview" class="menu-link">프로젝트 개요</a>
+                  </li>
+                  <li class="menu-item" data-target="workflow">
+                    <a href="#workflow" class="menu-link">4단계 워크플로우</a>
+                  </li>
+                  <li class="menu-item" data-target="modular-editor">
+                    <a href="#modular-editor" class="menu-link">모듈 에디터</a>
+                  </li>
+                  <li class="menu-item" data-target="state-management">
+                    <a href="#state-management" class="menu-link">상태 관리</a>
+                  </li>
+                  <li class="menu-item" data-target="problem-solving">
+                    <a href="#problem-solving" class="menu-link">문제 해결</a>
+                  </li>
+                  <li class="menu-item" data-target="tech-stack">
+                    <a href="#tech-stack" class="menu-link">기술 스택</a>
+                  </li>
+                  <li class="menu-item" data-target="architecture">
+                    <a href="#architecture" class="menu-link">아키텍처</a>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+
+            <div class="resume-section">
+              <div class="content-section overview" id="overview">
+                <section class="project-intro-section">
+                  <div class="project-header-content">
+                    <div class="project-category">
+                      엔터프라이즈급 React TypeScript 프로젝트
+                    </div>
+                    <strong class="project-main-title">
+                      Multi-Step Blog Creation Platform
+                    </strong>
+                    <p class="project-subtitle">
+                      React TypeScript 기반의 엔터프라이즈급 다단계 블로그 작성
+                      플랫폼으로, 모듈화된 에디터, 실시간 미리보기, 고급 이미지
+                      관리 시스템을 통해 완전한 블로그 제작 워크플로우를
+                      제공합니다.
+                    </p>
+                  </div>
+                </section>
+
+                <div class="highlight-box">
+                  <h3 style="margin-bottom: 16px; color: #667eea">
+                    🎯 애플리케이션 개요
+                  </h3>
+                  <p>
+                    이 애플리케이션은 사용자가 4단계의 직관적인 과정을 통해
+                    완성된 블로그 포스트를 작성할 수 있는 플랫폼입니다. 각
+                    단계는 독립적이면서도 서로 연동되어 일관된 사용자 경험을
+                    제공하며, 실시간 미리보기를 통해 결과를 즉시 확인할 수
+                    있습니다.
+                  </p>
+                </div>
+
+                <ul class="section-content">
+                  <li class="content-item">
+                    <strong class="content-title">핵심 특징:</strong>
+                    <ul class="content-sub-list">
+                      <li class="sub-list-item">
+                        📋 4단계 워크플로우: 체계적인 블로그 작성 과정
+                      </li>
+                      <li class="sub-list-item">
+                        🧩 모듈화 에디터: 레고 블록처럼 조합 가능한 컨텐츠 구조
+                      </li>
+                      <li class="sub-list-item">
+                        👁️ 실시간 미리보기: 입력과 동시에 결과 확인
+                      </li>
+                      <li class="sub-list-item">
+                        🖼️ 고급 이미지 관리: 드래그앤드롭, 갤러리, 슬라이더 통합
+                      </li>
+                      <li class="sub-list-item">
+                        🛡️ 완전한 타입 안전성: TypeScript + Zod 스키마 검증
+                      </li>
+                      <li class="sub-list-item">
+                        📱 반응형 디자인: 모바일/데스크톱 최적화
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="content-item">
+                    <strong class="content-title">개발 배경:</strong>
+                    <p class="content-description">
+                      복잡한 회원가입이나 설문 폼에서 사용자가 중도 포기하는
+                      문제를 해결하고, React Hook Form 멀티스텝 구현의 핵심
+                      이점을 연구하며, 현대적인 빌드 도구(Vite)의 활용과 상태
+                      관리 최적화를 목표로 시작되었습니다.
+                    </p>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="content-section workflow" id="workflow">
+                <h2 class="section-title">🔄 4단계 워크플로우</h2>
+
+                <div class="highlight-box">
+                  <h3 style="margin-bottom: 16px; color: #667eea">
+                    핵심 동작 원리
+                  </h3>
+                  <p>
+                    <strong>React Hook Form의 가장 큰 장점</strong>은 하나의 폼
+                    인스턴스로 전체 다단계 프로세스를 관리할 수 있다는 점입니다.
+                    단일 폼 인스턴스로 복잡한 워크플로우를 관리하며, 각 단계가
+                    독립적으로 검증되면서도 전체적으로는 통합된 상태를
+                    유지합니다.
+                  </p>
+                </div>
+
+                <div class="workflow-step">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      margin-bottom: 12px;
+                    "
+                  >
+                    <span class="step-number">1</span>
+                    <strong>사용자 정보 단계</strong>
+                  </div>
+                  <p>프로필 이미지, 닉네임, 이메일, 자기소개 입력</p>
+                </div>
+
+                <div class="workflow-step">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      margin-bottom: 12px;
+                    "
+                  >
+                    <span class="step-number">2</span>
+                    <strong>블로그 기본 정보</strong>
+                  </div>
+                  <p>제목, 설명, 태그 설정</p>
+                </div>
+
+                <div class="workflow-step">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      margin-bottom: 12px;
+                    "
+                  >
+                    <span class="step-number">3</span>
+                    <strong>모듈화 에디터</strong>
+                  </div>
+                  <p>구조화된 컨텐츠 작성 (컨테이너 + 단락 조합)</p>
+                </div>
+
+                <div class="workflow-step">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      margin-bottom: 12px;
+                    "
+                  >
+                    <span class="step-number">4</span>
+                    <strong>미디어 관리</strong>
+                  </div>
+                  <p>이미지 업로드, 메인 이미지 설정, 갤러리 구성</p>
+                </div>
+
+                <div class="code-block">
+                  // React Hook Form 통합 관리 예시 const formMethods =
+                  useForm&lt;FormSchemaValues&gt;({ resolver:
+                  zodResolver(formSchema), // 전체 스키마 통합 검증 mode:
+                  'onChange', // 실시간 검증 }); // 모든 단계에서 동일한 폼
+                  컨텍스트 공유 &lt;FormProvider {...formMethods}&gt;
+                  &lt;UserInfoStep /&gt; {/* 1단계 */} &lt;BlogBasicStep /&gt;
+                  {/* 2단계 */} &lt;ModularEditor /&gt; {/* 3단계 */}
+                  &lt;MediaStep /&gt; {/* 4단계 */} &lt;/FormProvider&gt;;
+                </div>
+
+                <ul class="section-content">
+                  <li class="content-item">
+                    <strong class="content-title"
+                      >⚡ 실시간 데이터 동기화:</strong
+                    >
+                    <ul class="content-sub-list">
+                      <li class="sub-list-item">
+                        🔗 React Hook Form ↔ 🏪 Zustand Store ↔ 👁️ PreviewPanel
+                        삼방향 실시간 동기화
+                      </li>
+                      <li class="sub-list-item">
+                        🌉 Bridge 시스템을 통한 단계간 데이터 전송
+                      </li>
+                      <li class="sub-list-item">
+                        🔌 Context API 기반 컴포넌트간 상태 공유
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="content-section modular-editor" id="modular-editor">
+                <h2 class="section-title">🧩 모듈 에디터 시스템</h2>
+
+                <div class="highlight-box">
+                  <h3 style="margin-bottom: 16px; color: #667eea">
+                    🏗️ 모듈 에디터(Modular Blog Editor) 완전 분석
+                  </h3>
+                  <p>
+                    <strong>4단계 폼의 3단계</strong>에 위치한 구조화된 블로그
+                    에디터로, <strong>TipTap 2.14.0</strong> 기반 리치 텍스트
+                    에디터입니다. 하이브리드 시스템으로 자유 작성과 구조화를
+                    결합하여 3단계 워크플로우(구조 설정 → 자유 작성 → 구조
+                    할당)를 제공합니다.
+                  </p>
+                </div>
+
+                <div class="workflow-step">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      margin-bottom: 12px;
+                    "
+                  >
+                    <span class="step-number">1</span>
+                    <strong>구조 설정</strong>
+                  </div>
+                  <p>섹션 이름 입력 → 컨테이너 자동 생성</p>
+                </div>
+
+                <div class="workflow-step">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      margin-bottom: 12px;
+                    "
+                  >
+                    <span class="step-number">2</span>
+                    <strong>자유 작성</strong>
+                  </div>
+                  <p>TipTap 에디터로 단락별 컨텐츠 작성</p>
+                </div>
+
+                <div class="workflow-step">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      margin-bottom: 12px;
+                    "
+                  >
+                    <span class="step-number">3</span>
+                    <strong>구조화</strong>
+                  </div>
+                  <p>작성된 단락들을 컨테이너에 할당</p>
+                </div>
+
+                <div class="workflow-step">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      margin-bottom: 12px;
+                    "
+                  >
+                    <span class="step-number">4</span>
+                    <strong>최종 생성</strong>
+                  </div>
+                  <p>마크다운 형태로 완성된 컨텐츠 생성</p>
+                </div>
+
+                <div class="code-block">
+                  // 모듈 에디터 주요 기능들 📦 컨테이너 관리 -
+                  createContainer() - 🆔 고유 ID 생성 -
+                  createContainersFromInputs() - 📋 일괄 생성 -
+                  sortContainersByOrder() - 🔢 순서 정렬 - 📈 통계 시스템 (단락
+                  수 추적) 📝 단락 관리 - addLocalParagraph() - ➕ 단락 추가 -
+                  updateLocalParagraphContent() - ✏️ 실시간 수정 -
+                  deleteLocalParagraph() - 🗑️ 안전 제거 -
+                  toggleParagraphSelection() - ☑️ 다중 선택 -
+                  addToLocalContainer() - 📥 컨테이너 할당 🎮 워크플로우 관리 -
+                  handleStructureComplete() - 🔄 단계 전환 - activateEditor() -
+                  🎯 포커스 + 스크롤 - togglePreview() - 👁️ 실시간 미리보기 -
+                  completeEditor() - ✅ 최종 생성
+                </div>
+
+                <ul class="section-content">
+                  <li class="content-item">
+                    <strong class="content-title">🔧 기술적 특징:</strong>
+                    <ul class="content-sub-list">
+                      <li class="sub-list-item">
+                        📋 상태 관리 패턴: 불변성 보장, 순수 함수, 메모이제이션
+                      </li>
+                      <li class="sub-list-item">
+                        📝 로깅 시스템: [MAIN], [CONTAINER], [LOCAL], [CONTENT]
+                        단계별 추적
+                      </li>
+                      <li class="sub-list-item">
+                        ✅ 검증 시스템: 다층 검증, 빈 내용 차단, 무결성 보장
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="content-item">
+                    <strong class="content-title">💼 비즈니스 가치:</strong>
+                    <ul class="content-sub-list">
+                      <li class="sub-list-item">
+                        📈 제작 효율성: 구조화된 사고, 유연한 편집, 재사용성
+                      </li>
+                      <li class="sub-list-item">
+                        🎯 품질 보장: 일관된 구조, 내용 검증, 실시간 미리보기
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+
+              <div
+                class="content-section state-management"
+                id="state-management"
+              >
+                <h2 class="section-title">🏪 고급 상태 관리 시스템</h2>
+
+                <div class="highlight-box">
+                  <h3 style="margin-bottom: 16px; color: #667eea">
+                    🔄 삼방향 실시간 동기화 아키텍처
+                  </h3>
+                  <p>
+                    이 애플리케이션은 React Hook Form을 중심으로 한 정교한 폼
+                    상태 관리 시스템을 구축했습니다.
+                    <strong>React Hook Form ↔ Zustand ↔ localStorage</strong>
+                    삼방향 실시간 동기화를 통해 최적의 사용자 경험을 제공합니다.
+                  </p>
+                </div>
+
+                <div class="code-block">
+                  // 삼방향 동기화 플로우 👨‍💻 사용자 입력 ↓ 📋 React Hook Form
+                  (즉시 반응) ↓ 🏪 Zustand Store (글로벌 상태 업데이트) ↓ 💾
+                  localStorage (선택적 영속화) ↓ 👁️ PreviewPanel (실시간
+                  미리보기)
+                </div>
+
+                <ul class="section-content">
+                  <li class="content-item">
+                    <strong class="content-title"
+                      >⚙️ React Hook Form 동작 원리:</strong
+                    >
+                    <ul class="content-sub-list">
+                      <li class="sub-list-item">
+                        📝 register: 각 입력 필드를 폼에 등록하고 검증 규칙 적용
+                      </li>
+                      <li class="sub-list-item">
+                        👀 watch: 실시간 필드 값 감지 및 즉시 반응
+                      </li>
+                      <li class="sub-list-item">
+                        📤 setValue: 프로그래매틱 값 업데이트 (Bridge 시스템
+                        연동)
+                      </li>
+                      <li class="sub-list-item">
+                        📥 getValues: 현재 폼 상태 추출 (미리보기 패널 동기화)
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="content-item">
+                    <strong class="content-title"
+                      >🛡️ Zod 스키마 검증 통합:</strong
+                    >
+                    <p class="content-description">
+                      12개 필드에 대한 실시간 타입 안전 검증: 👤 userImage,
+                      nickname, emailPrefix/emailDomain, 📝 bio, title,
+                      description, tags, 🖼️ media, mainImage, sliderImages, ✅
+                      editorCompletedContent, isEditorCompleted
+                    </p>
+                  </li>
+                  <li class="content-item">
+                    <strong class="content-title"
+                      >🎯 고급 최적화 시스템:</strong
+                    >
+                    <ul class="content-sub-list">
+                      <li class="sub-list-item">
+                        🚫 무한루프 감지 및 방지: 컴포넌트별 렌더링 횟수 추적,
+                        10초 타임아웃
+                      </li>
+                      <li class="sub-list-item">
+                        🧠 메모리 효율성: 2MB 임계값, QuotaExceededError 감지,
+                        WeakMap 활용
+                      </li>
+                      <li class="sub-list-item">
+                        🌉 Bridge 데이터 전송: 환경별 설정, 자동 전송, 재시도
+                        로직
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+
+                <div class="code-block">
+                  // React Hook Form + Zustand 연동 예시 const formMethods =
+                  useForm({ resolver: zodResolver(formSchema), mode: 'onChange'
+                  }); // Zustand 스토어와 자동 동기화 const { setValue,
+                  getValues, watch } = formMethods; const syncWithStore =
+                  useFormStore((state) => state.syncData); useEffect(() => {
+                  const subscription = watch((value) => { syncWithStore(value);
+                  }); return () => subscription.unsubscribe(); }, [watch,
+                  syncWithStore]);
+                </div>
+              </div>
+
+              <div class="content-section problem-solving" id="problem-solving">
+                <h2 class="section-title">
+                  ⚡ 문제 해결: React 상태 동기화 타이밍 이슈
+                </h2>
+
+                <div class="highlight-box">
+                  <h3 style="margin-bottom: 16px; color: #667eea">
+                    🚨 핵심 문제
+                  </h3>
+                  <p>
+                    <strong
+                      >이미지 드롭 후 즉시 "추가" 버튼 클릭 시 이미지
+                      미표시</strong
+                    ><br />
+                    정상 케이스: 텍스트 수정 후 재시도하면 이미지 정상 표시<br />
+                    문제 케이스: 첫 번째 시도에서 텍스트만 표시
+                  </p>
+                </div>
+
+                <div class="code-block">
+                  // 문제 시나리오 0ms: 이미지 드롭 → Tiptap 마크다운 변환 완료
+                  0ms: setPendingContent(newContent) 호출 (배칭 큐 추가) 0ms:
+                  useDebounce는 여전히 이전 값으로 시작 (클로저) 300ms: 사용자
+                  "추가" 클릭 → 아직 이전 값만 있는 상태 1000ms: 디바운스 완료
+                  (너무 늦음) 핵심 모순: Tiptap은 즉시 완료, React 상태는 1000ms
+                  후 반영
+                </div>
+
+                <ul class="section-content">
+                  <li class="content-item">
+                    <strong class="content-title">🔍 근본 원인:</strong>
+                    <p class="content-description">
+                      <strong
+                        >React 18 자동 배칭 + 클로저 특성 = 상태 동기화
+                        지연</strong
+                      ><br />
+                      React의 최적화 메커니즘(배칭)이 특정 상황에서는 장애물이
+                      되는 경우
+                    </p>
+                  </li>
+                  <li class="content-item">
+                    <strong class="content-title">🔧 해결 시도 과정:</strong>
+                    <ul class="content-sub-list">
+                      <li class="sub-list-item">
+                        1차 시도: 디바운스 1000ms → 300ms 단축 ❌ (부분 개선,
+                        근본 해결 안됨)
+                      </li>
+                      <li class="sub-list-item">
+                        2차 시도: pendingContent 상태 추가 ❌ (React 배칭으로
+                        여전히 지연)
+                      </li>
+                      <li class="sub-list-item">
+                        3차 시도: 조건부 즉시 전달 ✅ (완전 해결)
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+
+                <div class="code-block">
+                  // 해결 코드 핵심 const handleLocalChange = useCallback(
+                  (content: string) => { setLocalContent(content); // 🎯 핵심:
+                  이미지 포함 시 디바운스 우회, 즉시 전달 if
+                  (content.includes('![') && content.length > 1000) {
+                  stableOnContentChange(content); // 즉시! } else {
+                  setTimeout(() => stableOnContentChange(content), 300); //
+                  디바운스 } }, [stableOnContentChange] );
+                </div>
+
+                <div class="highlight-box">
+                  <h3 style="margin-bottom: 16px; color: #667eea">
+                    💡 핵심 학습
+                  </h3>
+                  <p>
+                    <strong>기술적 깨달음</strong>: React 배칭은 성능
+                    최적화이지만 특정 상황에서는 장애물, setState 비동기 특성과
+                    클로저의 "스냅샷" 특성 이해 필수
+                  </p>
+                  <p>
+                    <strong>설계 원칙</strong>: 복잡한 상태 관리 < 조건부 로직의
+                    단순함, 프레임워크와 싸우기 < 상황별 유연한 접근
+                  </p>
+                  <p>
+                    <strong>해결 패턴</strong>: 매개변수 직접 활용으로 클로저
+                    우회 + 상황별 처리 전략 분리
+                  </p>
+                </div>
+              </div>
+
+              <div class="content-section tech-stack" id="tech-stack">
+                <h2 class="section-title">🛠 기술 스택</h2>
+                <div class="section-content">
+                  <div class="tech-grid">
+                    <div class="tech-category">
+                      <h4>⚡ 코어 기술</h4>
+                      <ul class="tech-list">
+                        <li>React 18 + TypeScript</li>
+                        <li>Vite (빌드 도구)</li>
+                        <li>Zustand (경량 상태 관리)</li>
+                        <li>React Hook Form + Zod</li>
+                      </ul>
+                    </div>
+
+                    <div class="tech-category">
+                      <h4>🎨 UI/UX</h4>
+                      <ul class="tech-list">
+                        <li>HeroUI (메인 UI 라이브러리)</li>
+                        <li>Tailwind CSS</li>
+                        <li>Framer Motion</li>
+                        <li>Iconify React</li>
+                      </ul>
+                    </div>
+
+                    <div class="tech-category">
+                      <h4>🔧 특화 라이브러리</h4>
+                      <ul class="tech-list">
+                        <li>TipTap (리치 텍스트 에디터)</li>
+                        <li>Swiper (이미지 갤러리)</li>
+                        <li>Lodash (유틸리티)</li>
+                        <li>React Router</li>
+                      </ul>
+                    </div>
+
+                    <div class="tech-category">
+                      <h4>🛡️ 개발 도구</h4>
+                      <ul class="tech-list">
+                        <li>TypeScript (타입 안전성)</li>
+                        <li>ESLint + Prettier</li>
+                        <li>Husky (Git Hooks)</li>
+                        <li>Vercel (배포)</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="content-section architecture" id="architecture">
+                <h2 class="section-title">🏗️ 프로젝트 아키텍처</h2>
+
+                <div class="highlight-box">
+                  <h3 style="margin-bottom: 16px; color: #667eea">
+                    📊 총 172개 파일로 구성된 엔터프라이즈급 React TypeScript
+                    애플리케이션
+                  </h3>
+                  <p>
+                    복잡한 블로그 작성 워크플로우를 직관적이고 효율적으로 처리할
+                    수 있도록 설계된 모듈화 구조
+                  </p>
+                </div>
+
+                <div class="code-block">
+                  src/ ├── components/ │ ├── multiStepForm/ # 📋 다단계 폼
+                  시스템 │ ├── previewPanel/ # 👁️ 실시간 미리보기 시스템 │ └──
+                  ImageGalleryWithContent/ # 🖼️ 이미지 갤러리 + 제품 정보 ├──
+                  store/ # 🏪 Zustand 상태 관리 ├── utils/ # 🛠️ 공통 유틸리티
+                  └── types/ # 📝 TypeScript 타입 정의
+                </div>
+
+                <ul class="section-content">
+                  <li class="content-item">
+                    <strong class="content-title"
+                      >📋 MultiStepForm 시스템 (다단계 폼):</strong
+                    >
+                    <ul class="content-sub-list">
+                      <li class="sub-list-item">
+                        🎯 MultiStepFormContainer - 메인 오케스트레이터
+                      </li>
+                      <li class="sub-list-item">
+                        📂 steps/stepsSections/ - 4단계별 컴포넌트
+                      </li>
+                      <li class="sub-list-item">
+                        👤 userInfoStep/ - 사용자 정보 입력
+                      </li>
+                      <li class="sub-list-item">
+                        📰 blogBasicStep/ - 블로그 기본 정보
+                      </li>
+                      <li class="sub-list-item">
+                        🧩 modularBlogEditor/ - 모듈화 에디터
+                      </li>
+                      <li class="sub-list-item">
+                        🖼️ blogMediaStep/ - 미디어 관리
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="content-item">
+                    <strong class="content-title"
+                      >🧩 ModularBlogEditor 시스템 (모듈화 에디터):</strong
+                    >
+                    <ul class="content-sub-list">
+                      <li class="sub-list-item">
+                        🎯 ModularBlogEditorContainer - 에디터 메인 컨테이너
+                      </li>
+                      <li class="sub-list-item">
+                        ⚡ actions/ - 에디터 상태 관리 액션 (Container, Editor,
+                        Paragraph)
+                      </li>
+                      <li class="sub-list-item">
+                        🪝 hooks/ - 특화된 에디터 훅 시스템
+                      </li>
+                      <li class="sub-list-item">
+                        🧩 parts/ - 에디터 UI 컴포넌트들
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="content-item">
+                    <strong class="content-title"
+                      >📤 ImageUpload 시스템 (이미지 관리):</strong
+                    >
+                    <ul class="content-sub-list">
+                      <li class="sub-list-item">
+                        🎯 ImageUploadContainer - 메인 이미지 업로드 관리
+                      </li>
+                      <li class="sub-list-item">
+                        🔌 context/ - Context API 기반 상태 통합
+                      </li>
+                      <li class="sub-list-item">
+                        🪝 hooks/ - 7개 특화 훅 (파일처리, 중복검사, 검증 등)
+                      </li>
+                      <li class="sub-list-item">
+                        🧩 parts/ - 12개 UI 컴포넌트 (드래그앤드롭, 프리뷰 등)
+                      </li>
+                      <li class="sub-list-item">
+                        🛠️ utils/ - 7개 유틸리티 (파일처리, 검증, 로깅 등)
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="content-item">
+                    <strong class="content-title"
+                      >🖼️ ImageGallery 시스템 (이미지 갤러리):</strong
+                    >
+                    <ul class="content-sub-list">
+                      <li class="sub-list-item">
+                        🎯 ImageGalleryContainer - 갤러리 메인 관리자
+                      </li>
+                      <li class="sub-list-item">🧩 parts/ - 3계층 아키텍처</li>
+                      <li class="sub-list-item">
+                        🖼️ gallery/ - 기본 갤러리 기능 (테이블, 카드, 모달)
+                      </li>
+                      <li class="sub-list-item">
+                        📐 layout/ - 레이아웃 엔진 (Grid, Masonry)
+                      </li>
+                      <li class="sub-list-item">
+                        🏗️ viewBuilder/ - 사용자 갤러리 빌더
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="content-item">
+                    <strong class="content-title"
+                      >👁️ PreviewPanel 시스템 (실시간 미리보기):</strong
+                    >
+                    <ul class="content-sub-list">
+                      <li class="sub-list-item">
+                        🎯 PreviewPanelContainer - 미리보기 메인 컨테이너
+                      </li>
+                      <li class="sub-list-item">
+                        🖥️ DesktopContentComponent - 데스크톱 최적화 미리보기
+                      </li>
+                      <li class="sub-list-item">
+                        📱 MobileContentComponent - 모바일 최적화 미리보기
+                      </li>
+                      <li class="sub-list-item">
+                        📊 StatusIndicatorComponent - 실시간 상태 표시
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="position-skills-section">
+              <div class="skills-container">
+                <div class="skills-title">이 프로젝트의 키워드</div>
+                <div class="skills-tags-wrapper">
+                  <span class="skill-tag-item">
+                    <div class="skill-tag-text">React 18</div>
+                  </span>
+                  <span class="skill-tag-item">
+                    <div class="skill-tag-text">TypeScript</div>
+                  </span>
+                  <span class="skill-tag-item">
+                    <div class="skill-tag-text">Vite</div>
+                  </span>
+                  <span class="skill-tag-item">
+                    <div class="skill-tag-text">Hook Form</div>
+                  </span>
+                  <span class="skill-tag-item">
+                    <div class="skill-tag-text">Zustand</div>
+                  </span>
+                  <span class="skill-tag-item">
+                    <div class="skill-tag-text">TipTap</div>
+                  </span>
+                  <span class="skill-tag-item">
+                    <div class="skill-tag-text">모듈화 에디터</div>
+                  </span>
+                  <span class="skill-tag-item">
+                    <div class="skill-tag-text">상태 동기화</div>
+                  </span>
+                  <span class="skill-tag-item">
+                    <div class="skill-tag-text">엔터프라이즈급</div>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="company-info-section">
+              <div class="company-info-container">
+                <div class="company-header">
+                  <div class="company-logo-wrapper">
+                    <div class="company-logo-placeholder">📋</div>
+                  </div>
+                  <div class="company-details">
+                    <div class="company-name">
+                      Multi-Step Blog Creation Platform
+                    </div>
+                    <a
+                      href="https://github.com/searchme86/vite_multistepForm_preview"
+                      class="company-info-link"
+                    >
+                      <div class="info-link-text">
+                        해당 프로젝트로 이동하기
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 32 32"
+                          width="16"
+                          height="16"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="m21 16-9.65 10L10 24.6l8.298-8.6L10 7.4 11.35 6z"
+                          ></path>
+                        </svg>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <button type="button" class="company-bookmark-btn">
+                  <div class="bookmark-icon-wrapper">
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M12 17.25L18.75 21V3.75H5.25V21L12 17.25ZM6.75 18.4507L12 15.5341L17.25 18.4507V5.25H6.75V18.4507Z"
+                        fill="#CDCCC6"
+                      ></path>
+                    </svg>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <section class="related-projects-section">
+              <h3 class="related-projects-title">
+                다른 프로젝트도 확인해보세요
+              </h3>
+              <ul class="job-style-projects-grid">
+                <li class="job-style-project-item">
+                  <a
+                    href="./project1_gsap_apple_scroll_detail.html"
+                    class="job-style-project-link"
+                  >
+                    <div class="job-style-project-card">
+                      <div class="project-image-container">
+                        <div class="project-thumbnail">🎯</div>
+                        <div class="bookmark-button-container">
+                          <button type="button" class="bookmark-button">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 32 32"
+                              class="bookmark-icon"
+                              width="16"
+                              height="16"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-width="2"
+                                d="M15.514 22.126 8 26.3V6h16v20.3l-7.514-4.174-.486-.27z"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="project-header-info">
+                        <strong class="project-title-main">
+                          GSAP 애플 스크롤 애니메이션
+                        </strong>
+                        <span class="project-company-name">
+                          개인 연구 프로젝트
+                        </span>
+                      </div>
+                      <div class="project-tags-container">
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">2주 완성</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">GSAP/ScrollTrigger</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">로컬 프로젝트</div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+
+                <li class="job-style-project-item">
+                  <a
+                    href="./project2-upperdate-animation.html"
+                    class="job-style-project-link"
+                  >
+                    <div class="job-style-project-card">
+                      <div class="project-image-container">
+                        <div class="project-thumbnail">⌚</div>
+                        <div class="bookmark-button-container">
+                          <button type="button" class="bookmark-button">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 32 32"
+                              class="bookmark-icon"
+                              width="16"
+                              height="16"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-width="2"
+                                d="M15.514 22.126 8 26.3V6h16v20.3l-7.514-4.174-.486-.27z"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="project-header-info">
+                        <strong class="project-title-main">
+                          스크롤 시계 애니메이션
+                        </strong>
+                        <span class="project-company-name">
+                          개인 연구 프로젝트
+                        </span>
+                      </div>
+                      <div class="project-tags-container">
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">3주 완성</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">GSAP/ScrollTrigger</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">로컬 프로젝트</div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+
+                <li class="job-style-project-item">
+                  <a
+                    href="./project4-vanilla-js-component.html"
+                    class="job-style-project-link"
+                  >
+                    <div class="job-style-project-card">
+                      <div class="project-image-container">
+                        <div class="project-thumbnail">⚡</div>
+                        <div class="bookmark-button-container">
+                          <button type="button" class="bookmark-button">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 32 32"
+                              class="bookmark-icon"
+                              width="16"
+                              height="16"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-width="2"
+                                d="M15.514 22.126 8 26.3V6h16v20.3l-7.514-4.174-.486-.27z"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="project-header-info">
+                        <strong class="project-title-main">
+                          Vanilla JS 어플리케이션 구현
+                        </strong>
+                        <span class="project-company-name">
+                          개인 학습 프로젝트
+                        </span>
+                      </div>
+                      <div class="project-tags-container">
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">3개월 완성</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">Vanilla JS/Vite</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">라이브 배포</div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+
+                <li class="job-style-project-item">
+                  <a
+                    href="./project5_chartjs_dashboard.html"
+                    class="job-style-project-link"
+                  >
+                    <div class="job-style-project-card">
+                      <div class="project-image-container">
+                        <div class="project-thumbnail">📊</div>
+                        <div class="bookmark-button-container">
+                          <button type="button" class="bookmark-button">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 32 32"
+                              class="bookmark-icon"
+                              width="16"
+                              height="16"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-width="2"
+                                d="M15.514 22.126 8 26.3V6h16v20.3l-7.514-4.174-.486-.27z"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="project-header-info">
+                        <strong class="project-title-main">
+                          chartJs를 이용한 커스텀 그래프 구현
+                        </strong>
+                        <span class="project-company-name"
+                          >실무 프로토타입</span
+                        >
+                      </div>
+                      <div class="project-tags-container">
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">1개월 완성</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">Chart.js/Canvas</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">라이브 배포</div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+
+                <li class="job-style-project-item">
+                  <a
+                    href="./project6-react-hookform-zod.html"
+                    class="job-style-project-link"
+                  >
+                    <div class="job-style-project-card">
+                      <div class="project-image-container">
+                        <div class="project-thumbnail">🔧</div>
+                        <div class="bookmark-button-container">
+                          <button type="button" class="bookmark-button">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 32 32"
+                              class="bookmark-icon"
+                              width="16"
+                              height="16"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-width="2"
+                                d="M15.514 22.126 8 26.3V6h16v20.3l-7.514-4.174-.486-.27z"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="project-header-info">
+                        <strong class="project-title-main">
+                          React Hook Form + Zod 풀스택 시스템
+                        </strong>
+                        <span class="project-company-name">
+                          개인 리팩토링 프로젝트
+                        </span>
+                      </div>
+                      <div class="project-tags-container">
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">2개월 완성</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">React/Node.js</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">코드 완료</div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+
+                <li class="job-style-project-item">
+                  <a
+                    href="./project7-react-fullstack.html"
+                    class="job-style-project-link"
+                  >
+                    <div class="job-style-project-card">
+                      <div class="project-image-container">
+                        <div class="project-thumbnail">🚀</div>
+                        <div class="bookmark-button-container">
+                          <button type="button" class="bookmark-button">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 32 32"
+                              class="bookmark-icon"
+                              width="16"
+                              height="16"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-width="2"
+                                d="M15.514 22.126 8 26.3V6h16v20.3l-7.514-4.174-.486-.27z"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="project-header-info">
+                        <strong class="project-title-main">
+                          NodeJs를 사용한 ReactJS 풀스택 프로젝트 구현
+                        </strong>
+                        <span class="project-company-name">
+                          개인 풀스택 프로젝트
+                        </span>
+                      </div>
+                      <div class="project-tags-container">
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">3개월 완성</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">React/MongoDB</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">라이브 배포</div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+
+                <li class="job-style-project-item">
+                  <a
+                    href="./project8_react_typescript.html"
+                    class="job-style-project-link"
+                  >
+                    <div class="job-style-project-card">
+                      <div class="project-image-container">
+                        <div class="project-thumbnail">💻</div>
+                        <div class="bookmark-button-container">
+                          <button type="button" class="bookmark-button">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 32 32"
+                              class="bookmark-icon"
+                              width="16"
+                              height="16"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-width="2"
+                                d="M15.514 22.126 8 26.3V6h16v20.3l-7.514-4.174-.486-.27z"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="project-header-info">
+                        <strong class="project-title-main">
+                          타입스크립트 적용한 팀 프로젝트
+                        </strong>
+                        <span class="project-company-name"
+                          >팀 협업 프로젝트</span
+                        >
+                      </div>
+                      <div class="project-tags-container">
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">3개월 완성</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">React/TypeScript</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">코드 완료</div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+
+                <li class="job-style-project-item">
+                  <a
+                    href="project9-jquery-web.html"
+                    class="job-style-project-link"
+                  >
+                    <div class="job-style-project-card">
+                      <div class="project-image-container">
+                        <div class="project-thumbnail">🌐</div>
+                        <div class="bookmark-button-container">
+                          <button type="button" class="bookmark-button">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 32 32"
+                              class="bookmark-icon"
+                              width="16"
+                              height="16"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-width="2"
+                                d="M15.514 22.126 8 26.3V6h16v20.3l-7.514-4.174-.486-.27z"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="project-header-info">
+                        <strong class="project-title-main">
+                          제이쿼리를 활용한 어플리케이션 구현
+                        </strong>
+                        <span class="project-company-name">
+                          웹 개발 입문 스튜디오
+                        </span>
+                      </div>
+                      <div class="project-tags-container">
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">1개월 완성</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">jQuery/HTML5</div>
+                        </div>
+                        <div class="project-tag-wrapper">
+                          <div class="project-tag">라이브 배포</div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </section>
+          </div>
+
+          <aside class="sidebar">
+            <div class="sidebar-inner">
+              <ul class="project-list">
+                <li class="project-item">
+                  <span class="project-subject">개발기간</span>
+                  <span class="project-content">2025.06~2025.08</span>
+                </li>
+                <li class="project-item">
+                  <span class="project-subject">프로젝트 타입</span>
+                  <span class="project-content">개인 프로젝트</span>
+                </li>
+                <li class="project-item">
+                  <span class="project-subject">파일 수</span>
+                  <span class="project-content">172개 파일</span>
+                </li>
+                <li class="project-item">
+                  <span class="project-subject">상태</span>
+                  <span class="project-content">배포 완료</span>
+                </li>
+              </ul>
+              <div class="project-util">
+                <ul class="box-list">
+                  <li class="box-item source-code">
+                    <a
+                      href="https://github.com/searchme86/vite_multi_stepForm"
+                      class="sidebar-button"
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      Source Code
+                    </a>
+                  </li>
+                  <li class="box-item preview">
+                    <a
+                      href="https://vite-multi-step-form.vercel.app/"
+                      class="sidebar-button"
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      Demo
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </aside>
+
+          <button
+            type="button"
+            class="scroll-to-top-button"
+            id="scrollToTopButton"
+            aria-label="페이지 상단으로 이동"
+            title="맨 위로"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              class="scroll-to-top-icon"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 10l7-7m0 0l7 7m-7-7v18"
+              />
+            </svg>
+            <span class="scroll-to-top-text">TOP</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="bottom-navigation">
+        <div class="container">
+          <a href="./portfolio.html" class="back-button">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 32 32"
+              width="16"
+              height="16"
+            >
+              <path
+                fill="currentColor"
+                d="m10 16 9.65-10L21 7.4 12.702 16 21 24.6 19.65 26z"
+              ></path>
+            </svg>
+            <span>포트폴리오 목록으로 돌아가기</span>
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      class StickyMenuApplicationController {
+        constructor() {
+          const {
+            headerElement = null,
+            navigationElement = null,
+            menuListElement = null,
+            menuItemElements = [],
+            sectionElements = [],
+            infoHeaderElement = null,
+          } = this.extractDomElementsWithFallback();
+
+          this.domElementsReference = {
+            headerElement,
+            navigationElement,
+            menuListElement,
+            menuItemElements,
+            sectionElements,
+            infoHeaderElement,
+          };
+
+          this.scrollStateDataContainer = {
+            currentScrollPositionY: 0,
+            headerElementCalculatedHeight: headerElement
+              ? headerElement.offsetHeight
+              : 60,
+            menuActivationTriggerPoint: 0,
+            menuDeactivationTriggerPoint: 0,
+            isHeaderElementInStickyMode: false,
+            isMenuElementInStickyMode: false,
+            isInfoHeaderElementCurrentlyVisible: false,
+            menuElementOriginalWidthPixels: 0,
+            isUserCurrentlyScrolling: false,
+            scrollDetectionTimeoutId: null,
+            lastScrollTimestamp: 0,
+            scrollVelocity: 0,
+            previousScrollPosition: 0,
+          };
+
+          this.dragInteractionStateContainer = {
+            isDragOperationCurrentlyActive: false,
+            dragStartPositionXCoordinate: 0,
+            dragInitialScrollLeftOffset: 0,
+            hasUserMovedDuringDragOperation: false,
+            dragStartTimestamp: 0,
+            minimumDragDurationMs: 100,
+            minimumDragDistancePixels: 5,
+          };
+
+          this.initializeCompleteApplication();
+        }
+
+        extractDomElementsWithFallback() {
+          const headerElement = document.getElementById('mainHeader');
+          const navigationElement = document.getElementById('navigationMenu');
+          const menuListElement = document.getElementById('menuList');
+          const menuItemElements = document.querySelectorAll('.menu-item');
+          const sectionElements = document.querySelectorAll('.content-section');
+          const infoHeaderElement = document.getElementById('infoHeader');
+
+          const elementValidationResults = {
+            headerElement: headerElement !== null,
+            navigationElement: navigationElement !== null,
+            menuListElement: menuListElement !== null,
+            menuItemElements: menuItemElements.length > 0,
+            sectionElements: sectionElements.length > 0,
+            infoHeaderElement: infoHeaderElement !== null,
+          };
+
+          return {
+            headerElement,
+            navigationElement,
+            menuListElement,
+            menuItemElements: Array.from(menuItemElements),
+            sectionElements: Array.from(sectionElements),
+            infoHeaderElement,
+          };
+        }
+
+        initializeCompleteApplication() {
+          this.calculateAllTriggerPositionsAccurately();
+          this.bindAllRequiredEventListeners();
+          this.updateCurrentScrollStateInformation();
+
+          const { infoHeaderElement = null } = this.domElementsReference;
+          if (infoHeaderElement) {
+            infoHeaderElement.style.display = 'none';
+          }
+        }
+
+        calculateAllTriggerPositionsAccurately() {
+          const { navigationElement = null } = this.domElementsReference;
+
+          if (!navigationElement) {
+            return;
+          }
+
+          const navigationElementRect =
+            navigationElement.getBoundingClientRect();
+          const currentPageScrollY = window.scrollY || 0;
+
+          this.scrollStateDataContainer.menuActivationTriggerPoint =
+            navigationElementRect.top +
+            currentPageScrollY -
+            this.scrollStateDataContainer.headerElementCalculatedHeight;
+
+          this.scrollStateDataContainer.menuElementOriginalWidthPixels =
+            navigationElement.offsetWidth || 0;
+
+          const resumeContentSectionElement =
+            document.querySelector('.resume-section');
+          const menuElementCalculatedHeight =
+            navigationElement.offsetHeight || 60;
+
+          if (resumeContentSectionElement) {
+            const {
+              offsetTop: resumeSectionTop = 0,
+              offsetHeight: resumeSectionHeight = 0,
+            } = resumeContentSectionElement;
+
+            this.scrollStateDataContainer.menuDeactivationTriggerPoint =
+              resumeSectionTop +
+              resumeSectionHeight -
+              menuElementCalculatedHeight;
+          } else {
+            this.scrollStateDataContainer.menuDeactivationTriggerPoint = 9999999;
+          }
+        }
+
+        recalculateTriggersForMobile() {
+          const visibleNavigationElement = document.querySelector(
+            '.navigation-menu:not([style*="display: none"])'
+          );
+
+          if (visibleNavigationElement) {
+            const navigationRect =
+              visibleNavigationElement.getBoundingClientRect();
+            const currentScrollY = window.scrollY || 0;
+
+            const previousTriggerPoint =
+              this.scrollStateDataContainer.menuActivationTriggerPoint;
+
+            this.scrollStateDataContainer.menuActivationTriggerPoint =
+              navigationRect.top +
+              currentScrollY -
+              this.scrollStateDataContainer.headerElementCalculatedHeight;
+
+            this.scrollStateDataContainer.menuElementOriginalWidthPixels =
+              visibleNavigationElement.offsetWidth || 0;
+
+            const resumeContentSectionElement =
+              document.querySelector('.resume-section');
+            const menuElementCalculatedHeight =
+              visibleNavigationElement.offsetHeight || 60;
+
+            if (resumeContentSectionElement) {
+              const {
+                offsetTop: resumeSectionTop = 0,
+                offsetHeight: resumeSectionHeight = 0,
+              } = resumeContentSectionElement;
+
+              this.scrollStateDataContainer.menuDeactivationTriggerPoint =
+                resumeSectionTop +
+                resumeSectionHeight -
+                menuElementCalculatedHeight;
+            }
+          }
+
+          setTimeout(() => {
+            this.handleScrollEventOccurrence();
+          }, 50);
+        }
+
+        bindAllRequiredEventListeners() {
+          window.addEventListener('scroll', () =>
+            this.handleScrollEventOccurrence()
+          );
+          window.addEventListener('resize', () =>
+            this.handleWindowResizeEventOccurrence()
+          );
+
+          this.setupMenuDragFunctionalityWithTouchSupport();
+        }
+
+        handleScrollEventOccurrence() {
+          this.updateCurrentScrollStateInformation();
+          this.detectUserScrollingState();
+          this.updateStickyMenuActivationState();
+          this.updateActiveMenuItemSelectionState();
+          this.updateInfoHeaderVisibilityState();
+        }
+
+        detectUserScrollingState() {
+          const currentTimestamp = Date.now();
+          const {
+            currentScrollPositionY,
+            previousScrollPosition,
+            lastScrollTimestamp,
+          } = this.scrollStateDataContainer;
+
+          const timeDelta = currentTimestamp - lastScrollTimestamp;
+          const scrollDelta = Math.abs(
+            currentScrollPositionY - previousScrollPosition
+          );
+
+          if (timeDelta > 0) {
+            this.scrollStateDataContainer.scrollVelocity =
+              scrollDelta / timeDelta;
+          }
+
+          if (scrollDelta > 1) {
+            this.scrollStateDataContainer.isUserCurrentlyScrolling = true;
+          }
+
+          if (this.scrollStateDataContainer.scrollDetectionTimeoutId) {
+            clearTimeout(
+              this.scrollStateDataContainer.scrollDetectionTimeoutId
+            );
+          }
+
+          this.scrollStateDataContainer.scrollDetectionTimeoutId = setTimeout(
+            () => {
+              this.scrollStateDataContainer.isUserCurrentlyScrolling = false;
+              this.scrollStateDataContainer.scrollVelocity = 0;
+            },
+            300
+          );
+
+          this.scrollStateDataContainer.previousScrollPosition =
+            currentScrollPositionY;
+          this.scrollStateDataContainer.lastScrollTimestamp = currentTimestamp;
+        }
+
+        updateCurrentScrollStateInformation() {
+          this.scrollStateDataContainer.currentScrollPositionY =
+            window.scrollY || 0;
+        }
+
+        updateStickyMenuActivationState() {
+          const {
+            currentScrollPositionY = 0,
+            menuActivationTriggerPoint = 0,
+            menuDeactivationTriggerPoint = 0,
+          } = this.scrollStateDataContainer;
+
+          const shouldMenuBeInStickyMode =
+            currentScrollPositionY >= menuActivationTriggerPoint &&
+            currentScrollPositionY <= menuDeactivationTriggerPoint;
+
+          if (
+            shouldMenuBeInStickyMode !==
+            this.scrollStateDataContainer.isMenuElementInStickyMode
+          ) {
+            this.scrollStateDataContainer.isMenuElementInStickyMode =
+              shouldMenuBeInStickyMode;
+
+            shouldMenuBeInStickyMode
+              ? this.activateStickyMenuWithWidthPreservation()
+              : this.deactivateStickyMenuAndRestoreOriginalState();
+          }
+        }
+
+        activateStickyMenuWithWidthPreservation() {
+          const { navigationElement = null } = this.domElementsReference;
+          if (!navigationElement) return;
+
+          navigationElement.classList.add('sticky');
+          navigationElement.style.height = `${navigationElement.offsetHeight}px`;
+
+          const { menuElementOriginalWidthPixels = 0 } =
+            this.scrollStateDataContainer;
+
+          if (menuElementOriginalWidthPixels > 0) {
+            navigationElement.style.width = `${menuElementOriginalWidthPixels}px`;
+          }
+        }
+
+        deactivateStickyMenuAndRestoreOriginalState() {
+          const { navigationElement = null } = this.domElementsReference;
+          if (!navigationElement) return;
+
+          navigationElement.style.height = '';
+          navigationElement.classList.remove('sticky');
+          navigationElement.style.width = '';
+        }
+
+        updateInfoHeaderVisibilityState() {
+          const {
+            currentScrollPositionY = 0,
+            isInfoHeaderElementCurrentlyVisible = false,
+          } = this.scrollStateDataContainer;
+
+          const techStackSectionElement =
+            document.querySelector('.state-management');
+
+          let startTriggerPositionY = 500;
+          let endTriggerPositionY = 1000;
+
+          if (techStackSectionElement) {
+            const {
+              offsetTop: techStackOffsetTop = 0,
+              offsetHeight: techStackOffsetHeight = 0,
+            } = techStackSectionElement;
+
+            startTriggerPositionY = techStackOffsetTop;
+            endTriggerPositionY = techStackOffsetTop + techStackOffsetHeight;
+          }
+
+          const shouldShowInfoHeaderNow =
+            currentScrollPositionY >= startTriggerPositionY &&
+            currentScrollPositionY < endTriggerPositionY;
+
+          if (shouldShowInfoHeaderNow && !isInfoHeaderElementCurrentlyVisible) {
+            this.showInfoHeaderWithAnimation();
+            const sideBar = document.querySelector('.sidebar');
+            sideBar?.classList.add('move');
+            return;
+          }
+
+          if (!shouldShowInfoHeaderNow && isInfoHeaderElementCurrentlyVisible) {
+            this.hideInfoHeaderWithAnimation();
+            const sideBar = document.querySelector('.sidebar');
+            sideBar?.classList.remove('move');
+            return;
+          }
+        }
+
+        showInfoHeaderWithAnimation() {
+          const { infoHeaderElement = null, navigationElement = null } =
+            this.domElementsReference;
+
+          if (!infoHeaderElement) return;
+
+          infoHeaderElement.style.display = 'flex';
+
+          setTimeout(() => {
+            infoHeaderElement.classList.add('show');
+
+            if (navigationElement?.classList.contains('sticky')) {
+              navigationElement.style.transform = 'translateY(100%)';
+            }
+          }, 10);
+
+          this.scrollStateDataContainer.isInfoHeaderElementCurrentlyVisible = true;
+        }
+
+        hideInfoHeaderWithAnimation() {
+          const { infoHeaderElement = null, navigationElement = null } =
+            this.domElementsReference;
+
+          if (!infoHeaderElement || !navigationElement) return;
+
+          infoHeaderElement.classList.remove('show');
+          setTimeout(() => {
+            infoHeaderElement.style.display = 'none';
+          }, 200);
+          navigationElement.style.transform = 'none';
+
+          this.scrollStateDataContainer.isInfoHeaderElementCurrentlyVisible = false;
+        }
+
+        updateActiveMenuItemSelectionState() {
+          let activeMenuSectionIdentifier = '';
+
+          const { sectionElements = [] } = this.domElementsReference;
+
+          sectionElements.forEach((sectionElement) => {
+            const sectionBoundingRect = sectionElement.getBoundingClientRect();
+            const scrollOffsetCalculated = this.scrollStateDataContainer
+              .isMenuElementInStickyMode
+              ? 120
+              : 60;
+
+            const isSectionCurrentlyVisible =
+              sectionBoundingRect.top <= scrollOffsetCalculated &&
+              sectionBoundingRect.bottom > scrollOffsetCalculated;
+
+            if (isSectionCurrentlyVisible) {
+              activeMenuSectionIdentifier = sectionElement.id || '';
+            }
+          });
+
+          if (activeMenuSectionIdentifier) {
+            this.setActiveMenuItemByTargetId(activeMenuSectionIdentifier);
+          }
+        }
+
+        setActiveMenuItemByTargetId(targetSectionIdentifier) {
+          const { menuItemElements = [] } = this.domElementsReference;
+
+          menuItemElements.forEach((menuItemElement) =>
+            menuItemElement.classList.remove('active')
+          );
+
+          const targetMenuItemElement = document.querySelector(
+            `[data-target="${targetSectionIdentifier}"]`
+          );
+
+          if (targetMenuItemElement) {
+            targetMenuItemElement.classList.add('active');
+            this.scrollMenuToActiveItemCenter(targetMenuItemElement);
+          }
+        }
+
+        scrollMenuToActiveItemCenter(activeMenuItemElement) {
+          const { menuListElement = null } = this.domElementsReference;
+
+          if (!menuListElement || !activeMenuItemElement) return;
+
+          const menuListBoundingRect = menuListElement.getBoundingClientRect();
+          const menuItemBoundingRect =
+            activeMenuItemElement.getBoundingClientRect();
+
+          const isItemOutOfViewport =
+            menuItemBoundingRect.left < menuListBoundingRect.left ||
+            menuItemBoundingRect.right > menuListBoundingRect.right;
+
+          if (isItemOutOfViewport) {
+            const scrollLeft =
+              menuItemBoundingRect.left -
+              menuListBoundingRect.left +
+              menuListElement.scrollLeft -
+              menuListBoundingRect.width / 2 +
+              menuItemBoundingRect.width / 2;
+
+            menuListElement.scrollTo({
+              left: scrollLeft,
+              behavior: 'smooth',
+            });
+          }
+        }
+
+        handleWindowResizeEventOccurrence() {
+          this.scrollStateDataContainer.menuActivationTriggerPoint = 0;
+          this.scrollStateDataContainer.menuDeactivationTriggerPoint = 0;
+
+          setTimeout(() => {
+            if (
+              window.responsiveDomController &&
+              window.responsiveDomController.viewportStateTracker
+                .isMobileLayoutActive
+            ) {
+              this.recalculateTriggersForMobile();
+            } else {
+              this.calculateAllTriggerPositionsAccurately();
+            }
+            this.handleScrollEventOccurrence();
+          }, 100);
+        }
+
+        setupMenuDragFunctionalityWithTouchSupport() {
+          const { menuListElement = null } = this.domElementsReference;
+
+          if (!menuListElement) return;
+
+          menuListElement.addEventListener('mousedown', (mouseDownEvent) =>
+            this.handleDragStartInteraction(mouseDownEvent)
+          );
+          menuListElement.addEventListener('mousemove', (mouseMoveEvent) =>
+            this.handleDragMoveInteraction(mouseMoveEvent)
+          );
+          menuListElement.addEventListener('mouseup', () =>
+            this.handleDragEndInteraction()
+          );
+          menuListElement.addEventListener('mouseleave', () =>
+            this.handleDragEndInteraction()
+          );
+
+          menuListElement.addEventListener('touchstart', (touchStartEvent) =>
+            this.handleDragStartInteraction(touchStartEvent)
+          );
+          menuListElement.addEventListener('touchmove', (touchMoveEvent) =>
+            this.handleDragMoveInteraction(touchMoveEvent)
+          );
+          menuListElement.addEventListener('touchend', () =>
+            this.handleDragEndInteraction()
+          );
+        }
+
+        handleDragStartInteraction(dragStartEvent) {
+          const currentTimestamp = Date.now();
+
+          this.dragInteractionStateContainer.isDragOperationCurrentlyActive = true;
+          this.dragInteractionStateContainer.hasUserMovedDuringDragOperation = false;
+          this.dragInteractionStateContainer.dragStartTimestamp =
+            currentTimestamp;
+
+          const clientXPositionCoordinate = dragStartEvent.type.includes(
+            'touch'
+          )
+            ? dragStartEvent.touches[0].clientX
+            : dragStartEvent.clientX;
+
+          const { menuListElement = null } = this.domElementsReference;
+          if (!menuListElement) return;
+
+          this.dragInteractionStateContainer.dragStartPositionXCoordinate =
+            clientXPositionCoordinate - menuListElement.offsetLeft;
+          this.dragInteractionStateContainer.dragInitialScrollLeftOffset =
+            menuListElement.scrollLeft;
+
+          menuListElement.classList.add('dragging');
+        }
+
+        handleDragMoveInteraction(dragMoveEvent) {
+          if (
+            !this.dragInteractionStateContainer.isDragOperationCurrentlyActive
+          )
+            return;
+
+          dragMoveEvent.preventDefault();
+
+          const clientXPositionCoordinate = dragMoveEvent.type.includes('touch')
+            ? dragMoveEvent.touches[0].clientX
+            : dragMoveEvent.clientX;
+
+          const { menuListElement = null } = this.domElementsReference;
+          if (!menuListElement) return;
+
+          const currentXPositionCoordinate =
+            clientXPositionCoordinate - menuListElement.offsetLeft;
+          const walkDistanceCalculated =
+            (currentXPositionCoordinate -
+              this.dragInteractionStateContainer.dragStartPositionXCoordinate) *
+            2;
+
+          const totalDragDistance = Math.abs(walkDistanceCalculated);
+          if (
+            totalDragDistance >
+            this.dragInteractionStateContainer.minimumDragDistancePixels
+          ) {
+            this.dragInteractionStateContainer.hasUserMovedDuringDragOperation = true;
+          }
+
+          menuListElement.scrollLeft =
+            this.dragInteractionStateContainer.dragInitialScrollLeftOffset -
+            walkDistanceCalculated;
+        }
+
+        handleDragEndInteraction() {
+          if (
+            !this.dragInteractionStateContainer.isDragOperationCurrentlyActive
+          )
+            return;
+
+          const currentTimestamp = Date.now();
+          const dragDuration =
+            currentTimestamp -
+            this.dragInteractionStateContainer.dragStartTimestamp;
+
+          this.dragInteractionStateContainer.isDragOperationCurrentlyActive = false;
+
+          const { menuListElement = null } = this.domElementsReference;
+          if (menuListElement) {
+            menuListElement.classList.remove('dragging');
+          }
+
+          setTimeout(() => {
+            this.dragInteractionStateContainer.hasUserMovedDuringDragOperation = false;
+          }, 150);
+        }
+      }
+
+      class ResponsiveDomRestructureController {
+        constructor() {
+          this.originalDomElementsStorage = {
+            projectCompanyAndTitleWrapper: null,
+            projectIntroSection: null,
+            sidebarElement: null,
+            sidebarInnerElement: null,
+            projectUtilElement: null,
+          };
+
+          this.viewportStateTracker = {
+            currentViewportWidth: window.innerWidth,
+            isMobileLayoutActive: false,
+            isDesktopLayoutActive: false,
+          };
+
+          this.initializeResponsiveLayoutSystem();
+        }
+
+        initializeResponsiveLayoutSystem() {
+          this.storeOriginalDomElements();
+          this.bindViewportResizeEventListener();
+          this.applyInitialLayoutBasedOnViewport();
+        }
+
+        storeOriginalDomElements() {
+          const projectCompanyAndTitleWrapper = document.querySelector(
+            '.project-company-and-title-wrapper'
+          );
+          const projectIntroSection = document.querySelector(
+            '.project-intro-section'
+          );
+          const sidebarElement = document.querySelector('.sidebar');
+          const sidebarInnerElement = document.querySelector('.sidebar-inner');
+          const projectUtilElement = document.querySelector('.project-util');
+
+          this.originalDomElementsStorage = {
+            projectCompanyAndTitleWrapper: {
+              element: projectCompanyAndTitleWrapper,
+              originalParent: projectCompanyAndTitleWrapper?.parentElement,
+              originalNextSibling:
+                projectCompanyAndTitleWrapper?.nextElementSibling,
+            },
+            projectIntroSection: {
+              element: projectIntroSection,
+              originalParent: projectIntroSection?.parentElement,
+              originalNextSibling: projectIntroSection?.nextElementSibling,
+            },
+            sidebarElement: {
+              element: sidebarElement,
+              originalParent: sidebarElement?.parentElement,
+              originalNextSibling: sidebarElement?.nextElementSibling,
+            },
+            sidebarInnerElement: {
+              element: sidebarInnerElement,
+              originalParent: sidebarInnerElement?.parentElement,
+              originalNextSibling: sidebarInnerElement?.nextElementSibling,
+            },
+            projectUtilElement: {
+              element: projectUtilElement,
+              originalParent: projectUtilElement?.parentElement,
+              originalNextSibling: projectUtilElement?.nextElementSibling,
+            },
+          };
+        }
+
+        bindViewportResizeEventListener() {
+          let resizeTimeoutId = null;
+
+          window.addEventListener('resize', () => {
+            if (resizeTimeoutId) {
+              clearTimeout(resizeTimeoutId);
+            }
+
+            resizeTimeoutId = setTimeout(() => {
+              const newViewportWidth = window.innerWidth;
+
+              this.viewportStateTracker.currentViewportWidth = newViewportWidth;
+              this.handleViewportSizeChangeEvent();
+            }, 150);
+          });
+        }
+
+        applyInitialLayoutBasedOnViewport() {
+          this.handleViewportSizeChangeEvent();
+        }
+
+        handleViewportSizeChangeEvent() {
+          const currentViewportWidth =
+            this.viewportStateTracker.currentViewportWidth;
+
+          if (currentViewportWidth >= 350 && currentViewportWidth < 768) {
+            if (!this.viewportStateTracker.isMobileLayoutActive) {
+              this.activateMobileLayoutConfiguration();
+            }
+          } else if (currentViewportWidth >= 768) {
+            if (!this.viewportStateTracker.isDesktopLayoutActive) {
+              this.activateDesktopLayoutConfiguration();
+            }
+          }
+        }
+
+        activateMobileLayoutConfiguration() {
+          try {
+            const projectCompanyAndTitleWrapper =
+              this.originalDomElementsStorage.projectCompanyAndTitleWrapper
+                .element;
+            if (projectCompanyAndTitleWrapper) {
+              projectCompanyAndTitleWrapper.style.display = 'none';
+            }
+
+            const sidebarElement =
+              this.originalDomElementsStorage.sidebarElement.element;
+            const projectIntroSection =
+              this.originalDomElementsStorage.projectIntroSection.element;
+
+            if (sidebarElement) {
+              sidebarElement.style.display = 'none';
+            }
+
+            if (projectIntroSection) {
+              projectIntroSection.style.display = 'none';
+            }
+
+            this.createMobileSidebarLayout();
+
+            this.viewportStateTracker.isMobileLayoutActive = true;
+            this.viewportStateTracker.isDesktopLayoutActive = false;
+
+            setTimeout(() => {
+              if (window.stickyMenuController) {
+                window.stickyMenuController.recalculateTriggersForMobile();
+              }
+            }, 100);
+          } catch (error) {
+            // 에러 발생 시 무시
+          }
+        }
+
+        createMobileSidebarLayout() {
+          const existingMobileSidebar =
+            document.querySelector('.mobile-sidebar');
+          if (existingMobileSidebar) {
+            existingMobileSidebar.remove();
+          }
+
+          const mobileSidebarContainer = document.createElement('div');
+          mobileSidebarContainer.className = 'mobile-sidebar';
+
+          const contentBodyElement = document.querySelector('.content-body');
+          if (!contentBodyElement) {
+            return;
+          }
+
+          const originalProjectCompanyWrapper =
+            this.originalDomElementsStorage.projectCompanyAndTitleWrapper
+              .element;
+          if (originalProjectCompanyWrapper) {
+            const clonedProjectCompanyWrapper =
+              originalProjectCompanyWrapper.cloneNode(true);
+            clonedProjectCompanyWrapper.style.display = 'flex';
+            mobileSidebarContainer.appendChild(clonedProjectCompanyWrapper);
+          }
+
+          const originalProjectIntroSection =
+            this.originalDomElementsStorage.projectIntroSection.element;
+          if (originalProjectIntroSection) {
+            const clonedProjectIntroSection =
+              originalProjectIntroSection.cloneNode(true);
+            clonedProjectIntroSection.style.display = 'flex';
+            mobileSidebarContainer.appendChild(clonedProjectIntroSection);
+          }
+
+          const originalSidebarInner =
+            this.originalDomElementsStorage.sidebarInnerElement.element;
+          if (originalSidebarInner) {
+            const clonedSidebarInner = originalSidebarInner.cloneNode(true);
+            mobileSidebarContainer.appendChild(clonedSidebarInner);
+          }
+
+          contentBodyElement.parentElement.insertBefore(
+            mobileSidebarContainer,
+            contentBodyElement.nextElementSibling
+          );
+        }
+
+        activateDesktopLayoutConfiguration() {
+          try {
+            const projectCompanyAndTitleWrapper =
+              this.originalDomElementsStorage.projectCompanyAndTitleWrapper
+                .element;
+            if (projectCompanyAndTitleWrapper) {
+              projectCompanyAndTitleWrapper.style.display = 'flex';
+            }
+
+            const sidebarElement =
+              this.originalDomElementsStorage.sidebarElement.element;
+            const projectIntroSection =
+              this.originalDomElementsStorage.projectIntroSection.element;
+
+            if (sidebarElement) {
+              sidebarElement.style.display = 'block';
+            }
+
+            if (projectIntroSection) {
+              projectIntroSection.style.display = 'flex';
+            }
+
+            this.removeMobileSidebarLayout();
+
+            this.viewportStateTracker.isMobileLayoutActive = false;
+            this.viewportStateTracker.isDesktopLayoutActive = true;
+
+            setTimeout(() => {
+              if (window.stickyMenuController) {
+                window.stickyMenuController.calculateAllTriggerPositionsAccurately();
+                window.stickyMenuController.handleScrollEventOccurrence();
+              }
+            }, 100);
+          } catch (error) {
+            // 에러 발생 시 무시
+          }
+        }
+
+        removeMobileSidebarLayout() {
+          const mobileSidebarElement =
+            document.querySelector('.mobile-sidebar');
+          if (mobileSidebarElement) {
+            mobileSidebarElement.remove();
+          }
+        }
+      }
+
+      // 상단 이동 버튼 컨트롤러
+      class ScrollToTopButtonController {
+        constructor() {
+          const { buttonElement = null } =
+            this.extractScrollToTopButtonElement();
+
+          this.buttonElementReference = buttonElement;
+
+          this.scrollDetectionSettings = {
+            showButtonThresholdPixels: 300,
+            isButtonCurrentlyVisible: false,
+            lastScrollPosition: 0,
+            scrollDetectionTimeoutId: null,
+            isUserCurrentlyScrolling: false,
+          };
+
+          this.initializeScrollToTopButtonFeature();
+        }
+
+        extractScrollToTopButtonElement() {
+          const buttonElement = document.getElementById('scrollToTopButton');
+
+          if (!buttonElement) {
+            console.warn('ScrollToTopButton: 버튼 요소를 찾을 수 없습니다.');
+            return { buttonElement: null };
+          }
+
+          console.log('ScrollToTopButton: 버튼 요소 초기화 완료');
+          return { buttonElement };
+        }
+
+        initializeScrollToTopButtonFeature() {
+          const { buttonElement } = this.buttonElementReference
+            ? { buttonElement: this.buttonElementReference }
+            : { buttonElement: null };
+
+          if (!buttonElement) {
+            console.error('ScrollToTopButton: 초기화 실패 - 버튼 요소 없음');
+            return;
+          }
+
+          this.bindScrollDetectionEventListener();
+          this.bindButtonClickEventListener();
+          this.performInitialScrollPositionCheck();
+
+          console.log('ScrollToTopButton: 기능 초기화 완료');
+        }
+
+        bindScrollDetectionEventListener() {
+          window.addEventListener(
+            'scroll',
+            () => {
+              this.handleScrollEventDetection();
+            },
+            { passive: true }
+          );
+
+          console.log('ScrollToTopButton: 스크롤 이벤트 리스너 등록 완료');
+        }
+
+        bindButtonClickEventListener() {
+          const { buttonElement } = this.buttonElementReference
+            ? { buttonElement: this.buttonElementReference }
+            : { buttonElement: null };
+
+          if (!buttonElement) {
+            return;
+          }
+
+          buttonElement.addEventListener('click', () => {
+            this.executeScrollToTopAction();
+          });
+
+          console.log('ScrollToTopButton: 클릭 이벤트 리스너 등록 완료');
+        }
+
+        handleScrollEventDetection() {
+          const currentScrollPositionY =
+            window.scrollY || window.pageYOffset || 0;
+          const { showButtonThresholdPixels } = this.scrollDetectionSettings;
+
+          this.scrollDetectionSettings.lastScrollPosition =
+            currentScrollPositionY;
+          this.scrollDetectionSettings.isUserCurrentlyScrolling = true;
+
+          const shouldShowButtonNow =
+            currentScrollPositionY > showButtonThresholdPixels;
+          const { isButtonCurrentlyVisible } = this.scrollDetectionSettings;
+
+          if (shouldShowButtonNow && !isButtonCurrentlyVisible) {
+            this.showScrollToTopButton();
+            console.log('ScrollToTopButton: 버튼 표시됨');
+            return;
+          }
+
+          if (!shouldShowButtonNow && isButtonCurrentlyVisible) {
+            this.hideScrollToTopButton();
+            console.log('ScrollToTopButton: 버튼 숨겨짐');
+            return;
+          }
+
+          this.resetScrollDetectionTimeout();
+        }
+
+        resetScrollDetectionTimeout() {
+          const { scrollDetectionTimeoutId } = this.scrollDetectionSettings;
+
+          if (scrollDetectionTimeoutId) {
+            clearTimeout(scrollDetectionTimeoutId);
+          }
+
+          this.scrollDetectionSettings.scrollDetectionTimeoutId = setTimeout(
+            () => {
+              this.scrollDetectionSettings.isUserCurrentlyScrolling = false;
+            },
+            150
+          );
+        }
+
+        showScrollToTopButton() {
+          const { buttonElement } = this.buttonElementReference
+            ? { buttonElement: this.buttonElementReference }
+            : { buttonElement: null };
+
+          if (!buttonElement) {
+            return;
+          }
+
+          buttonElement.classList.add('show');
+          this.scrollDetectionSettings.isButtonCurrentlyVisible = true;
+        }
+
+        hideScrollToTopButton() {
+          const { buttonElement } = this.buttonElementReference
+            ? { buttonElement: this.buttonElementReference }
+            : { buttonElement: null };
+
+          if (!buttonElement) {
+            return;
+          }
+
+          buttonElement.classList.remove('show');
+          this.scrollDetectionSettings.isButtonCurrentlyVisible = false;
+        }
+
+        executeScrollToTopAction() {
+          console.log('ScrollToTopButton: 상단 이동 시작');
+
+          const hasNativeSmoothScrollSupport =
+            'scrollBehavior' in document.documentElement.style;
+
+          if (hasNativeSmoothScrollSupport) {
+            this.performNativeSmoothScrollToTop();
+            return;
+          }
+
+          this.performPolyfillSmoothScrollToTop();
+        }
+
+        performNativeSmoothScrollToTop() {
+          window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth',
+          });
+
+          console.log('ScrollToTopButton: 네이티브 부드러운 스크롤 실행');
+        }
+
+        performPolyfillSmoothScrollToTop() {
+          const currentScrollPositionY =
+            window.scrollY || window.pageYOffset || 0;
+          const scrollDurationMs = Math.min(
+            800,
+            Math.max(300, currentScrollPositionY / 3)
+          );
+          const startTimestamp = performance.now();
+
+          const executeAnimationFrame = (currentTimestamp) => {
+            const elapsedTimeMs = currentTimestamp - startTimestamp;
+            const progressRatio = Math.min(elapsedTimeMs / scrollDurationMs, 1);
+
+            const easedProgress =
+              this.calculateEaseOutQuartProgress(progressRatio);
+            const targetScrollPosition =
+              currentScrollPositionY * (1 - easedProgress);
+
+            window.scrollTo(0, targetScrollPosition);
+
+            const isAnimationComplete = progressRatio >= 1;
+
+            if (!isAnimationComplete) {
+              requestAnimationFrame(executeAnimationFrame);
+              return;
+            }
+
+            console.log('ScrollToTopButton: 폴리필 부드러운 스크롤 완료');
+          };
+
+          requestAnimationFrame(executeAnimationFrame);
+          console.log('ScrollToTopButton: 폴리필 부드러운 스크롤 시작');
+        }
+
+        calculateEaseOutQuartProgress(progressRatio) {
+          return 1 - Math.pow(1 - progressRatio, 4);
+        }
+
+        performInitialScrollPositionCheck() {
+          const currentScrollPositionY =
+            window.scrollY || window.pageYOffset || 0;
+
+          setTimeout(() => {
+            this.scrollDetectionSettings.lastScrollPosition =
+              currentScrollPositionY;
+            this.handleScrollEventDetection();
+          }, 100);
+
+          console.log('ScrollToTopButton: 초기 스크롤 위치 확인 완료');
+        }
+      }
+
+      // 스크롤 투 톱 버튼 초기화 함수
+      function initializeScrollToTopButtonFeature() {
+        const scrollToTopButton = document.getElementById('scrollToTopButton');
+
+        if (!scrollToTopButton) {
+          console.warn('ScrollToTopButton: 버튼 요소가 존재하지 않습니다.');
+          return;
+        }
+
+        window.scrollToTopController = new ScrollToTopButtonController();
+        console.log('ScrollToTopButton: 전역 컨트롤러 초기화 완료');
+      }
+
+      // DOM 로드 완료 후 초기화
+      const initializeScrollToTopOnDOMReady = () => {
+        const isDocumentReady =
+          document.readyState === 'complete' ||
+          document.readyState === 'interactive';
+
+        if (isDocumentReady) {
+          initializeScrollToTopButtonFeature();
+          return;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+          initializeScrollToTopButtonFeature();
+        });
+      };
+
+      initializeScrollToTopOnDOMReady();
+
+      const handleDownloadAction = () => {
+        alert('소스코드 다운로드 기능을 준비 중입니다.');
+      };
+
+      const handlePreviewAction = () => {
+        alert('Demo 기능을 준비 중입니다.');
+      };
+
+      window.handleDownloadAction = handleDownloadAction;
+      window.handlePreviewAction = handlePreviewAction;
+
+      class ApplicationInitializer {
+        constructor() {
+          this.initializationPromise = null;
+          this.isInitialized = false;
+        }
+
+        async initialize() {
+          if (this.initializationPromise) {
+            return this.initializationPromise;
+          }
+
+          this.initializationPromise = this.performInitialization();
+          return this.initializationPromise;
+        }
+
+        async performInitialization() {
+          this.cleanup();
+
+          try {
+            await this.waitForLayoutReady();
+            await this.initializeResponsiveController();
+            await this.initializeStickyController();
+            await this.performFinalValidation();
+
+            this.isInitialized = true;
+          } catch (error) {
+            throw error;
+          }
+        }
+
+        cleanup() {
+          if (window.stickyMenuController) {
+            delete window.stickyMenuController;
+          }
+          if (window.responsiveDomController) {
+            delete window.responsiveDomController;
+          }
+        }
+
+        waitForLayoutReady() {
+          return new Promise((resolve) => {
+            const checkLayout = () => {
+              const nav = document.getElementById('navigationMenu');
+              const isReady =
+                nav &&
+                nav.offsetHeight > 0 &&
+                document.readyState === 'complete' &&
+                window.getComputedStyle;
+
+              if (isReady) {
+                resolve();
+              } else {
+                requestAnimationFrame(checkLayout);
+              }
+            };
+            checkLayout();
+          });
+        }
+
+        initializeResponsiveController() {
+          return new Promise((resolve) => {
+            window.responsiveDomController =
+              new ResponsiveDomRestructureController();
+
+            requestAnimationFrame(() => {
+              requestAnimationFrame(resolve);
+            });
+          });
+        }
+
+        initializeStickyController() {
+          return new Promise((resolve) => {
+            window.stickyMenuController = new StickyMenuApplicationController();
+            resolve();
+          });
+        }
+
+        performFinalValidation() {
+          return new Promise((resolve) => {
+            if (
+              window.stickyMenuController &&
+              typeof window.stickyMenuController
+                .forceRecalculateAllPositions === 'function'
+            ) {
+              window.stickyMenuController.forceRecalculateAllPositions();
+            }
+            resolve();
+          });
+        }
+      }
+
+      const appInitializer = new ApplicationInitializer();
+
+      const startInitialization = async () => {
+        try {
+          await appInitializer.initialize();
+        } catch (error) {
+          setTimeout(() => {
+            window.stickyMenuController = new StickyMenuApplicationController();
+            window.responsiveDomController =
+              new ResponsiveDomRestructureController();
+          }, 1000);
+        }
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', startInitialization);
+      } else {
+        startInitialization();
+      }
+
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && window.stickyMenuController) {
+          requestAnimationFrame(() => {
+            window.stickyMenuController.forceRecalculateAllPositions();
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

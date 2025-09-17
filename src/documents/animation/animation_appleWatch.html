@@ -1,0 +1,2545 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <!-- src/demos/디바이스별-UPPERDATE-시작좌표-분리-애니메이션-정리버전 -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>디바이스별-UPPERDATE-시작좌표-분리-애니메이션</title>
+    <style>
+      /* src/styles/device-specific-upperdate-coordinates-animation-clean.css */
+
+      /* ================================ */
+      /* ===== 일반 CSS 스타일 섹션 ===== */
+      /* ================================ */
+
+      /* ===== CSS 변수 (CSS Variables) ===== */
+      :root {
+        --vh: 1vh;
+        --mobile-vh: 1vh;
+
+        /* 🍎 애플워치 DOM의 기본 레이아웃 크기 및 위치 (데스크톱/모바일 공통) */
+        --applewatch-case-width-percentage: 70%;
+        --applewatch-case-height-percentage: 85%;
+        --applewatch-case-top-position-percentage: 7.5%;
+        --applewatch-case-left-position-percentage: 15%;
+
+        /* 소형 모바일 디바이스에서의 애플워치 케이스 DOM 레이아웃 (375px 이하 전용) */
+        --small-mobile-applewatch-case-width-percentage: 80%;
+        --small-mobile-applewatch-case-height-percentage: 95%;
+        --small-mobile-applewatch-case-top-position-percentage: 50%;
+        --small-mobile-applewatch-case-left-position-percentage: 50%;
+
+        /* JavaScript와 동기화되는 반응형 기준점들 (미디어쿼리에서 사용) */
+        --responsive-mobile-breakpoint-pixels: 768px;
+        --responsive-small-mobile-breakpoint-pixels: 375px;
+
+        /* 🖤 동적 검은색 색상 정의 */
+        --dynamic-black-base: #000000;
+        --dynamic-black-midnight: #1c1c1e;
+        --dynamic-black-space-gray: #2c2c2e;
+        --dynamic-black-glossy: #0a0a0a;
+
+        /* 🍎 애플워치 밴드 색상 정의 */
+        --applewatch-band-color-black: #1c1c1e;
+        --applewatch-band-color-white: #f2f2f7;
+        --applewatch-band-color-product-red: #ff3b30;
+        --applewatch-band-color-ocean-blue: #007aff;
+
+        /* 🍎 애플워치 디스플레이 색상 및 상태 */
+        --applewatch-display-background-color: #000000;
+        --applewatch-always-on-dimmed-opacity: 0.4;
+        --applewatch-active-display-opacity: 1;
+
+        /* JavaScript에서 CSS 변수로 제어되는 transform 속성들 */
+        --applewatch-case-scale-multiplier: 1;
+        --applewatch-case-rotation-degrees: 0deg;
+        --applewatch-case-translate-x-percentage: 0;
+        --applewatch-case-translate-y-percentage: 0;
+
+        /* 🍎 애플워치 디테일 요소들 크기 정의 */
+        --applewatch-digital-crown-size: 12px;
+        --applewatch-side-button-width: 8px;
+        --applewatch-side-button-height: 24px;
+        --applewatch-band-connector-width: 20px;
+        --applewatch-band-connector-height: 6px;
+
+        /* 🎨 애플워치 형태 변환 애니메이션 관련 */
+        --watch-transformation-progress: 0;
+        --watch-crown-opacity: 0;
+        --watch-button-opacity: 0;
+        --watch-band-opacity: 0;
+      }
+
+      /* ===== 기본 리셋 및 베이스 스타일 ===== */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+          'Segoe UI', Roboto, sans-serif;
+        overflow-x: hidden;
+        background: #000;
+        color: white;
+        scroll-behavior: smooth;
+        overscroll-behavior: none;
+        -webkit-text-size-adjust: 100%;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      /* ===== 동적 검은색 애니메이션 키프레임 ===== */
+      @keyframes dynamicBlackPulse {
+        0% {
+          background: linear-gradient(
+            135deg,
+            #000000 0%,
+            #1c1c1e 50%,
+            #000000 100%
+          );
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.8);
+        }
+        25% {
+          background: linear-gradient(
+            135deg,
+            #0a0a0a 0%,
+            #000000 50%,
+            #1a1a1a 100%
+          );
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8),
+            inset 0 2px 4px rgba(255, 255, 255, 0.08),
+            inset 0 -2px 4px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 0, 0, 0.9),
+            0 0 15px rgba(255, 255, 255, 0.03);
+        }
+        50% {
+          background: linear-gradient(
+            135deg,
+            #1c1c1e 0%,
+            #2c2c2e 50%,
+            #000000 100%
+          );
+          box-shadow: 0 8px 35px rgba(0, 0, 0, 0.9),
+            inset 0 3px 6px rgba(255, 255, 255, 0.1),
+            inset 0 -3px 6px rgba(0, 0, 0, 0.6),
+            0 0 0 1px rgba(255, 255, 255, 0.05),
+            0 0 20px rgba(255, 255, 255, 0.05);
+        }
+        75% {
+          background: linear-gradient(
+            135deg,
+            #2c2c2e 0%,
+            #1c1c1e 50%,
+            #0a0a0a 100%
+          );
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8),
+            inset 0 2px 4px rgba(255, 255, 255, 0.08),
+            inset 0 -2px 4px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 0, 0, 0.9),
+            0 0 15px rgba(255, 255, 255, 0.03);
+        }
+        100% {
+          background: linear-gradient(
+            135deg,
+            #000000 0%,
+            #1c1c1e 50%,
+            #000000 100%
+          );
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.8);
+        }
+      }
+
+      @keyframes dynamicBlackShimmer {
+        0% {
+          background-position: -200% center;
+        }
+        100% {
+          background-position: 200% center;
+        }
+      }
+
+      @keyframes appleWatchTransformation {
+        0% {
+          border-radius: 22% / 18%;
+          --watch-crown-opacity: 0;
+          --watch-button-opacity: 0;
+          --watch-band-opacity: 0;
+        }
+        60% {
+          border-radius: 22% / 18%;
+          --watch-crown-opacity: 0.3;
+          --watch-button-opacity: 0.3;
+          --watch-band-opacity: 0.2;
+        }
+        100% {
+          border-radius: 22% / 18%;
+          --watch-crown-opacity: 1;
+          --watch-button-opacity: 1;
+          --watch-band-opacity: 1;
+        }
+      }
+
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateX(-50%) translateY(0);
+        }
+        40% {
+          transform: translateX(-50%) translateY(-10px);
+        }
+        60% {
+          transform: translateX(-50%) translateY(-5px);
+        }
+      }
+
+      @keyframes digitalTouchRipple {
+        0% {
+          transform: scale(0);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+
+      /* ===== 레이아웃 컴포넌트 ===== */
+      .container {
+        width: 100%;
+        min-height: 100vh;
+      }
+
+      .intro-section {
+        height: 100vh;
+        height: calc(var(--mobile-vh, 1vh) * 100);
+        background: linear-gradient(
+          135deg,
+          #000000 0%,
+          #1a1a1a 50%,
+          #000000 100%
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+      }
+
+      .intro-content {
+        text-align: center;
+        padding: 2rem;
+      }
+
+      .intro-content h1 {
+        font-size: 3rem;
+        font-weight: 200;
+        margin-bottom: 1rem;
+        background: linear-gradient(45deg, #333, #666, #999);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .intro-content p {
+        font-size: 1.2rem;
+        opacity: 0.8;
+        margin-bottom: 2rem;
+      }
+
+      .scroll-hint {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #667eea;
+        font-size: 1rem;
+        animation: bounce 2s infinite;
+      }
+
+      .watch-section {
+        position: relative;
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        min-height: 600px;
+      }
+
+      .black-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        z-index: 1;
+      }
+
+      .watch-text-layout {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        will-change: transform;
+        flex-direction: row;
+      }
+
+      .dummy-section {
+        height: 100vh;
+        height: calc(var(--mobile-vh, 1vh) * 100);
+        background: linear-gradient(
+          135deg,
+          #1a1a1a 0%,
+          #333333 50%,
+          #1a1a1a 100%
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+        text-align: center;
+      }
+
+      /* ===== 애플워치 컴포넌트 ===== */
+      .watch-element {
+        width: 45vw;
+        height: 45vw;
+        position: relative;
+        transform-origin: center center;
+        will-change: transform;
+        backface-visibility: hidden;
+        contain: layout style paint;
+        isolation: isolate;
+        z-index: 5;
+        opacity: 1;
+        visibility: visible;
+        display: block;
+      }
+
+      /* 🍎 애플워치 케이스 (메인 본체) - 동적 검은색 적용 */
+      .watch-main {
+        width: var(--applewatch-case-width-percentage);
+        height: var(--applewatch-case-height-percentage);
+        position: absolute;
+        top: var(--applewatch-case-top-position-percentage);
+        left: var(--applewatch-case-left-position-percentage);
+        background: var(--dynamic-black-midnight);
+        border-radius: 22% / 18%;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        contain: layout style paint;
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 10;
+        opacity: 1;
+        visibility: visible;
+        padding: 30px;
+        transform-origin: center center;
+        will-change: transform, opacity, background-color, box-shadow;
+        transform: scale(var(--applewatch-case-scale-multiplier))
+          rotate(var(--applewatch-case-rotation-degrees))
+          translateX(var(--applewatch-case-translate-x-percentage))
+          translateY(var(--applewatch-case-translate-y-percentage));
+
+        /* 🖤 동적 검은색 애니메이션 기본 상태 */
+        animation: dynamicBlackPulse 4s ease-in-out infinite;
+      }
+
+      /* 🖤 동적 검은색 - 반짝임 효과 */
+      .watch-main.shimmer-effect {
+        background: linear-gradient(
+          90deg,
+          #000000 0%,
+          #1c1c1e 25%,
+          #2c2c2e 50%,
+          #1c1c1e 75%,
+          #000000 100%
+        );
+        background-size: 200% 100%;
+        animation: dynamicBlackShimmer 3s linear infinite,
+          dynamicBlackPulse 4s ease-in-out infinite;
+      }
+
+      /* 🍎 최종 애플워치 형태 변환 클래스 */
+      .watch-main.apple-watch-transformed {
+        animation: appleWatchTransformation 2s ease-out forwards,
+          dynamicBlackPulse 6s ease-in-out infinite;
+        border-radius: 22% / 18%;
+      }
+
+      /* 🍎 애플워치 디지털 크라운 */
+      .apple-watch-digital-crown {
+        position: absolute;
+        top: 20%;
+        right: -6px;
+        width: var(--applewatch-digital-crown-size);
+        height: var(--applewatch-digital-crown-size);
+        background: linear-gradient(45deg, #5a5a5a, #3c3c3c);
+        border-radius: 50%;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        z-index: 15;
+        border: 1px solid rgba(0, 0, 0, 0.6);
+        opacity: var(--watch-crown-opacity);
+        transition: opacity 1s ease;
+        will-change: opacity;
+      }
+
+      .apple-watch-digital-crown::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 60%;
+        height: 60%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        border-radius: 50%;
+      }
+
+      /* 🍎 애플워치 사이드 버튼 */
+      .apple-watch-side-button {
+        position: absolute;
+        top: 40%;
+        right: -4px;
+        width: var(--applewatch-side-button-width);
+        height: var(--applewatch-side-button-height);
+        background: linear-gradient(90deg, #5a5a5a, #3c3c3c);
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        z-index: 15;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        opacity: var(--watch-button-opacity);
+        transition: opacity 1s ease;
+        will-change: opacity;
+      }
+
+      /* 🍎 애플워치 밴드 연결부 (상단) */
+      .apple-watch-band-connector-top {
+        position: absolute;
+        top: -3px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--applewatch-band-connector-width);
+        height: var(--applewatch-band-connector-height);
+        background: #3c3c3c;
+        border-radius: 3px;
+        z-index: 5;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+        opacity: var(--watch-band-opacity);
+        transition: opacity 1s ease;
+        will-change: opacity;
+      }
+
+      /* 🍎 애플워치 밴드 연결부 (하단) */
+      .apple-watch-band-connector-bottom {
+        position: absolute;
+        bottom: -3px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--applewatch-band-connector-width);
+        height: var(--applewatch-band-connector-height);
+        background: #3c3c3c;
+        border-radius: 3px;
+        z-index: 5;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+        opacity: var(--watch-band-opacity);
+        transition: opacity 1s ease;
+        will-change: opacity;
+      }
+
+      /* 🍎 애플워치 스포츠 밴드 (상단) */
+      .apple-watch-sport-band-top {
+        position: absolute;
+        top: -50px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 22px;
+        height: 50px;
+        background: linear-gradient(
+          180deg,
+          var(--applewatch-band-color-black) 0%,
+          rgba(28, 28, 30, 0.8) 100%
+        );
+        border-radius: 11px 11px 6px 6px;
+        z-index: 3;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        opacity: var(--watch-band-opacity);
+        transition: opacity 1s ease;
+        will-change: opacity;
+      }
+
+      /* 🍎 애플워치 스포츠 밴드 (하단) */
+      .apple-watch-sport-band-bottom {
+        position: absolute;
+        bottom: -50px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 22px;
+        height: 50px;
+        background: linear-gradient(
+          0deg,
+          var(--applewatch-band-color-black) 0%,
+          rgba(28, 28, 30, 0.8) 100%
+        );
+        border-radius: 6px 6px 11px 11px;
+        z-index: 3;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        opacity: var(--watch-band-opacity);
+        transition: opacity 1s ease;
+        will-change: opacity;
+      }
+
+      /* 🍎 애플워치 디스플레이 (OLED 스크린) */
+      .watch-screen {
+        width: 100%;
+        height: 100%;
+        background: var(--applewatch-display-background-color);
+        border-radius: 18% / 15%;
+        border: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 1.2rem;
+        overflow: hidden;
+        position: relative;
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: background-color, color, opacity;
+        z-index: 15;
+        opacity: var(--applewatch-active-display-opacity);
+        visibility: visible;
+      }
+
+      /* 🍎 애플워치 Always-On Display 효과 */
+      .watch-screen.always-on-mode {
+        opacity: var(--applewatch-always-on-dimmed-opacity);
+        filter: brightness(0.3);
+      }
+
+      /* 🍎 애플워치 디스플레이의 미세한 반사 효과 */
+      .watch-screen::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.05) 0%,
+          transparent 30%,
+          transparent 70%,
+          rgba(255, 255, 255, 0.02) 100%
+        );
+        border-radius: inherit;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      /* 🍎 애플워치 시간 섹션 */
+      .time-section {
+        text-align: center;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        opacity: 1;
+        visibility: visible;
+        position: relative;
+        z-index: 2;
+      }
+
+      /* 🍎 애플워치 상단 날짜 (Complications 스타일) */
+      .upperDate {
+        position: absolute;
+        top: -50%;
+        left: 70%;
+        font-size: 35px;
+        font-weight: 500;
+        text-align: center;
+        opacity: 0;
+        z-index: 3;
+        will-change: transform, opacity;
+        backface-visibility: hidden;
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+          sans-serif;
+        letter-spacing: -0.2px;
+        color: #ffffff;
+        text-shadow: none;
+        transition: all 0.3s ease;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 4px 8px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      /* 🍎 애플워치 메인 시간 디스플레이 */
+      .time-display {
+        font-size: 130px;
+        font-weight: 300;
+        color: #ffffff;
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+          sans-serif;
+        text-shadow: none;
+        letter-spacing: -1px;
+        text-align: center;
+        line-height: 1;
+        will-change: color;
+        transition: color 0.3s ease;
+        z-index: 20;
+        position: relative;
+        opacity: 1;
+        visibility: visible;
+        display: block;
+        -webkit-font-feature-settings: 'tnum';
+        font-feature-settings: 'tnum';
+      }
+
+      /* 🍎 애플워치 시간 숫자 (개별 스타일링) */
+      .time-digit {
+        display: inline-block;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* 🍎 애플워치 콜론 구분자 */
+      .divider {
+        display: inline-block;
+        opacity: 1;
+        transition: opacity 0.5s ease;
+        will-change: opacity;
+        font-weight: 300;
+        margin: 0 2px;
+      }
+
+      /* 🍎 애플워치 Digital Touch 효과 (터치 시 나타나는 원형 효과) */
+      .digital-touch-ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.3) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+        transform: scale(0);
+        animation: digitalTouchRipple 0.6s ease-out;
+        z-index: 100;
+      }
+
+      /* ===== UI 컴포넌트 ===== */
+      .product-text {
+        position: absolute;
+        left: 5%;
+        top: 50%;
+        transform: translateY(-50%);
+        color: white;
+        font-size: 4rem;
+        font-weight: 200;
+        text-align: left;
+        opacity: 0;
+        line-height: 1.1;
+        letter-spacing: -1px;
+        z-index: 3;
+        will-change: transform, opacity;
+        backface-visibility: hidden;
+      }
+
+      .product-text .line {
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      /* ================================ */
+      /* ===== 미디어쿼리 CSS 섹션 ===== */
+      /* ================================ */
+
+      @supports (-webkit-touch-callout: none) {
+        :root {
+          --vh: 1vh;
+        }
+      }
+
+      /* ===== 태블릿 (1024px 이하) ===== */
+      @media only screen and (max-width: 1024px) {
+        .watch-element {
+          width: 55vw;
+          height: 55vw;
+        }
+        .product-text {
+          font-size: 3.5rem;
+        }
+      }
+
+      /* ===== 모바일 (768px 이하) ===== */
+      @media only screen and (max-width: 768px) {
+        .watch-text-layout {
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 3rem;
+          padding: 2rem 1rem;
+        }
+
+        .watch-element {
+          order: 1;
+        }
+
+        .product-text {
+          order: 2;
+          position: relative;
+          left: auto !important;
+          top: auto !important;
+          transform: none !important;
+          text-align: center;
+          font-size: 2.5rem;
+          line-height: 1.2;
+        }
+
+        .watch-main {
+          width: 100%;
+          height: 100%;
+          padding: 20px;
+          opacity: 1;
+          background: var(--dynamic-black-midnight);
+          --applewatch-case-scale-multiplier: 1.1;
+          --applewatch-case-rotation-degrees: 0deg;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) !important;
+        }
+
+        .time-display {
+          font-size: 5rem;
+        }
+
+        .upperDate {
+          font-size: 10px;
+          top: -70%;
+          left: 56%;
+        }
+      }
+
+      /* ===== 소형 모바일 (430px 이하) ===== */
+      @media only screen and (max-width: 430px) {
+        .intro-content h1 {
+          font-size: 2.5rem;
+        }
+        .intro-content p {
+          font-size: 1rem;
+        }
+        .watch-element {
+          width: 75vw;
+          height: 75vw;
+        }
+        .time-display {
+          font-size: 75px;
+        }
+        .product-text {
+          font-size: 2rem;
+        }
+      }
+
+      /* ===== 극소형 모바일 (375px 이하) ===== */
+      @media only screen and (max-width: 375px) {
+        .intro-section {
+          font-size: 1.5rem;
+          padding: 20px;
+        }
+        .dummy-section {
+          font-size: 1.5rem;
+          padding: 20px;
+        }
+        .watch-element {
+          width: 80vw;
+          height: 80vw;
+          max-width: 300px;
+          max-height: 300px;
+        }
+
+        .watch-main {
+          width: 100%;
+          height: 100%;
+          top: var(--small-mobile-applewatch-case-top-position-percentage);
+          left: var(--small-mobile-applewatch-case-left-position-percentage);
+          transform: translate(-50%, -50%)
+            scale(var(--applewatch-case-scale-multiplier))
+            rotate(var(--applewatch-case-rotation-degrees));
+        }
+
+        .time-display {
+          font-size: 60px;
+        }
+
+        .upperDate {
+          left: 57%;
+          font-size: 20px;
+          padding: 3px 6px;
+        }
+
+        .product-text {
+          font-size: 1.8rem;
+        }
+      }
+
+      /* ===== 최소형 모바일 (320px 이하) ===== */
+      @media only screen and (max-width: 320px) {
+        .intro-content h1 {
+          font-size: 2rem;
+        }
+        .intro-content p {
+          font-size: 0.9rem;
+        }
+        .watch-element {
+          width: 85vw;
+          height: 85vw;
+          max-width: 280px;
+          max-height: 280px;
+        }
+        .time-display {
+          font-size: 3.5rem;
+        }
+        .product-text {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <section class="intro-section" role="banner">
+        <div class="intro-content">
+          <h1>Lorem Ipsum Animation Demo</h1>
+        </div>
+      </section>
+
+      <section class="watch-section" id="watchSection" role="main">
+        <div class="black-overlay"></div>
+
+        <div class="watch-text-layout" id="watchTextLayout">
+          <div class="watch-element" id="watchElement">
+            <!-- 🍎 애플워치 스포츠 밴드 (상단) -->
+            <div class="apple-watch-sport-band-top"></div>
+
+            <!-- 🍎 애플워치 밴드 연결부 (상단) -->
+            <div class="apple-watch-band-connector-top"></div>
+
+            <!-- 🍎 애플워치 메인 케이스 -->
+            <div class="watch-main" id="watchMain">
+              <!-- 🍎 애플워치 디지털 크라운 -->
+              <div class="apple-watch-digital-crown"></div>
+
+              <!-- 🍎 애플워치 사이드 버튼 -->
+              <div class="apple-watch-side-button"></div>
+
+              <!-- 🍎 애플워치 OLED 디스플레이 -->
+              <div class="watch-screen" id="watchScreen">
+                <div class="time-section">
+                  <!-- 🍎 애플워치 Complications (날짜) -->
+                  <p class="upperDate" id="upperDate">
+                    <span class="currentDateNumber">
+                      <span id="currentDateNumber">01</span>일
+                    </span>
+                    <span class="currentDateNameWrapper">
+                      (<span class="currentDateName" id="currentDateName"
+                        >금</span
+                      >)
+                    </span>
+                  </p>
+
+                  <!-- 🍎 애플워치 메인 시간 디스플레이 -->
+                  <p
+                    class="time-display"
+                    id="timeDisplay"
+                    aria-label="현재 시간"
+                  >
+                    <span class="time-digit" id="hours">08</span>
+                    <span class="divider" id="colonDivider">:</span>
+                    <span class="time-digit" id="minutes">43</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 🍎 애플워치 밴드 연결부 (하단) -->
+            <div class="apple-watch-band-connector-bottom"></div>
+
+            <!-- 🍎 애플워치 스포츴 밴드 (하단) -->
+            <div class="apple-watch-sport-band-bottom"></div>
+          </div>
+
+          <div
+            class="product-text"
+            id="productText"
+            role="heading"
+            aria-level="2"
+          >
+            <span class="line">Device.</span><br />
+            <span class="line">Specific.</span><br />
+            <span class="line">UpperDate.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="dummy-section" role="region">
+        <div>
+          <h2>🎯 디바이스별 UPPERDATE 좌표!</h2>
+          <p>X축 + Y축 동시 애니메이션으로 역동적 등장</p>
+        </div>
+      </section>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+      // src/scripts/device-specific-upperdate-coordinates-animation-clean.js
+      gsap.registerPlugin(ScrollTrigger);
+
+      // ===============================================
+      // 📋 수정된 상수 정의 (디바이스별 UPPERDATE 좌표 분리)
+      // ===============================================
+
+      const DYNAMIC_BLACK_ANIMATION_CONFIG = {
+        APPLEWATCH_SCALE_ANIMATION: {
+          AT_ANIMATION_START: 4.0,
+          AT_ANIMATION_END: 1.0,
+        },
+
+        DYNAMIC_BLACK_MOBILE_APPLEWATCH_CASE_ANIMATION: {
+          SCALE_AT_ANIMATION_START: 1.1,
+          SCALE_AT_ANIMATION_END: 1.0,
+          FADE_ANIMATION_COMPLETE_AT_PROGRESS: 0.2,
+          DYNAMIC_BLACK_START_AT_PROGRESS: 0.1,
+          SCALE_ANIMATION_START_AT_PROGRESS: 0.6,
+          ROTATION_MAX_DEGREES: 1.5,
+          APPLE_WATCH_TRANSFORM_START_AT_PROGRESS: 0.8,
+        },
+
+        ANIMATION_TRIGGER_THRESHOLDS: {
+          APPLEWATCH_COMPLICATIONS_APPEAR_AT_PROGRESS: 0.2,
+          DESKTOP_APPLEWATCH_MOVE_START_AT_PROGRESS: 0.7,
+          PRODUCTTEXT_DOM_APPEAR_AT_PROGRESS: 0.85,
+          DESKTOP_DYNAMIC_BLACK_START_AT_PROGRESS: 0.1,
+          DESKTOP_APPLE_WATCH_TRANSFORM_START_AT_PROGRESS: 0.8,
+        },
+
+        RESPONSIVE_DEVICE_BREAKPOINTS: {
+          MOBILE_DEVICE_MAX_WIDTH_PIXELS: 768,
+          SMALL_MOBILE_DEVICE_MAX_WIDTH_PIXELS: 375,
+          DESKTOP_DEVICE_MIN_WIDTH_PIXELS: 769,
+        },
+
+        ANIMATION_DURATION_SETTINGS: {
+          SCROLL_TRIGGER_SCRUB_DELAY_SECONDS: 0.3,
+          CSS_TRANSITION_DURATION_SECONDS: 0.8,
+          BORDER_RADIUS_TRANSITION_SECONDS: 0.8,
+        },
+
+        SCROLL_HEIGHT_CALCULATION: {
+          SCROLL_END_POINT_HEIGHT_MULTIPLIER: 0.8,
+          REFERENCE_ASPECT_RATIO_WIDTH: 16,
+          REFERENCE_ASPECT_RATIO_HEIGHT: 9,
+          REFERENCE_SCREEN_WIDTH_PIXELS: 1920,
+          REFERENCE_SCREEN_HEIGHT_PIXELS: 1080,
+          MINIMUM_SECTION_HEIGHT_PIXELS: 800,
+        },
+
+        DESKTOP_APPLEWATCH_MOVEMENT: {
+          MOVE_DISTANCE_MULTIPLIER: 0.35,
+          EASING_CURVE_THRESHOLD: 0.5,
+        },
+
+        APPLEWATCH_COMPLICATIONS_ANIMATION: {
+          UPPERDATE_DESKTOP_INITIAL_X_OFFSET_PIXELS: 0,
+          UPPERDATE_DESKTOP_INITIAL_Y_OFFSET_PIXELS: -30,
+          UPPERDATE_MOBILE_INITIAL_X_OFFSET_PIXELS: 0,
+          UPPERDATE_MOBILE_INITIAL_Y_OFFSET_PIXELS: -30,
+          UPPERDATE_SMALL_MOBILE_INITIAL_X_OFFSET_PIXELS: 0,
+          UPPERDATE_SMALL_MOBILE_INITIAL_Y_OFFSET_PIXELS: -30,
+          UPPERDATE_FADE_IN_DURATION_PROGRESS: 0.25,
+        },
+
+        PRODUCTTEXT_DOM_ANIMATION: {
+          INITIAL_SCALE: 0.7,
+          FINAL_SCALE: 1.0,
+          INITIAL_Y_OFFSET_PIXELS: 40,
+          DESKTOP_INITIAL_X_OFFSET_PIXELS: -100,
+          FADE_IN_DURATION_PROGRESS: 0.15,
+        },
+
+        DYNAMIC_BLACK_COLORS: {
+          BASE_BLACK: '#000000',
+          MIDNIGHT: '#1c1c1e',
+          SPACE_GRAY: '#2c2c2e',
+          GLOSSY_BLACK: '#0a0a0a',
+          DEEP_BLACK: '#050505',
+        },
+
+        APPLE_WATCH_TRANSFORMATION: {
+          CROWN_OPACITY_START: 0,
+          CROWN_OPACITY_END: 1,
+          BUTTON_OPACITY_START: 0,
+          BUTTON_OPACITY_END: 1,
+          BAND_OPACITY_START: 0,
+          BAND_OPACITY_END: 1,
+          TRANSFORMATION_DURATION_PROGRESS: 0.2,
+        },
+
+        RESPONSIVE_START_POINTS: {
+          SMALL_MOBILE_START: 'bottom-=200px top',
+          MOBILE_START: 'bottom-=100px top',
+          DESKTOP_START: 'bottom top',
+        },
+      };
+
+      // ===============================================
+      // 📋 공통 유틸리티 함수 분리
+      // ===============================================
+
+      const clampValueBetweenMinAndMax = (
+        currentValue,
+        minimumValue,
+        maximumValue
+      ) => {
+        return Math.max(minimumValue, Math.min(currentValue, maximumValue));
+      };
+
+      const calculateProgressWithinSpecificRange = (
+        currentValue,
+        rangeStartValue,
+        rangeEndValue
+      ) => {
+        if (currentValue <= rangeStartValue) return 0;
+        if (currentValue >= rangeEndValue) return 1;
+        return (
+          (currentValue - rangeStartValue) / (rangeEndValue - rangeStartValue)
+        );
+      };
+
+      const interpolateValueBetweenTwoPoints = (
+        startingValue,
+        endingValue,
+        progressRatio
+      ) => {
+        return startingValue + (endingValue - startingValue) * progressRatio;
+      };
+
+      const calculateCubicEasingProgress = (
+        linearProgress,
+        easingThreshold = 0.5
+      ) => {
+        return linearProgress < easingThreshold
+          ? 4 * linearProgress * linearProgress * linearProgress
+          : 1 - Math.pow(-2 * linearProgress + 2, 3) / 2;
+      };
+
+      const calculateSineWaveRotation = (progress, maxRotationDegrees) => {
+        return Math.sin(progress * Math.PI) * maxRotationDegrees;
+      };
+
+      const updateDomElementTextContent = (elementId, newTextValue) => {
+        const targetElement = document.getElementById(elementId);
+        if (targetElement && newTextValue !== undefined) {
+          targetElement.textContent = newTextValue;
+          return true;
+        }
+        return false;
+      };
+
+      const updateDomElementCssProperty = (
+        domElement,
+        cssPropertyName,
+        cssPropertyValue
+      ) => {
+        if (domElement && cssPropertyName && cssPropertyValue !== undefined) {
+          domElement.style.setProperty(cssPropertyName, cssPropertyValue);
+          return true;
+        }
+        return false;
+      };
+
+      const applyGsapPropertiesToDomElement = (
+        domElement,
+        gsapPropertiesObject
+      ) => {
+        if (domElement && gsapPropertiesObject) {
+          gsap.set(domElement, gsapPropertiesObject);
+          return true;
+        }
+        return false;
+      };
+
+      const getDomElementById = (elementId) => {
+        return document.getElementById(elementId);
+      };
+
+      const queryDomElementBySelector = (cssSelector) => {
+        return document.querySelector(cssSelector);
+      };
+
+      const detectCurrentDeviceTypeBasedOnWindowWidth = (
+        windowWidthPixels = window.innerWidth
+      ) => {
+        const {
+          SMALL_MOBILE_DEVICE_MAX_WIDTH_PIXELS,
+          MOBILE_DEVICE_MAX_WIDTH_PIXELS,
+        } = DYNAMIC_BLACK_ANIMATION_CONFIG.RESPONSIVE_DEVICE_BREAKPOINTS;
+
+        if (windowWidthPixels <= SMALL_MOBILE_DEVICE_MAX_WIDTH_PIXELS) {
+          return 'small-mobile';
+        }
+        if (windowWidthPixels <= MOBILE_DEVICE_MAX_WIDTH_PIXELS) {
+          return 'mobile';
+        }
+        return 'desktop';
+      };
+
+      const checkIfCurrentDeviceIsMobileOrSmaller = (
+        windowWidthPixels = window.innerWidth
+      ) => {
+        return (
+          windowWidthPixels <=
+          DYNAMIC_BLACK_ANIMATION_CONFIG.RESPONSIVE_DEVICE_BREAKPOINTS
+            .MOBILE_DEVICE_MAX_WIDTH_PIXELS
+        );
+      };
+
+      const checkIfCurrentDeviceIsSmallMobile = (
+        windowWidthPixels = window.innerWidth
+      ) => {
+        return (
+          windowWidthPixels <=
+          DYNAMIC_BLACK_ANIMATION_CONFIG.RESPONSIVE_DEVICE_BREAKPOINTS
+            .SMALL_MOBILE_DEVICE_MAX_WIDTH_PIXELS
+        );
+      };
+
+      const getResponsiveStartPoint = () => {
+        const deviceType = detectCurrentDeviceTypeBasedOnWindowWidth();
+        const { SMALL_MOBILE_START, MOBILE_START, DESKTOP_START } =
+          DYNAMIC_BLACK_ANIMATION_CONFIG.RESPONSIVE_START_POINTS;
+
+        const deviceStartPointMap = new Map([
+          ['small-mobile', SMALL_MOBILE_START],
+          ['mobile', MOBILE_START],
+          ['desktop', DESKTOP_START],
+        ]);
+
+        const selectedStartPoint =
+          deviceStartPointMap.get(deviceType) || DESKTOP_START;
+
+        return selectedStartPoint;
+      };
+
+      const calculateOptimalSectionHeight = (currentWindowWidth) => {
+        const {
+          REFERENCE_SCREEN_WIDTH_PIXELS,
+          REFERENCE_SCREEN_HEIGHT_PIXELS,
+          MINIMUM_SECTION_HEIGHT_PIXELS,
+        } = DYNAMIC_BLACK_ANIMATION_CONFIG.SCROLL_HEIGHT_CALCULATION;
+
+        const calculatedAspectRatioHeight =
+          (currentWindowWidth / REFERENCE_SCREEN_WIDTH_PIXELS) *
+          REFERENCE_SCREEN_HEIGHT_PIXELS;
+        const finalOptimalHeight = Math.max(
+          calculatedAspectRatioHeight,
+          MINIMUM_SECTION_HEIGHT_PIXELS
+        );
+        return Math.round(finalOptimalHeight);
+      };
+
+      const calculateScrollTriggerEndValue = (sectionHeightPixels) => {
+        const { SCROLL_END_POINT_HEIGHT_MULTIPLIER } =
+          DYNAMIC_BLACK_ANIMATION_CONFIG.SCROLL_HEIGHT_CALCULATION;
+        const endPointHeight = Math.round(
+          sectionHeightPixels * SCROLL_END_POINT_HEIGHT_MULTIPLIER
+        );
+        return `+=${endPointHeight}px`;
+      };
+
+      const calculateWatchDomMovementDistance = (windowWidthPixels) => {
+        const { MOVE_DISTANCE_MULTIPLIER } =
+          DYNAMIC_BLACK_ANIMATION_CONFIG.DESKTOP_APPLEWATCH_MOVEMENT;
+        return windowWidthPixels * MOVE_DISTANCE_MULTIPLIER;
+      };
+
+      // ===============================================
+      // 🖤 동적 검은색 애니메이션 함수 분리
+      // ===============================================
+
+      const createDynamicBlackMobileAppleWatchCaseAnimationState = (
+        scrollProgress,
+        deviceType
+      ) => {
+        if (deviceType !== 'mobile' && deviceType !== 'small-mobile') {
+          return {
+            backgroundColor:
+              DYNAMIC_BLACK_ANIMATION_CONFIG.DYNAMIC_BLACK_COLORS.MIDNIGHT,
+            dynamicEffect: 'none',
+          };
+        }
+
+        const { DYNAMIC_BLACK_START_AT_PROGRESS } =
+          DYNAMIC_BLACK_ANIMATION_CONFIG.DYNAMIC_BLACK_MOBILE_APPLEWATCH_CASE_ANIMATION;
+
+        if (scrollProgress <= DYNAMIC_BLACK_START_AT_PROGRESS) {
+          return {
+            backgroundColor:
+              DYNAMIC_BLACK_ANIMATION_CONFIG.DYNAMIC_BLACK_COLORS.BASE_BLACK,
+            dynamicEffect: 'pulse',
+          };
+        }
+
+        const dynamicProgress = calculateProgressWithinSpecificRange(
+          scrollProgress,
+          DYNAMIC_BLACK_START_AT_PROGRESS,
+          1.0
+        );
+
+        let currentEffect = 'pulse';
+        let currentBackgroundColor =
+          DYNAMIC_BLACK_ANIMATION_CONFIG.DYNAMIC_BLACK_COLORS.MIDNIGHT;
+
+        if (dynamicProgress <= 0.3) {
+          currentEffect = 'pulse';
+          currentBackgroundColor =
+            DYNAMIC_BLACK_ANIMATION_CONFIG.DYNAMIC_BLACK_COLORS.MIDNIGHT;
+        } else if (dynamicProgress <= 0.6) {
+          currentEffect = 'shimmer';
+          currentBackgroundColor =
+            DYNAMIC_BLACK_ANIMATION_CONFIG.DYNAMIC_BLACK_COLORS.SPACE_GRAY;
+        } else {
+          currentEffect = 'pulse+shimmer';
+          currentBackgroundColor =
+            DYNAMIC_BLACK_ANIMATION_CONFIG.DYNAMIC_BLACK_COLORS.GLOSSY_BLACK;
+        }
+
+        return {
+          backgroundColor: currentBackgroundColor,
+          dynamicEffect: currentEffect,
+        };
+      };
+
+      const createDynamicBlackDesktopAppleWatchCaseAnimationState = (
+        scrollProgress,
+        deviceType
+      ) => {
+        if (checkIfCurrentDeviceIsMobileOrSmaller()) {
+          return {
+            backgroundColor:
+              DYNAMIC_BLACK_ANIMATION_CONFIG.DYNAMIC_BLACK_COLORS.MIDNIGHT,
+            dynamicEffect: 'none',
+          };
+        }
+
+        const { DESKTOP_DYNAMIC_BLACK_START_AT_PROGRESS } =
+          DYNAMIC_BLACK_ANIMATION_CONFIG.ANIMATION_TRIGGER_THRESHOLDS;
+
+        if (scrollProgress <= DESKTOP_DYNAMIC_BLACK_START_AT_PROGRESS) {
+          return {
+            backgroundColor:
+              DYNAMIC_BLACK_ANIMATION_CONFIG.DYNAMIC_BLACK_COLORS.BASE_BLACK,
+            dynamicEffect: 'pulse',
+          };
+        }
+
+        const dynamicProgress = calculateProgressWithinSpecificRange(
+          scrollProgress,
+          DESKTOP_DYNAMIC_BLACK_START_AT_PROGRESS,
+          1.0
+        );
+
+        let currentEffect = 'pulse';
+        let currentBackgroundColor =
+          DYNAMIC_BLACK_ANIMATION_CONFIG.DYNAMIC_BLACK_COLORS.MIDNIGHT;
+
+        if (dynamicProgress <= 0.3) {
+          currentEffect = 'pulse';
+          currentBackgroundColor =
+            DYNAMIC_BLACK_ANIMATION_CONFIG.DYNAMIC_BLACK_COLORS.MIDNIGHT;
+        } else if (dynamicProgress <= 0.6) {
+          currentEffect = 'shimmer';
+          currentBackgroundColor =
+            DYNAMIC_BLACK_ANIMATION_CONFIG.DYNAMIC_BLACK_COLORS.SPACE_GRAY;
+        } else {
+          currentEffect = 'pulse+shimmer';
+          currentBackgroundColor =
+            DYNAMIC_BLACK_ANIMATION_CONFIG.DYNAMIC_BLACK_COLORS.DEEP_BLACK;
+        }
+
+        return {
+          backgroundColor: currentBackgroundColor,
+          dynamicEffect: currentEffect,
+        };
+      };
+
+      const createAppleWatchTransformationAnimationState = (
+        scrollProgress,
+        deviceType
+      ) => {
+        const transformStartThreshold = checkIfCurrentDeviceIsMobileOrSmaller()
+          ? DYNAMIC_BLACK_ANIMATION_CONFIG
+              .DYNAMIC_BLACK_MOBILE_APPLEWATCH_CASE_ANIMATION
+              .APPLE_WATCH_TRANSFORM_START_AT_PROGRESS
+          : DYNAMIC_BLACK_ANIMATION_CONFIG.ANIMATION_TRIGGER_THRESHOLDS
+              .DESKTOP_APPLE_WATCH_TRANSFORM_START_AT_PROGRESS;
+
+        if (scrollProgress < transformStartThreshold) {
+          return {
+            crownOpacity:
+              DYNAMIC_BLACK_ANIMATION_CONFIG.APPLE_WATCH_TRANSFORMATION
+                .CROWN_OPACITY_START,
+            buttonOpacity:
+              DYNAMIC_BLACK_ANIMATION_CONFIG.APPLE_WATCH_TRANSFORMATION
+                .BUTTON_OPACITY_START,
+            bandOpacity:
+              DYNAMIC_BLACK_ANIMATION_CONFIG.APPLE_WATCH_TRANSFORMATION
+                .BAND_OPACITY_START,
+            isTransforming: false,
+          };
+        }
+
+        const transformProgress = calculateProgressWithinSpecificRange(
+          scrollProgress,
+          transformStartThreshold,
+          transformStartThreshold +
+            DYNAMIC_BLACK_ANIMATION_CONFIG.APPLE_WATCH_TRANSFORMATION
+              .TRANSFORMATION_DURATION_PROGRESS
+        );
+
+        const currentCrownOpacity = interpolateValueBetweenTwoPoints(
+          DYNAMIC_BLACK_ANIMATION_CONFIG.APPLE_WATCH_TRANSFORMATION
+            .CROWN_OPACITY_START,
+          DYNAMIC_BLACK_ANIMATION_CONFIG.APPLE_WATCH_TRANSFORMATION
+            .CROWN_OPACITY_END,
+          transformProgress
+        );
+
+        const currentButtonOpacity = interpolateValueBetweenTwoPoints(
+          DYNAMIC_BLACK_ANIMATION_CONFIG.APPLE_WATCH_TRANSFORMATION
+            .BUTTON_OPACITY_START,
+          DYNAMIC_BLACK_ANIMATION_CONFIG.APPLE_WATCH_TRANSFORMATION
+            .BUTTON_OPACITY_END,
+          transformProgress
+        );
+
+        const currentBandOpacity = interpolateValueBetweenTwoPoints(
+          DYNAMIC_BLACK_ANIMATION_CONFIG.APPLE_WATCH_TRANSFORMATION
+            .BAND_OPACITY_START,
+          DYNAMIC_BLACK_ANIMATION_CONFIG.APPLE_WATCH_TRANSFORMATION
+            .BAND_OPACITY_END,
+          transformProgress
+        );
+
+        return {
+          crownOpacity: currentCrownOpacity,
+          buttonOpacity: currentButtonOpacity,
+          bandOpacity: currentBandOpacity,
+          isTransforming: transformProgress > 0,
+        };
+      };
+
+      const createMobileAppleWatchCaseFadeInAnimationState = (
+        scrollProgress,
+        deviceType
+      ) => {
+        if (deviceType !== 'mobile' && deviceType !== 'small-mobile') {
+          return { opacity: 1 };
+        }
+
+        const fadeCompleteThreshold =
+          DYNAMIC_BLACK_ANIMATION_CONFIG
+            .DYNAMIC_BLACK_MOBILE_APPLEWATCH_CASE_ANIMATION
+            .FADE_ANIMATION_COMPLETE_AT_PROGRESS;
+
+        if (scrollProgress <= fadeCompleteThreshold) {
+          const fadeProgress = calculateProgressWithinSpecificRange(
+            scrollProgress,
+            0,
+            fadeCompleteThreshold
+          );
+          return { opacity: fadeProgress };
+        }
+
+        return { opacity: 1 };
+      };
+
+      const createMobileAppleWatchCaseScaleAnimationState = (
+        scrollProgress,
+        deviceType
+      ) => {
+        if (deviceType !== 'mobile' && deviceType !== 'small-mobile') {
+          return { scale: 1 };
+        }
+
+        const {
+          SCALE_AT_ANIMATION_START,
+          SCALE_AT_ANIMATION_END,
+          SCALE_ANIMATION_START_AT_PROGRESS,
+        } =
+          DYNAMIC_BLACK_ANIMATION_CONFIG.DYNAMIC_BLACK_MOBILE_APPLEWATCH_CASE_ANIMATION;
+
+        if (scrollProgress <= SCALE_ANIMATION_START_AT_PROGRESS) {
+          return { scale: SCALE_AT_ANIMATION_START };
+        }
+
+        const scaleAnimationProgress = calculateProgressWithinSpecificRange(
+          scrollProgress,
+          SCALE_ANIMATION_START_AT_PROGRESS,
+          1.0
+        );
+        const currentScale = interpolateValueBetweenTwoPoints(
+          SCALE_AT_ANIMATION_START,
+          SCALE_AT_ANIMATION_END,
+          scaleAnimationProgress
+        );
+
+        return { scale: currentScale };
+      };
+
+      const createMobileAppleWatchCaseRotationAnimationState = (
+        scrollProgress,
+        deviceType
+      ) => {
+        if (deviceType !== 'mobile' && deviceType !== 'small-mobile') {
+          return { rotation: 0 };
+        }
+
+        const { SCALE_ANIMATION_START_AT_PROGRESS, ROTATION_MAX_DEGREES } =
+          DYNAMIC_BLACK_ANIMATION_CONFIG.DYNAMIC_BLACK_MOBILE_APPLEWATCH_CASE_ANIMATION;
+
+        if (scrollProgress <= SCALE_ANIMATION_START_AT_PROGRESS) {
+          return { rotation: 0 };
+        }
+
+        const rotationAnimationProgress = calculateProgressWithinSpecificRange(
+          scrollProgress,
+          SCALE_ANIMATION_START_AT_PROGRESS,
+          1.0
+        );
+        const currentRotation = calculateSineWaveRotation(
+          rotationAnimationProgress,
+          ROTATION_MAX_DEGREES
+        );
+
+        return { rotation: currentRotation };
+      };
+
+      const createAppleWatchScaleAnimationState = (scrollProgress) => {
+        const { AT_ANIMATION_START, AT_ANIMATION_END } =
+          DYNAMIC_BLACK_ANIMATION_CONFIG.APPLEWATCH_SCALE_ANIMATION;
+        const currentWatchScale = interpolateValueBetweenTwoPoints(
+          AT_ANIMATION_START,
+          AT_ANIMATION_END,
+          scrollProgress
+        );
+
+        return { scale: currentWatchScale };
+      };
+
+      const createAppleWatchComplicationsAppearAnimationState = (
+        scrollProgress,
+        deviceType
+      ) => {
+        const complicationsAppearThreshold =
+          DYNAMIC_BLACK_ANIMATION_CONFIG.ANIMATION_TRIGGER_THRESHOLDS
+            .APPLEWATCH_COMPLICATIONS_APPEAR_AT_PROGRESS;
+
+        const {
+          UPPERDATE_DESKTOP_INITIAL_X_OFFSET_PIXELS,
+          UPPERDATE_DESKTOP_INITIAL_Y_OFFSET_PIXELS,
+          UPPERDATE_MOBILE_INITIAL_X_OFFSET_PIXELS,
+          UPPERDATE_MOBILE_INITIAL_Y_OFFSET_PIXELS,
+          UPPERDATE_SMALL_MOBILE_INITIAL_X_OFFSET_PIXELS,
+          UPPERDATE_SMALL_MOBILE_INITIAL_Y_OFFSET_PIXELS,
+          UPPERDATE_FADE_IN_DURATION_PROGRESS,
+        } = DYNAMIC_BLACK_ANIMATION_CONFIG.APPLEWATCH_COMPLICATIONS_ANIMATION;
+
+        let upperDateInitialX, upperDateInitialY;
+
+        if (deviceType === 'small-mobile') {
+          upperDateInitialX = UPPERDATE_SMALL_MOBILE_INITIAL_X_OFFSET_PIXELS;
+          upperDateInitialY = UPPERDATE_SMALL_MOBILE_INITIAL_Y_OFFSET_PIXELS;
+        } else if (deviceType === 'mobile') {
+          upperDateInitialX = UPPERDATE_MOBILE_INITIAL_X_OFFSET_PIXELS;
+          upperDateInitialY = UPPERDATE_MOBILE_INITIAL_Y_OFFSET_PIXELS;
+        } else {
+          upperDateInitialX = UPPERDATE_DESKTOP_INITIAL_X_OFFSET_PIXELS;
+          upperDateInitialY = UPPERDATE_DESKTOP_INITIAL_Y_OFFSET_PIXELS;
+        }
+
+        if (scrollProgress < complicationsAppearThreshold) {
+          return {
+            opacity: 0,
+            translateX: upperDateInitialX,
+            translateY: upperDateInitialY,
+          };
+        }
+
+        const complicationsAppearProgress =
+          calculateProgressWithinSpecificRange(
+            scrollProgress,
+            complicationsAppearThreshold,
+            complicationsAppearThreshold + UPPERDATE_FADE_IN_DURATION_PROGRESS
+          );
+
+        return {
+          opacity: complicationsAppearProgress,
+          translateX: interpolateValueBetweenTwoPoints(
+            upperDateInitialX,
+            0,
+            complicationsAppearProgress
+          ),
+          translateY: interpolateValueBetweenTwoPoints(
+            upperDateInitialY,
+            0,
+            complicationsAppearProgress
+          ),
+        };
+      };
+
+      const createProductTextDomAppearAnimationState = (
+        scrollProgress,
+        deviceType
+      ) => {
+        const textAppearThreshold =
+          DYNAMIC_BLACK_ANIMATION_CONFIG.ANIMATION_TRIGGER_THRESHOLDS
+            .PRODUCTTEXT_DOM_APPEAR_AT_PROGRESS;
+        const {
+          INITIAL_SCALE,
+          FINAL_SCALE,
+          INITIAL_Y_OFFSET_PIXELS,
+          DESKTOP_INITIAL_X_OFFSET_PIXELS,
+          FADE_IN_DURATION_PROGRESS,
+        } = DYNAMIC_BLACK_ANIMATION_CONFIG.PRODUCTTEXT_DOM_ANIMATION;
+
+        if (scrollProgress < textAppearThreshold) {
+          return {
+            opacity: 0,
+            translateX:
+              deviceType === 'desktop' ? DESKTOP_INITIAL_X_OFFSET_PIXELS : 0,
+            translateY: INITIAL_Y_OFFSET_PIXELS,
+            scale: INITIAL_SCALE,
+          };
+        }
+
+        const textAppearProgress = calculateProgressWithinSpecificRange(
+          scrollProgress,
+          textAppearThreshold,
+          textAppearThreshold + FADE_IN_DURATION_PROGRESS
+        );
+
+        return {
+          opacity: textAppearProgress,
+          translateX:
+            deviceType === 'desktop'
+              ? interpolateValueBetweenTwoPoints(
+                  DESKTOP_INITIAL_X_OFFSET_PIXELS,
+                  0,
+                  textAppearProgress
+                )
+              : 0,
+          translateY: interpolateValueBetweenTwoPoints(
+            INITIAL_Y_OFFSET_PIXELS,
+            0,
+            textAppearProgress
+          ),
+          scale: interpolateValueBetweenTwoPoints(
+            INITIAL_SCALE,
+            FINAL_SCALE,
+            textAppearProgress
+          ),
+        };
+      };
+
+      const createDesktopAppleWatchMovementAnimationState = (
+        scrollProgress,
+        deviceType
+      ) => {
+        if (checkIfCurrentDeviceIsMobileOrSmaller()) {
+          return { translateX: 0 };
+        }
+
+        const watchMoveThreshold =
+          DYNAMIC_BLACK_ANIMATION_CONFIG.ANIMATION_TRIGGER_THRESHOLDS
+            .DESKTOP_APPLEWATCH_MOVE_START_AT_PROGRESS;
+
+        if (scrollProgress < watchMoveThreshold) {
+          return { translateX: 0 };
+        }
+
+        const moveProgress = calculateProgressWithinSpecificRange(
+          scrollProgress,
+          watchMoveThreshold,
+          1.0
+        );
+        const easedProgress = calculateCubicEasingProgress(
+          moveProgress,
+          DYNAMIC_BLACK_ANIMATION_CONFIG.DESKTOP_APPLEWATCH_MOVEMENT
+            .EASING_CURVE_THRESHOLD
+        );
+        const maxMoveDistance = calculateWatchDomMovementDistance(
+          window.innerWidth
+        );
+        const currentTranslateX = maxMoveDistance * easedProgress;
+
+        return { translateX: currentTranslateX };
+      };
+
+      const createFixedWhiteTextColorAnimationState = (
+        scrollProgress,
+        deviceType
+      ) => {
+        return {
+          textColor: '#ffffff',
+          backgroundColor: '#000000',
+        };
+      };
+
+      // ===============================================
+      // 📋 애니메이션 조합 함수
+      // ===============================================
+
+      const createCompleteDynamicBlackMobileHybridAppleWatchCaseAnimationState =
+        (scrollProgress, deviceType) => {
+          return {
+            ...createMobileAppleWatchCaseFadeInAnimationState(
+              scrollProgress,
+              deviceType
+            ),
+            ...createDynamicBlackMobileAppleWatchCaseAnimationState(
+              scrollProgress,
+              deviceType
+            ),
+            ...createMobileAppleWatchCaseScaleAnimationState(
+              scrollProgress,
+              deviceType
+            ),
+            ...createMobileAppleWatchCaseRotationAnimationState(
+              scrollProgress,
+              deviceType
+            ),
+            ...createAppleWatchTransformationAnimationState(
+              scrollProgress,
+              deviceType
+            ),
+          };
+        };
+
+      const createCompleteDynamicBlackDesktopAppleWatchCaseAnimationState = (
+        scrollProgress,
+        deviceType
+      ) => {
+        return {
+          ...createDynamicBlackDesktopAppleWatchCaseAnimationState(
+            scrollProgress,
+            deviceType
+          ),
+          ...createAppleWatchTransformationAnimationState(
+            scrollProgress,
+            deviceType
+          ),
+        };
+      };
+
+      const createCompleteAppleWatchAnimationState = (
+        scrollProgress,
+        deviceType
+      ) => {
+        return {
+          ...createAppleWatchScaleAnimationState(scrollProgress),
+          ...createDesktopAppleWatchMovementAnimationState(
+            scrollProgress,
+            deviceType
+          ),
+        };
+      };
+
+      const createCompleteTextAnimationState = (scrollProgress, deviceType) => {
+        return {
+          complicationsAnimation:
+            createAppleWatchComplicationsAppearAnimationState(
+              scrollProgress,
+              deviceType
+            ),
+          productTextAnimation: createProductTextDomAppearAnimationState(
+            scrollProgress,
+            deviceType
+          ),
+          colorAnimation: createFixedWhiteTextColorAnimationState(
+            scrollProgress,
+            deviceType
+          ),
+        };
+      };
+
+      // ===============================================
+      // 📋 DOM 업데이트 함수 분리
+      // ===============================================
+
+      const applyDynamicBlackAppleWatchCaseAnimationStateToDomElement = (
+        appleWatchCaseElement,
+        animationState
+      ) => {
+        if (!appleWatchCaseElement || !animationState) return false;
+
+        let updateCount = 0;
+
+        if (animationState.opacity !== undefined) {
+          updateDomElementCssProperty(
+            appleWatchCaseElement,
+            'opacity',
+            animationState.opacity
+          );
+          updateCount++;
+        }
+
+        if (animationState.backgroundColor) {
+          updateDomElementCssProperty(
+            appleWatchCaseElement,
+            'background-color',
+            animationState.backgroundColor
+          );
+          updateCount++;
+        }
+
+        if (animationState.dynamicEffect) {
+          appleWatchCaseElement.classList.remove(
+            'shimmer-effect',
+            'apple-watch-transformed'
+          );
+
+          if (animationState.dynamicEffect === 'shimmer') {
+            appleWatchCaseElement.classList.add('shimmer-effect');
+          } else if (animationState.dynamicEffect === 'pulse+shimmer') {
+            appleWatchCaseElement.classList.add('shimmer-effect');
+          }
+          updateCount++;
+        }
+
+        if (animationState.isTransforming !== undefined) {
+          if (animationState.isTransforming) {
+            appleWatchCaseElement.classList.add('apple-watch-transformed');
+          }
+          updateCount++;
+        }
+
+        if (animationState.scale !== undefined) {
+          updateDomElementCssProperty(
+            appleWatchCaseElement,
+            '--applewatch-case-scale-multiplier',
+            animationState.scale
+          );
+          updateCount++;
+        }
+
+        if (animationState.rotation !== undefined) {
+          updateDomElementCssProperty(
+            appleWatchCaseElement,
+            '--applewatch-case-rotation-degrees',
+            animationState.rotation + 'deg'
+          );
+          updateCount++;
+        }
+
+        if (animationState.crownOpacity !== undefined) {
+          updateDomElementCssProperty(
+            appleWatchCaseElement,
+            '--watch-crown-opacity',
+            animationState.crownOpacity
+          );
+          updateCount++;
+        }
+
+        if (animationState.buttonOpacity !== undefined) {
+          updateDomElementCssProperty(
+            appleWatchCaseElement,
+            '--watch-button-opacity',
+            animationState.buttonOpacity
+          );
+          updateCount++;
+        }
+
+        if (animationState.bandOpacity !== undefined) {
+          updateDomElementCssProperty(
+            appleWatchCaseElement,
+            '--watch-band-opacity',
+            animationState.bandOpacity
+          );
+          updateCount++;
+        }
+
+        return updateCount > 0;
+      };
+
+      const applyAppleWatchAnimationStateToDomElement = (
+        appleWatchElement,
+        animationState
+      ) => {
+        if (!appleWatchElement || !animationState) return false;
+
+        const gsapProperties = {};
+
+        if (animationState.scale !== undefined) {
+          gsapProperties.scale = animationState.scale;
+        }
+
+        if (animationState.translateX !== undefined) {
+          gsapProperties.x = animationState.translateX;
+        }
+
+        if (animationState.translateY !== undefined) {
+          gsapProperties.y = animationState.translateY;
+        }
+
+        return applyGsapPropertiesToDomElement(
+          appleWatchElement,
+          gsapProperties
+        );
+      };
+
+      const applyAppleWatchComplicationsAnimationStateToDomElement = (
+        complicationsDomElement,
+        animationState
+      ) => {
+        if (!complicationsDomElement || !animationState) return false;
+
+        const gsapProperties = {
+          opacity: animationState.opacity || 0,
+          x: animationState.translateX || 0,
+          y: animationState.translateY || 0,
+        };
+
+        return applyGsapPropertiesToDomElement(
+          complicationsDomElement,
+          gsapProperties
+        );
+      };
+
+      const applyProductTextDomAnimationStateToDomElement = (
+        productTextDomElement,
+        animationState,
+        deviceType
+      ) => {
+        if (!productTextDomElement || !animationState) return false;
+
+        const gsapProperties = {
+          opacity: animationState.opacity || 0,
+          y: animationState.translateY || 0,
+          scale: animationState.scale || 0.7,
+        };
+
+        if (deviceType === 'desktop') {
+          gsapProperties.x = animationState.translateX || -100;
+          gsapProperties.left = '15%';
+        } else {
+          gsapProperties.x = 0;
+          gsapProperties.left = 'auto';
+        }
+
+        return applyGsapPropertiesToDomElement(
+          productTextDomElement,
+          gsapProperties
+        );
+      };
+
+      const applyFixedWhiteColorAnimationStateToDomElements = (
+        colorAnimationState,
+        deviceType
+      ) => {
+        const timeDisplayElement = queryDomElementBySelector('.time-display');
+        const upperDateElement = queryDomElementBySelector('.upperDate');
+        const watchScreenElement = queryDomElementBySelector('.watch-screen');
+
+        let updateCount = 0;
+
+        if (timeDisplayElement && colorAnimationState.textColor) {
+          applyGsapPropertiesToDomElement(timeDisplayElement, {
+            color: colorAnimationState.textColor,
+          });
+          updateCount++;
+        }
+
+        if (upperDateElement && colorAnimationState.textColor) {
+          applyGsapPropertiesToDomElement(upperDateElement, {
+            color: colorAnimationState.textColor,
+          });
+          updateCount++;
+        }
+
+        if (watchScreenElement && colorAnimationState.backgroundColor) {
+          applyGsapPropertiesToDomElement(watchScreenElement, {
+            backgroundColor: colorAnimationState.backgroundColor,
+          });
+          updateCount++;
+        }
+
+        return updateCount > 0;
+      };
+
+      // ===============================================
+      // 📋 메인 시스템
+      // ===============================================
+
+      const createDirectControlManager = () => {
+        let currentUnifiedHeight = 0;
+        let currentEndValue = '';
+
+        const applyUnifiedDimensionsAndGetEndValue = () => {
+          const currentWidth = window.innerWidth;
+          const calculatedHeight = calculateOptimalSectionHeight(currentWidth);
+          const calculatedEndValue =
+            calculateScrollTriggerEndValue(calculatedHeight);
+
+          currentUnifiedHeight = calculatedHeight;
+          currentEndValue = calculatedEndValue;
+
+          const watchSection = queryDomElementBySelector('.watch-section');
+          if (watchSection) {
+            updateDomElementCssProperty(
+              watchSection,
+              'height',
+              `${calculatedHeight}px`
+            );
+          }
+
+          return {
+            height: calculatedHeight,
+            endValue: calculatedEndValue,
+          };
+        };
+
+        const forcePinSpacerHeight = (targetHeight) => {
+          const pinSpacer = queryDomElementBySelector('.pin-spacer');
+
+          if (pinSpacer && targetHeight > 0) {
+            updateDomElementCssProperty(
+              pinSpacer,
+              'height',
+              `${targetHeight}px`
+            );
+            updateDomElementCssProperty(
+              pinSpacer,
+              'min-height',
+              `${targetHeight}px`
+            );
+            updateDomElementCssProperty(
+              pinSpacer,
+              'max-height',
+              `${targetHeight}px`
+            );
+
+            return true;
+          }
+          return false;
+        };
+
+        return {
+          apply: applyUnifiedDimensionsAndGetEndValue,
+          forceSync: forcePinSpacerHeight,
+          getCurrentHeight: () => currentUnifiedHeight,
+          getCurrentEndValue: () => currentEndValue,
+        };
+      };
+
+      const createDynamicBlackAnimationManager = (directControlManager) => {
+        let scrollTriggerInstance = null;
+        let animationProgress = 0;
+        let clockInterval = null;
+
+        const resetAllAnimationElementsToInitialState = () => {
+          const initialScale =
+            DYNAMIC_BLACK_ANIMATION_CONFIG.APPLEWATCH_SCALE_ANIMATION
+              .AT_ANIMATION_START;
+
+          const watchElement = queryDomElementBySelector('.watch-element');
+          applyGsapPropertiesToDomElement(watchElement, {
+            scale: initialScale,
+            x: 0,
+            opacity: 1,
+            visibility: 'visible',
+            transformOrigin: 'center center',
+            force3D: true,
+          });
+
+          const productText = queryDomElementBySelector('.product-text');
+          const {
+            INITIAL_SCALE,
+            INITIAL_Y_OFFSET_PIXELS,
+            DESKTOP_INITIAL_X_OFFSET_PIXELS,
+          } = DYNAMIC_BLACK_ANIMATION_CONFIG.PRODUCTTEXT_DOM_ANIMATION;
+          applyGsapPropertiesToDomElement(productText, {
+            opacity: 0,
+            left: '5%',
+            x: DESKTOP_INITIAL_X_OFFSET_PIXELS,
+            y: INITIAL_Y_OFFSET_PIXELS,
+            scale: INITIAL_SCALE,
+            force3D: true,
+            visibility: 'visible',
+          });
+
+          const deviceType = detectCurrentDeviceTypeBasedOnWindowWidth();
+          const upperDate = queryDomElementBySelector('.upperDate');
+
+          const {
+            UPPERDATE_DESKTOP_INITIAL_X_OFFSET_PIXELS,
+            UPPERDATE_DESKTOP_INITIAL_Y_OFFSET_PIXELS,
+            UPPERDATE_MOBILE_INITIAL_X_OFFSET_PIXELS,
+            UPPERDATE_MOBILE_INITIAL_Y_OFFSET_PIXELS,
+            UPPERDATE_SMALL_MOBILE_INITIAL_X_OFFSET_PIXELS,
+            UPPERDATE_SMALL_MOBILE_INITIAL_Y_OFFSET_PIXELS,
+          } = DYNAMIC_BLACK_ANIMATION_CONFIG.APPLEWATCH_COMPLICATIONS_ANIMATION;
+
+          let upperDateInitialX, upperDateInitialY;
+
+          if (deviceType === 'small-mobile') {
+            upperDateInitialX = UPPERDATE_SMALL_MOBILE_INITIAL_X_OFFSET_PIXELS;
+            upperDateInitialY = UPPERDATE_SMALL_MOBILE_INITIAL_Y_OFFSET_PIXELS;
+          } else if (deviceType === 'mobile') {
+            upperDateInitialX = UPPERDATE_MOBILE_INITIAL_X_OFFSET_PIXELS;
+            upperDateInitialY = UPPERDATE_MOBILE_INITIAL_Y_OFFSET_PIXELS;
+          } else {
+            upperDateInitialX = UPPERDATE_DESKTOP_INITIAL_X_OFFSET_PIXELS;
+            upperDateInitialY = UPPERDATE_DESKTOP_INITIAL_Y_OFFSET_PIXELS;
+          }
+
+          applyGsapPropertiesToDomElement(upperDate, {
+            opacity: 0,
+            x: upperDateInitialX,
+            y: upperDateInitialY,
+            force3D: true,
+            visibility: 'visible',
+          });
+
+          const screenElement = queryDomElementBySelector('.watch-screen');
+          const timeDisplay = queryDomElementBySelector('.time-display');
+          const dateElement = queryDomElementBySelector('.upperDate');
+          applyGsapPropertiesToDomElement(screenElement, {
+            backgroundColor: '#000000',
+            color: '#ffffff',
+          });
+          applyGsapPropertiesToDomElement(timeDisplay, { color: '#ffffff' });
+          if (dateElement)
+            applyGsapPropertiesToDomElement(dateElement, { color: '#ffffff' });
+
+          const layoutElement = queryDomElementBySelector('.watch-text-layout');
+          applyGsapPropertiesToDomElement(layoutElement, {
+            justifyContent: 'center',
+          });
+
+          const appleWatchCase = queryDomElementBySelector('.watch-main');
+
+          if (checkIfCurrentDeviceIsMobileOrSmaller()) {
+            appleWatchCase.classList.remove(
+              'shimmer-effect',
+              'apple-watch-transformed'
+            );
+            applyGsapPropertiesToDomElement(appleWatchCase, {
+              opacity: 0,
+              backgroundColor:
+                DYNAMIC_BLACK_ANIMATION_CONFIG.DYNAMIC_BLACK_COLORS.BASE_BLACK,
+              transformOrigin: 'center center',
+            });
+            updateDomElementCssProperty(
+              appleWatchCase,
+              '--applewatch-case-scale-multiplier',
+              DYNAMIC_BLACK_ANIMATION_CONFIG
+                .DYNAMIC_BLACK_MOBILE_APPLEWATCH_CASE_ANIMATION
+                .SCALE_AT_ANIMATION_START
+            );
+            updateDomElementCssProperty(
+              appleWatchCase,
+              '--applewatch-case-rotation-degrees',
+              '0deg'
+            );
+            updateDomElementCssProperty(
+              appleWatchCase,
+              '--watch-crown-opacity',
+              0
+            );
+            updateDomElementCssProperty(
+              appleWatchCase,
+              '--watch-button-opacity',
+              0
+            );
+            updateDomElementCssProperty(
+              appleWatchCase,
+              '--watch-band-opacity',
+              0
+            );
+          } else {
+            appleWatchCase.classList.remove(
+              'shimmer-effect',
+              'apple-watch-transformed'
+            );
+            applyGsapPropertiesToDomElement(appleWatchCase, {
+              opacity: 1,
+              backgroundColor:
+                DYNAMIC_BLACK_ANIMATION_CONFIG.DYNAMIC_BLACK_COLORS.BASE_BLACK,
+              transformOrigin: 'center center',
+            });
+            updateDomElementCssProperty(
+              appleWatchCase,
+              '--applewatch-case-scale-multiplier',
+              1
+            );
+            updateDomElementCssProperty(
+              appleWatchCase,
+              '--applewatch-case-rotation-degrees',
+              '0deg'
+            );
+            updateDomElementCssProperty(
+              appleWatchCase,
+              '--watch-crown-opacity',
+              0
+            );
+            updateDomElementCssProperty(
+              appleWatchCase,
+              '--watch-button-opacity',
+              0
+            );
+            updateDomElementCssProperty(
+              appleWatchCase,
+              '--watch-band-opacity',
+              0
+            );
+          }
+
+          return initialScale;
+        };
+
+        const setupDynamicBlackAnimationSystem = () => {
+          const initialScale = resetAllAnimationElementsToInitialState();
+          const { height, endValue } = directControlManager.apply();
+          const deviceType = detectCurrentDeviceTypeBasedOnWindowWidth();
+          const responsiveStartPoint = getResponsiveStartPoint();
+
+          const timeline = gsap.timeline({
+            scrollTrigger: {
+              trigger: '.intro-section',
+              pin: '.watch-section',
+              scrub:
+                DYNAMIC_BLACK_ANIMATION_CONFIG.ANIMATION_DURATION_SETTINGS
+                  .SCROLL_TRIGGER_SCRUB_DELAY_SECONDS,
+              start: responsiveStartPoint,
+              end: endValue,
+              anticipatePin: 1,
+              refreshPriority: 1,
+              invalidateOnRefresh: true,
+
+              onStart: (self) => {
+                setTimeout(() => {
+                  const targetHeight = directControlManager.getCurrentHeight();
+                  directControlManager.forceSync(targetHeight);
+                }, 100);
+              },
+
+              onRefresh: (self) => {
+                const newStartPoint = getResponsiveStartPoint();
+                self.vars.start = newStartPoint;
+
+                setTimeout(() => {
+                  const targetHeight = directControlManager.getCurrentHeight();
+                  directControlManager.forceSync(targetHeight);
+                }, 100);
+              },
+
+              onUpdate: (self) => {
+                const progress = self.progress;
+                animationProgress = progress;
+                const currentDeviceType =
+                  detectCurrentDeviceTypeBasedOnWindowWidth();
+
+                const appleWatchAnimationState =
+                  createCompleteAppleWatchAnimationState(
+                    progress,
+                    currentDeviceType
+                  );
+
+                const appleWatchCaseAnimationState =
+                  checkIfCurrentDeviceIsMobileOrSmaller()
+                    ? createCompleteDynamicBlackMobileHybridAppleWatchCaseAnimationState(
+                        progress,
+                        currentDeviceType
+                      )
+                    : createCompleteDynamicBlackDesktopAppleWatchCaseAnimationState(
+                        progress,
+                        currentDeviceType
+                      );
+
+                const textAnimationStates = createCompleteTextAnimationState(
+                  progress,
+                  currentDeviceType
+                );
+
+                const appleWatchElement =
+                  queryDomElementBySelector('.watch-element');
+                const appleWatchCaseElement =
+                  queryDomElementBySelector('.watch-main');
+                const complicationsElement =
+                  queryDomElementBySelector('.upperDate');
+                const productTextElement =
+                  queryDomElementBySelector('.product-text');
+
+                applyAppleWatchAnimationStateToDomElement(
+                  appleWatchElement,
+                  appleWatchAnimationState
+                );
+                applyDynamicBlackAppleWatchCaseAnimationStateToDomElement(
+                  appleWatchCaseElement,
+                  appleWatchCaseAnimationState
+                );
+                applyAppleWatchComplicationsAnimationStateToDomElement(
+                  complicationsElement,
+                  textAnimationStates.complicationsAnimation
+                );
+                applyProductTextDomAnimationStateToDomElement(
+                  productTextElement,
+                  textAnimationStates.productTextAnimation,
+                  currentDeviceType
+                );
+                applyFixedWhiteColorAnimationStateToDomElements(
+                  textAnimationStates.colorAnimation,
+                  currentDeviceType
+                );
+
+                if (
+                  progress >=
+                    DYNAMIC_BLACK_ANIMATION_CONFIG.ANIMATION_TRIGGER_THRESHOLDS
+                      .DESKTOP_APPLEWATCH_MOVE_START_AT_PROGRESS &&
+                  !checkIfCurrentDeviceIsMobileOrSmaller()
+                ) {
+                  const layoutElement =
+                    queryDomElementBySelector('.watch-text-layout');
+                  applyGsapPropertiesToDomElement(layoutElement, {
+                    justifyContent: 'space-between',
+                  });
+                }
+              },
+
+              onComplete: () => {},
+
+              onLeaveBack: (self) => {
+                if (self.progress <= 0.01) {
+                  resetAllAnimationElementsToInitialState();
+                }
+              },
+            },
+          });
+
+          return timeline;
+        };
+
+        const startRealtimeClockSystem = () => {
+          if (clockInterval) return;
+
+          const updateCurrentTimeDisplay = () => {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const day = now.getDate();
+            const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+            const dayName = dayNames[now.getDay()];
+
+            updateDomElementTextContent('hours', hours);
+            updateDomElementTextContent('minutes', minutes);
+            updateDomElementTextContent('currentDateNumber', day);
+            updateDomElementTextContent('currentDateName', dayName);
+
+            return { hours, minutes, day, dayName };
+          };
+
+          const toggleColonBlinkAnimation = () => {
+            const colonElement = getDomElementById('colonDivider');
+            if (!colonElement) return;
+
+            const currentOpacity = colonElement.style.opacity || '1';
+            const newOpacity = currentOpacity === '0' ? '1' : '0';
+            updateDomElementCssProperty(colonElement, 'opacity', newOpacity);
+          };
+
+          updateCurrentTimeDisplay();
+
+          clockInterval = setInterval(() => {
+            updateCurrentTimeDisplay();
+            toggleColonBlinkAnimation();
+          }, 1000);
+        };
+
+        const stopRealtimeClockSystem = () => {
+          if (clockInterval) {
+            clearInterval(clockInterval);
+            clockInterval = null;
+          }
+        };
+
+        const handleViewportChangeWithCompleteReinitialization = () => {
+          ScrollTrigger.killAll();
+          const pinSpacers = document.querySelectorAll('.pin-spacer');
+          pinSpacers.forEach((spacer) => spacer.remove());
+
+          const watchSection = getDomElementById('watchSection');
+          if (watchSection) {
+            watchSection.removeAttribute('style');
+            directControlManager.apply();
+          }
+
+          setTimeout(() => {
+            resetAllAnimationElementsToInitialState();
+            scrollTriggerInstance = setupDynamicBlackAnimationSystem();
+
+            setTimeout(() => {
+              ScrollTrigger.refresh();
+
+              setTimeout(() => {
+                const targetHeight = directControlManager.getCurrentHeight();
+                directControlManager.forceSync(targetHeight);
+              }, 200);
+            }, 100);
+          }, 300);
+        };
+
+        return {
+          initialize: () => {
+            resetAllAnimationElementsToInitialState();
+            scrollTriggerInstance = setupDynamicBlackAnimationSystem();
+            startRealtimeClockSystem();
+
+            setTimeout(() => {
+              const targetHeight = directControlManager.getCurrentHeight();
+              directControlManager.forceSync(targetHeight);
+            }, 800);
+          },
+
+          handleViewportChange:
+            handleViewportChangeWithCompleteReinitialization,
+
+          destroy: () => {
+            ScrollTrigger.killAll();
+            stopRealtimeClockSystem();
+          },
+
+          getCurrentState: () => ({
+            progress: animationProgress,
+            isMobile: checkIfCurrentDeviceIsMobileOrSmaller(),
+          }),
+        };
+      };
+
+      const createKeyboardScrollManager = () => {
+        const scrollStepAmount = 100;
+        let isCurrentlyScrolling = false;
+
+        const performSmoothScrollToTarget = (targetScrollY) => {
+          if (isCurrentlyScrolling) return;
+
+          isCurrentlyScrolling = true;
+          const maxScrollY = document.body.scrollHeight - window.innerHeight;
+          const clampedScrollY = clampValueBetweenMinAndMax(
+            targetScrollY,
+            0,
+            maxScrollY
+          );
+
+          window.scrollTo({
+            top: clampedScrollY,
+            behavior: 'smooth',
+          });
+
+          setTimeout(() => {
+            isCurrentlyScrolling = false;
+          }, 300);
+        };
+
+        const handleKeyboardScrollNavigation = (event) => {
+          switch (event.key) {
+            case 'ArrowUp':
+              event.preventDefault();
+              performSmoothScrollToTarget(
+                window.pageYOffset - scrollStepAmount
+              );
+              break;
+            case 'ArrowDown':
+              event.preventDefault();
+              performSmoothScrollToTarget(
+                window.pageYOffset + scrollStepAmount
+              );
+              break;
+            case 'PageUp':
+              event.preventDefault();
+              performSmoothScrollToTarget(
+                window.pageYOffset - window.innerHeight * 0.8
+              );
+              break;
+            case 'PageDown':
+              event.preventDefault();
+              performSmoothScrollToTarget(
+                window.pageYOffset + window.innerHeight * 0.8
+              );
+              break;
+            case 'Home':
+              event.preventDefault();
+              performSmoothScrollToTarget(0);
+              break;
+            case 'End':
+              event.preventDefault();
+              performSmoothScrollToTarget(document.body.scrollHeight);
+              break;
+          }
+        };
+
+        return {
+          initialize: () => {
+            document.addEventListener(
+              'keydown',
+              handleKeyboardScrollNavigation
+            );
+          },
+          destroy: () => {
+            document.removeEventListener(
+              'keydown',
+              handleKeyboardScrollNavigation
+            );
+          },
+        };
+      };
+
+      const createViewportManager = (
+        directControlManager,
+        animationManager
+      ) => {
+        let isProcessingViewportChange = false;
+
+        const createDebounceFunction = (targetFunction, delayMilliseconds) => {
+          let timeoutId;
+          return function executedFunction(...functionArguments) {
+            const laterExecution = () => {
+              clearTimeout(timeoutId);
+              targetFunction(...functionArguments);
+            };
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(laterExecution, delayMilliseconds);
+          };
+        };
+
+        const handleViewportResizeWithDebounce = createDebounceFunction(() => {
+          if (isProcessingViewportChange) {
+            return;
+          }
+
+          isProcessingViewportChange = true;
+
+          getResponsiveStartPoint();
+          animationManager.handleViewportChange();
+
+          setTimeout(() => {
+            isProcessingViewportChange = false;
+          }, 1500);
+        }, 300);
+
+        return {
+          initialize: () => {
+            directControlManager.apply();
+            getResponsiveStartPoint();
+            window.addEventListener('resize', handleViewportResizeWithDebounce);
+          },
+          destroy: () => {
+            window.removeEventListener(
+              'resize',
+              handleViewportResizeWithDebounce
+            );
+          },
+        };
+      };
+
+      // ===============================================
+      // 🎯 메인 시스템 초기화
+      // ===============================================
+
+      const initializeDeviceSpecificUpperDateCoordinatesSystem = () => {
+        const directControlManager = createDirectControlManager();
+        const animationManager =
+          createDynamicBlackAnimationManager(directControlManager);
+        const keyboardManager = createKeyboardScrollManager();
+        const viewportManager = createViewportManager(
+          directControlManager,
+          animationManager
+        );
+
+        let scrollTicking = false;
+        const handleOptimizedScrollEvent = () => {
+          if (!scrollTicking) {
+            requestAnimationFrame(() => {
+              scrollTicking = false;
+            });
+            scrollTicking = true;
+          }
+        };
+
+        window.addEventListener('scroll', handleOptimizedScrollEvent, {
+          passive: true,
+        });
+        keyboardManager.initialize();
+        viewportManager.initialize();
+        animationManager.initialize();
+
+        const periodicSyncInterval = setInterval(() => {
+          const targetHeight = directControlManager.getCurrentHeight();
+          if (targetHeight > 0) {
+            directControlManager.forceSync(targetHeight);
+          }
+        }, 3000);
+
+        const cleanupCompleteSystem = () => {
+          clearInterval(periodicSyncInterval);
+          animationManager.destroy();
+          viewportManager.destroy();
+          keyboardManager.destroy();
+          window.removeEventListener('scroll', handleOptimizedScrollEvent);
+        };
+
+        window.addEventListener('beforeunload', cleanupCompleteSystem);
+
+        return cleanupCompleteSystem;
+      };
+
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          const systemCleanup =
+            initializeDeviceSpecificUpperDateCoordinatesSystem();
+        }, 100);
+      });
+
+      window.addEventListener('error', (errorEvent) => {});
+    </script>
+  </body>
+</html>

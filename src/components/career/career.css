@@ -1,0 +1,2712 @@
+/* /src/components/career/career.css */
+
+/* ============ Base: 공통(모바일 퍼스트) 스타일 ============ */
+/* 가장 작은 화면(320px~)에서도 적용될 기본 스타일 */
+
+/* Career Section */
+.career-section {
+  background: var(--bg-card);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+  padding: 12px;
+}
+
+/* here */
+
+.career-section-summary .career-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.career-section-summary .career-section-header > .component-title {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.component-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.career-length {
+  margin: auto 0 0 10px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.career-type-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.career-type-option > li:not(:last-child) {
+  margin-right: 10px;
+}
+
+.career-type-option li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.career-year,
+.career-month,
+.text-year,
+.text-month {
+  display: inline-block;
+}
+
+.text-year {
+  margin-right: 5px;
+}
+
+.career-graph {
+  margin: 20px 0;
+}
+
+.graph-type-publishing,
+.graph-type-publishing-else {
+  display: none;
+}
+
+.graph-type-publishing.show,
+.graph-type-publishing-else.show {
+  display: block;
+}
+
+input[type='radio'] {
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+label {
+  cursor: pointer;
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* 타임라인 그래프 추가 스타일 */
+.timeline-container {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin: 16px 0;
+}
+
+.timeline-bar-container {
+  position: relative;
+  height: auto;
+  margin: 30px 0;
+}
+
+.timeline-bar {
+  display: flex;
+  height: 40px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  margin-bottom: 20px;
+}
+
+.timeline-segment {
+  height: 100%;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.timeline-segment:hover {
+  filter: brightness(1.1);
+  z-index: 1;
+  transform: scaleY(1.05);
+}
+
+.timeline-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-top: 10px;
+}
+
+.timeline-label {
+  position: relative;
+}
+
+.timeline-label::before {
+  content: '';
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 20px;
+  background: var(--border-color);
+}
+
+/* 회사 정보 리스트 */
+.career-companies-list {
+  list-style: none;
+  margin: 24px 0;
+  padding: 0;
+}
+
+.career-company-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.career-company-item:last-child {
+  border-bottom: none;
+}
+
+.company-color-indicator {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.company-info {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.company-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.company-period {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.company-duration {
+  color: var(--accent-color);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* // here */
+.career-container {
+  width: 100%;
+}
+
+/* Career Accordion */
+.career-accordion {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.career-accordion-item {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.career-accordion-item:last-child {
+  border-bottom: none;
+}
+
+.career-accordion-button {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 12px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-primary);
+  font-family: inherit;
+  text-align: left;
+}
+
+.career-accordion-button:hover {
+  background: var(--hover-bg);
+  border-radius: 6px;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.career-accordion-button:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.career-summary {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 3px;
+  flex: 1;
+}
+
+.career-company-name {
+  position: relative;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.career-company-name.star::after {
+  position: absolute;
+  content: '*';
+  display: block;
+  width: 5px;
+  height: 5px;
+  color: red;
+  top: -3px;
+}
+
+.career-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.career-period {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.career-role {
+  font-size: 0.75rem;
+  color: var(--accent-color);
+  font-weight: 500;
+}
+
+.career-accordion-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--text-secondary);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.career-accordion-button[aria-expanded='true'] .career-accordion-icon {
+  transform: rotate(180deg);
+}
+
+.career-accordion-content {
+  height: 0;
+  overflow: hidden;
+  transition: height 0.4s ease;
+  background: transparent;
+}
+
+.career-company-details {
+  padding: 12px 0 0 0;
+}
+
+/* ============ 새로운 구조를 위한 스타일 ============ */
+
+/* Career Details List - 최상위 ul 컨테이너 */
+.career-details-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Career Detail Section - 각 li 섹션 */
+.career-detail-section {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  padding: 20px;
+}
+
+.career-detail-section:hover {
+  border-color: var(--accent-color);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.career-detail-sub-item:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+/* Career Section Title - 각 섹션의 strong 제목 */
+.career-section-title {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--accent-color);
+  line-height: 1.3;
+}
+
+/* Career Sub List - 하위 ul 리스트 */
+.career-sub-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.career-sub-list li {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+  position: relative;
+  padding-left: 24px;
+  transition: all 0.3s ease;
+}
+
+.career-sub-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent-color);
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.career-sub-list li:hover {
+  background: var(--hover-bg);
+  border-color: var(--accent-color);
+  transform: translateY(-1px);
+}
+
+/* ============ Portfolio Product Layout Styles (Base Mobile) ============ */
+
+/* Portfolio Products Container */
+.portfolio-products-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+/* Portfolio Product Item */
+.portfolio-product-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  transition: box-shadow 0.3s ease;
+}
+
+.portfolio-product-item:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+
+/* Portfolio Product Layout - 기본은 가로 배치 */
+.portfolio-product-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Portfolio Product Images */
+.portfolio-product-images {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+}
+
+.main-image-container {
+  background: var(--bg-secondary);
+
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.portfolio-main-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.portfolio-main-image:hover {
+  transform: scale(1.05);
+}
+
+.thumbnail-images {
+  list-style: none;
+  margin: 0;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+  overflow-x: auto;
+}
+
+.thumbnail-item {
+  flex-shrink: 0;
+}
+
+.thumbnail-btn {
+  width: 80px;
+  height: 80px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+  display: block;
+}
+
+.thumbnail-btn.active {
+  border-color: var(--accent-color);
+}
+
+.thumbnail-btn:hover {
+  border-color: var(--accent-color);
+}
+
+.thumbnail-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* Portfolio Product Info */
+.portfolio-product-info {
+  width: 100%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.portfolio-product-header {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+}
+
+.portfolio-category {
+  display: inline-block;
+  font-size: 0.75rem;
+  color: var(--accent-color);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.portfolio-product-title {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+
+.portfolio-period {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  background: var(--bg-secondary);
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin: 0;
+  display: inline-block;
+}
+
+.portfolio-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.portfolio-links {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.portfolio-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--accent-color);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.portfolio-link:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+/* Portfolio Description */
+.portfolio-description strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.portfolio-description p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+/* Portfolio Highlights */
+.portfolio-highlights {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.highlight-item {
+  background: var(--bg-secondary);
+  padding: 8px;
+  border-radius: 6px;
+  border-left: 3px solid var(--accent-color);
+  transition: transform 0.2s ease;
+}
+
+.highlight-item:hover {
+  transform: translateY(-1px);
+}
+
+.highlight-item strong {
+  display: block;
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.highlight-item span {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+/* Portfolio Stats */
+.portfolio-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 12px 8px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+  border-color: var(--accent-color);
+  transform: translateY(-1px);
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  margin-bottom: 3px;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-weight: 500;
+}
+
+/* Portfolio Details */
+.portfolio-details {
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+
+.detail-section {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.detail-section:last-child {
+  border-bottom: none;
+}
+
+.detail-header {
+  background: var(--bg-secondary);
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.detail-header:hover {
+  background: var(--hover-bg);
+}
+
+.detail-header strong {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.detail-toggle {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.detail-section.expanded .detail-toggle {
+  transform: rotate(180deg);
+}
+
+.detail-content {
+  padding: 0 12px;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.detail-section.expanded .detail-content {
+  max-height: 400px;
+  padding: 12px;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature-list li {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-bottom: 6px;
+  padding-left: 12px;
+  position: relative;
+}
+
+.feature-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.feature-list li strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Portfolio Materials (Tech Stack) */
+.portfolio-materials {
+  background: linear-gradient(
+    135deg,
+    var(--accent-color) 0%,
+    var(--primary-color) 100%
+  );
+  padding: 16px;
+  border-radius: 6px;
+  margin: 12px 0;
+}
+
+.portfolio-materials strong {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tech-tag {
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 12px;
+  padding: 4px 8px;
+  white-space: nowrap;
+  transition: background 0.3s ease;
+}
+
+.tech-tag:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Portfolio Actions */
+.portfolio-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+}
+
+.portfolio-btn {
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.portfolio-btn-primary {
+  background: var(--accent-color);
+  color: white;
+}
+
+.portfolio-btn-primary:hover {
+  background: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+.portfolio-btn-secondary {
+  background: transparent;
+  color: var(--accent-color);
+  border: 2px solid var(--accent-color);
+}
+
+.portfolio-btn-secondary:hover {
+  background: var(--accent-color);
+  color: white;
+}
+
+/* ============ Career Utils Container ============ */
+.career-utils-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+/* Filter Select Container */
+.career-filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.career-filter-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.career-filter-select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.career-filter-select:hover {
+  border-color: var(--accent-color);
+}
+
+.career-filter-select:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+  border-color: var(--accent-color);
+}
+
+/* Layout Toggle Container */
+.career-layout-toggle-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.career-layout-toggle-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.career-layout-toggle-list {
+  display: flex;
+  gap: 3px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.career-layout-toggle-item {
+  flex: 1;
+}
+
+.career-layout-toggle-button {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.career-layout-toggle-button:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.career-layout-toggle-button:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.career-layout-toggle-button.active {
+  background: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+.career-layout-toggle-button.active:hover {
+  color: white;
+}
+
+.career-layout-icon {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
+}
+
+/* ============ Company Dashboard Section ============ */
+.company-dashboard-section {
+  margin-bottom: 24px;
+}
+
+.dashboard-section-title {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.company-dashboard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 16px 0;
+}
+
+.company-dashboard .dashboard-card {
+  flex: 1;
+  min-width: 240px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.company-dashboard.layout-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.company-dashboard.layout-list .dashboard-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 10px 12px;
+  min-width: unset;
+  max-width: unset;
+  flex: none;
+  border-radius: 6px;
+}
+
+.company-dashboard.layout-list .dashboard-card-title {
+  flex: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.company-dashboard.layout-list .metric {
+  flex: none;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  text-align: left;
+  margin: 0;
+}
+
+.company-dashboard.layout-list .description {
+  flex: none;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.dashboard-card {
+  transition: all 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--accent-color);
+}
+
+.dashboard-card h3 {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  line-height: 1.3;
+}
+
+.dashboard-card .metric {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.dashboard-card .description {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.dashboard-card .description-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard-card .description-list li {
+  margin-bottom: 4px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  position: relative;
+  padding-left: 12px;
+  line-height: 1.4;
+}
+
+.dashboard-card .description-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.dashboard-card.career-filter-hidden {
+  display: none !important;
+}
+
+/* Company Projects */
+.company-projects {
+  border-top: 1px solid var(--border-color);
+  padding-top: 16px;
+}
+
+.projects-title {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.projects-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 16px 0;
+}
+
+.project-card {
+  flex: 1;
+  min-width: 240px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  list-style: none;
+}
+
+.project-card:hover {
+  border-color: var(--accent-color);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.project-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.project-icon {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.project-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-color);
+  text-decoration: none;
+  flex: 1;
+  min-width: 0;
+}
+
+.project-name:hover {
+  text-decoration: underline;
+}
+
+.project-visibility {
+  padding: 2px 4px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.project-description {
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.project-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.project-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.project-stat {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.language-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.project-updated {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+/* Language Colors */
+.lang-javascript {
+  background: #f1e05a;
+}
+.lang-typescript {
+  background: #2b7489;
+}
+.lang-html {
+  background: #e34c26;
+}
+.lang-css {
+  background: #563d7c;
+}
+.lang-vue {
+  background: #4fc08d;
+}
+.lang-react {
+  background: #61dafb;
+}
+
+/* Modal Styles */
+.career-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 12px;
+}
+
+.career-modal-overlay.show {
+  display: flex;
+}
+
+.career-modal-content {
+  background: var(--bg-card);
+  border-radius: 12px;
+  max-width: 95vw;
+  max-height: 90vh;
+  width: 100%;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  animation: modalSlideIn 0.4s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.career-modal-header {
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+}
+
+.career-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--bg-secondary);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.career-modal-close:hover {
+  background: var(--accent-color);
+  color: white;
+}
+
+.career-modal-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  line-height: 1.3;
+  padding-right: 32px;
+}
+
+.career-modal-subtitle {
+  color: var(--accent-color);
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.career-modal-period {
+  background: var(--text-secondary);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.career-modal-body {
+  padding: 16px;
+}
+
+.detail-section {
+  margin-bottom: 16px;
+}
+
+.detail-section h3 {
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid var(--accent-color);
+  display: inline-block;
+}
+
+.tech-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.tech-item {
+  background: var(--bg-secondary);
+  color: var(--accent-color);
+  border: 1px solid rgba(0, 113, 227, 0.2);
+  padding: 6px 8px;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.achievement-list {
+  list-style: none;
+  margin: 8px 0;
+  padding: 0;
+}
+
+.achievement-item {
+  background: var(--bg-secondary);
+  border-left: 3px solid var(--accent-color);
+  margin-bottom: 6px;
+  padding: 8px 10px;
+  border-radius: 0 4px 4px 0;
+  color: var(--text-primary);
+  line-height: 1.4;
+  font-size: 0.8rem;
+}
+
+.achievement-item strong {
+  color: var(--accent-color);
+  display: block;
+  margin-bottom: 2px;
+  font-size: 0.75rem;
+}
+/* 접근성 */
+input[type='radio']:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+label:hover {
+  color: var(--accent-color);
+}
+
+.timeline-segment:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* ============ 모바일에서 세로 배치로 변경 ============ */
+@media (max-width: 767px) {
+  .thumbnail-images {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .thumbnail-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+  }
+
+  .thumbnail-btn img {
+    border-radius: 4px;
+  }
+
+  .portfolio-product-info {
+    width: 100%;
+    padding: 16px;
+    gap: 12px;
+  }
+
+  /* 새로운 구조 모바일 스타일 */
+  .career-details-list {
+    gap: 16px;
+  }
+
+  .career-section-title {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+  }
+
+  .career-sub-list {
+    gap: 6px;
+  }
+
+  .career-sub-list li {
+    padding: 8px 10px;
+    padding-left: 20px;
+    font-size: 0.85rem;
+  }
+
+  .career-sub-list li::before {
+    left: 6px;
+    font-size: 0.7rem;
+  }
+
+  .career-section-summary .career-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .component-title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 1.3rem;
+  }
+
+  .timeline-container {
+    padding: 16px;
+  }
+
+  .timeline-bar {
+    height: 32px;
+  }
+
+  .timeline-labels {
+    font-size: 0.75rem;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .company-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .company-duration {
+    align-self: flex-end;
+  }
+}
+
+/* ============ 1) ≥360px (Galaxy S 등 360 폭 계열) ============ */
+@media (min-width: 360px) {
+  .career-section {
+    padding: 14px;
+    border-radius: 10px;
+  }
+
+  .career-length {
+    margin: 0 0 0 0;
+  }
+
+  .career-accordion-button {
+    padding: 14px 0;
+  }
+
+  .career-company-name {
+    font-size: 16px;
+  }
+
+  .career-period {
+    font-size: 0.82rem;
+  }
+
+  .portfolio-product-info {
+    padding: 18px;
+  }
+
+  .portfolio-product-title {
+    font-size: 1.25rem;
+  }
+
+  .thumbnail-images {
+    gap: 7px;
+    padding: 9px;
+  }
+
+  .thumbnail-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .career-utils-container {
+    padding: 14px;
+  }
+
+  .company-dashboard .dashboard-card {
+    min-width: 260px;
+    padding: 14px;
+  }
+
+  .project-card {
+    min-width: 260px;
+    padding: 14px;
+  }
+
+  /* 새로운 구조 360px+ 스타일 */
+  .career-details-list {
+    gap: 18px;
+  }
+
+  .career-section-title {
+    font-size: 1.05rem;
+  }
+
+  .career-sub-list li {
+    padding: 9px 11px;
+    padding-left: 22px;
+    font-size: 0.87rem;
+  }
+}
+
+/* ============ 2) ≥375px (iPhone 375 폭 계열) ============ */
+@media (min-width: 375px) {
+  .career-section {
+    margin-bottom: 18px;
+  }
+
+  .career-role {
+    font-size: 0.78rem;
+  }
+
+  .portfolio-products-container {
+    gap: 28px;
+  }
+
+  .portfolio-highlights {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .highlight-item {
+    padding: 10px;
+  }
+
+  .portfolio-actions {
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .portfolio-btn {
+    padding: 12px 18px;
+    font-size: 0.9rem;
+  }
+
+  .career-layout-toggle-button {
+    padding: 9px 12px;
+    font-size: 0.78rem;
+  }
+
+  /* 새로운 구조 375px+ 스타일 */
+  .career-details-list {
+    gap: 20px;
+  }
+
+  .career-section-title {
+    font-size: 1.1rem;
+    margin-bottom: 11px;
+  }
+
+  .career-sub-list li {
+    font-size: 0.88rem;
+  }
+
+  .career-company-name.star::after {
+    left: 86px;
+  }
+
+  .career-section-summary .career-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .company-period {
+    font-size: 11px;
+  }
+
+  .company-color-indicator {
+    width: 10px;
+    height: 10px;
+  }
+
+  .component-title {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .company-info {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .company-duration {
+    align-self: auto;
+  }
+}
+
+/* ============ 3) ≥390px (iPhone Pro 390×844 계열) ============ */
+@media (min-width: 390px) {
+  .career-accordion-button {
+    padding: 16px 0;
+  }
+
+  .career-accordion-icon {
+    width: 22px;
+    height: 22px;
+    margin-left: 10px;
+  }
+
+  .portfolio-product-info {
+    padding: 20px;
+    gap: 14px;
+  }
+
+  .portfolio-product-title {
+    font-size: 1.3rem;
+  }
+
+  .stat-item {
+    padding: 14px 10px;
+  }
+
+  .stat-value {
+    font-size: 1.3rem;
+  }
+
+  .company-dashboard {
+    gap: 10px;
+  }
+
+  .projects-grid {
+    gap: 14px;
+  }
+
+  .career-modal-content {
+    max-width: 90vw;
+    border-radius: 14px;
+  }
+
+  .career-modal-header {
+    padding: 18px 18px 14px;
+  }
+
+  .career-modal-body {
+    padding: 18px;
+  }
+
+  /* 새로운 구조 390px+ 스타일 */
+  .career-detail-section {
+    border-radius: 9px;
+  }
+
+  .career-section-title {
+    font-size: 1.15rem;
+    margin-bottom: 12px;
+    padding-bottom: 9px;
+  }
+
+  .career-sub-list {
+    gap: 9px;
+  }
+
+  .career-sub-list li {
+    padding: 10px 12px;
+    padding-left: 24px;
+    font-size: 0.9rem;
+    border-radius: 7px;
+  }
+}
+
+/* ============ 4) ≥393px (iPhone 16 / 일부 Android 393 폭) ============ */
+@media (min-width: 393px) {
+  .portfolio-products-container {
+    gap: 30px;
+  }
+
+  .thumbnail-images {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .thumbnail-btn {
+    width: 48px;
+    height: 48px;
+  }
+
+  .portfolio-description strong {
+    font-size: 1.05rem;
+  }
+
+  .portfolio-description p {
+    font-size: 0.9rem;
+  }
+
+  .highlight-item strong {
+    font-size: 0.82rem;
+  }
+
+  .highlight-item span {
+    font-size: 0.77rem;
+  }
+
+  .company-dashboard .dashboard-card {
+    padding: 15px;
+    border-radius: 10px;
+  }
+
+  .dashboard-card h3 {
+    font-size: 0.92rem;
+  }
+
+  /* 새로운 구조 393px+ 스타일 */
+  .career-details-list {
+    gap: 22px;
+  }
+
+  .career-section-title {
+    font-size: 1.2rem;
+  }
+
+  .career-sub-list li {
+    font-size: 0.92rem;
+  }
+}
+
+/* ============ 5) ≥402px (iPhone 16 Pro 402 폭) ============ */
+@media (min-width: 402px) {
+  .career-section {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .portfolio-product-info {
+    gap: 16px;
+  }
+
+  .portfolio-product-title {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+
+  .portfolio-meta {
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .portfolio-links {
+    gap: 14px;
+  }
+
+  .portfolio-link {
+    font-size: 0.82rem;
+    gap: 5px;
+  }
+
+  .career-utils-container {
+    gap: 10px;
+    padding: 16px;
+    border-radius: 8px;
+  }
+
+  .career-filter-label,
+  .career-layout-toggle-label {
+    font-size: 0.82rem;
+  }
+
+  .career-filter-select {
+    padding: 7px 10px;
+    font-size: 0.82rem;
+  }
+
+  /* 새로운 구조 402px+ 스타일 */
+  .career-detail-section {
+    border-radius: 10px;
+  }
+
+  .career-section-title {
+    font-size: 1.25rem;
+    margin-bottom: 13px;
+    padding-bottom: 10px;
+  }
+
+  .career-sub-list {
+    gap: 10px;
+  }
+
+  .career-sub-list li {
+    padding: 11px 13px;
+    padding-left: 25px;
+    font-size: 0.93rem;
+  }
+}
+
+/* ============ 6) ≥412px (Pixel/Android 다수 412 폭) ============ */
+@media (min-width: 412px) {
+  .career-company-details {
+    padding: 16px 0 0 0;
+  }
+
+  .portfolio-products-container {
+    gap: 32px;
+    margin-top: 20px;
+  }
+
+  .portfolio-product-info {
+    padding: 22px;
+  }
+
+  .portfolio-product-header {
+    padding-bottom: 14px;
+  }
+
+  .portfolio-category {
+    font-size: 0.78rem;
+    margin-bottom: 7px;
+  }
+
+  .portfolio-period {
+    font-size: 0.82rem;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  .portfolio-highlights {
+    margin: 14px 0;
+  }
+
+  .portfolio-stats {
+    margin: 14px 0;
+  }
+
+  .company-dashboard-section {
+    margin-bottom: 26px;
+  }
+
+  .dashboard-section-title {
+    font-size: 1.25rem;
+    margin-bottom: 14px;
+  }
+
+  .company-dashboard {
+    gap: 12px;
+    padding: 0 0 18px 0;
+  }
+
+  .project-card {
+    padding: 14px;
+  }
+
+  .project-header {
+    gap: 7px;
+    margin-bottom: 7px;
+  }
+
+  .project-name {
+    font-size: 0.92rem;
+  }
+
+  .project-description {
+    font-size: 0.82rem;
+    margin-bottom: 10px;
+  }
+
+  /* 새로운 구조 412px+ 스타일 */
+  .career-details-list {
+    gap: 24px;
+  }
+
+  .career-section-title {
+    font-size: 1.3rem;
+    margin-bottom: 14px;
+  }
+
+  .career-sub-list {
+    gap: 11px;
+  }
+
+  .career-sub-list li {
+    padding: 12px 14px;
+    padding-left: 26px;
+    font-size: 0.95rem;
+    border-radius: 8px;
+  }
+
+  .career-sub-list li::before {
+    left: 9px;
+    font-size: 0.85rem;
+  }
+}
+
+/* ============ 7) ≥430px (iPhone Plus/Pro Max 430 폭) ============ */
+@media (min-width: 430px) {
+  .career-section {
+    margin-bottom: 20px;
+  }
+
+  .portfolio-product-info {
+    padding: 24px;
+    gap: 18px;
+  }
+
+  .portfolio-product-title {
+    font-size: 1.5rem;
+  }
+
+  .thumbnail-images {
+    padding: 12px;
+  }
+
+  .thumbnail-btn {
+    width: 50px;
+    height: 50px;
+  }
+
+  .portfolio-description strong {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+
+  .portfolio-description p {
+    font-size: 0.92rem;
+    margin-bottom: 14px;
+  }
+
+  .highlight-item {
+    padding: 12px;
+    border-radius: 7px;
+    border-left-width: 4px;
+    flex-grow: 1;
+  }
+
+  .highlight-item strong {
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+  }
+
+  .highlight-item span {
+    font-size: 0.8rem;
+  }
+
+  .portfolio-materials {
+    padding: 18px;
+    border-radius: 7px;
+    margin: 14px 0;
+  }
+
+  .portfolio-materials strong {
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+  }
+
+  .tech-stack {
+    gap: 7px;
+  }
+
+  .tech-tag {
+    font-size: 0.77rem;
+    padding: 5px 10px;
+    border-radius: 14px;
+  }
+
+  .portfolio-actions {
+    padding-top: 14px;
+    gap: 12px;
+  }
+
+  .company-dashboard .dashboard-card {
+    min-width: 280px;
+  }
+
+  .dashboard-card .metric {
+    font-size: 1.4rem;
+  }
+
+  .career-modal-content {
+    border-radius: 16px;
+  }
+
+  .career-modal-title {
+    font-size: 1.3rem;
+  }
+
+  /* 새로운 구조 430px+ 스타일 */
+  .career-details-list {
+    gap: 26px;
+  }
+
+  .career-detail-section {
+    border-radius: 12px;
+  }
+
+  .career-section-title {
+    font-size: 1.35rem;
+    margin-bottom: 15px;
+    padding-bottom: 11px;
+  }
+
+  .career-sub-list {
+    gap: 12px;
+  }
+
+  .career-sub-list li {
+    padding: 13px 15px;
+    padding-left: 28px;
+    font-size: 0.97rem;
+  }
+}
+
+/* ============ 8) ≥440px (iPhone 16 Pro Max 440 폭) ============ */
+@media (min-width: 440px) {
+  .career-accordion-button {
+    padding: 18px 0;
+  }
+
+  .career-accordion-button:hover {
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 8px;
+  }
+
+  .career-company-name {
+    font-size: 1.15rem;
+    width: 170px;
+  }
+
+  .career-period {
+    font-size: 0.85rem;
+  }
+
+  .career-role {
+    font-size: 0.8rem;
+  }
+
+  .career-section-summary .career-section-header {
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+  }
+  .company-name {
+    font-size: 17px;
+  }
+
+  .company-period {
+    font-size: 14px;
+  }
+  .company-color-indicator {
+    width: 20px;
+    height: 20px;
+  }
+
+  .career-accordion-icon {
+    width: 24px;
+    height: 24px;
+    margin-left: 12px;
+  }
+
+  .portfolio-products-container {
+    gap: 36px;
+  }
+
+  .portfolio-product-item:hover {
+    transform: translateY(-1px);
+  }
+
+  .portfolio-main-image:hover {
+    transform: scale(1.02);
+  }
+
+  .portfolio-product-info {
+    padding: 26px;
+    gap: 20px;
+  }
+
+  .portfolio-product-header {
+    padding-bottom: 16px;
+  }
+
+  .portfolio-product-title {
+    font-size: 1.6rem;
+  }
+
+  .portfolio-highlights {
+    display: flex;
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .portfolio-stats {
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .stat-item {
+    padding: 16px 12px;
+    border-radius: 7px;
+  }
+
+  .stat-value {
+    font-size: 1.4rem;
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+  }
+
+  .portfolio-details {
+    border-radius: 7px;
+    margin: 14px 0;
+  }
+
+  .detail-header {
+    padding: 12px 14px;
+  }
+
+  .detail-header strong {
+    font-size: 0.9rem;
+  }
+
+  .detail-section.expanded .detail-content {
+    max-height: 450px;
+    padding: 14px;
+  }
+
+  .feature-list li {
+    font-size: 0.82rem;
+    margin-bottom: 7px;
+    padding-left: 14px;
+  }
+
+  .career-utils-container {
+    flex-direction: row;
+    align-items: end;
+    gap: 20px;
+    padding: 18px;
+  }
+
+  .career-filter-container {
+    flex: 1;
+    min-width: 180px;
+  }
+
+  .career-layout-toggle-container {
+    flex: 0 0 auto;
+  }
+
+  .career-layout-toggle-list {
+    gap: 6px;
+  }
+
+  .career-layout-toggle-button {
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    border-radius: 5px;
+  }
+
+  .career-layout-icon {
+    width: 15px;
+    height: 15px;
+  }
+
+  .dashboard-section-title {
+    font-size: 1.3rem;
+  }
+
+  .company-dashboard.layout-list .dashboard-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    border-radius: 7px;
+  }
+
+  .company-dashboard.layout-list .dashboard-card-title {
+    flex: 2;
+    font-size: 0.87rem;
+  }
+
+  .company-dashboard.layout-list .metric {
+    flex: 1;
+    font-size: 1.05rem;
+    text-align: center;
+  }
+
+  .company-dashboard.layout-list .description {
+    flex: 3;
+    font-size: 0.82rem;
+  }
+
+  .projects-grid {
+    gap: 16px;
+    padding: 0 0 18px 0;
+  }
+
+  .project-card:hover {
+    transform: translateY(-1px);
+  }
+
+  .career-modal-overlay {
+    padding: 16px;
+  }
+
+  .career-modal-content {
+    max-width: 85vw;
+  }
+
+  .career-modal-close {
+    width: 30px;
+    height: 30px;
+    top: 14px;
+    right: 14px;
+    font-size: 15px;
+  }
+
+  .career-modal-title {
+    font-size: 1.35rem;
+    margin-bottom: 5px;
+    padding-right: 36px;
+  }
+
+  .career-modal-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 7px;
+  }
+
+  .career-modal-period {
+    padding: 4px 10px;
+    border-radius: 11px;
+    font-size: 0.77rem;
+  }
+
+  .career-modal-body {
+    padding: 20px;
+  }
+
+  /* 새로운 구조 440px+ 스타일 */
+  .career-details-list {
+    gap: 28px;
+  }
+
+  .career-detail-section {
+    border-radius: 14px;
+  }
+
+  .career-detail-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .career-section-title {
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom-width: 3px;
+  }
+
+  .career-sub-list {
+    gap: 14px;
+  }
+
+  .career-sub-list li {
+    padding: 14px 16px;
+    padding-left: 30px;
+    font-size: 1rem;
+    border-radius: 9px;
+  }
+
+  .career-sub-list li::before {
+    left: 10px;
+    font-size: 0.9rem;
+  }
+
+  .career-sub-list li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .career-company-name.star::after {
+    left: 97px;
+  }
+}
+
+/* ============ 500px: career-summary 레이아웃 전환점 ============ */
+@media (min-width: 500px) {
+  .career-summary {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .career-meta {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 22px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .career-company-name {
+    flex-shrink: 0;
+  }
+}
+
+/* ============ Tablet Styles (768px+) ============ */
+@media (min-width: 768px) {
+  .career-section {
+    padding: 24px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+  }
+
+  .portfolio-product-info {
+    padding: 32px;
+  }
+
+  .portfolio-product-title {
+    font-size: 1.8rem;
+  }
+
+  .portfolio-actions {
+    flex-direction: row;
+  }
+
+  .portfolio-btn {
+    width: auto;
+    min-width: 140px;
+  }
+
+  .portfolio-meta {
+    flex-direction: row;
+  }
+
+  .portfolio-links {
+    flex-direction: row;
+  }
+
+  .portfolio-highlights {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .portfolio-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Career Utils - Tablet */
+  .career-utils-container {
+    flex-direction: row;
+    align-items: end;
+    gap: 24px;
+    padding: 20px;
+  }
+
+  .career-filter-container {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .career-layout-toggle-container {
+    flex: 0 0 auto;
+  }
+
+  .career-layout-toggle-list {
+    gap: 8px;
+  }
+
+  .career-layout-toggle-button {
+    padding: 12px 16px;
+    font-size: 0.85rem;
+  }
+
+  /* 새로운 구조 Tablet 스타일 */
+  .career-details-list {
+    gap: 32px;
+  }
+
+  .career-detail-section {
+    border-radius: 16px;
+  }
+
+  .career-section-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+  }
+
+  .career-sub-list {
+    gap: 16px;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .career-sub-list li {
+    flex: 1;
+    min-width: 200px;
+    padding: 16px 18px;
+    padding-left: 32px;
+    font-size: 1.05rem;
+    border-radius: 10px;
+  }
+
+  .career-sub-list li::before {
+    left: 12px;
+    font-size: 1rem;
+  }
+
+  .timeline-container {
+    padding: 32px;
+  }
+
+  .timeline-bar {
+    height: 45px;
+  }
+}
+
+/* ============ Desktop Styles (1024px+) ============ */
+@media (min-width: 1024px) {
+  .career-section {
+    padding: 32px;
+    border-radius: 20px;
+    margin-bottom: 30px;
+  }
+
+  /* Portfolio Product Layout - Desktop */
+  .portfolio-products-container {
+    gap: 60px;
+  }
+
+  .portfolio-product-info {
+    flex: 1;
+    padding: 40px;
+  }
+
+  .portfolio-product-title {
+    font-size: 2rem;
+  }
+
+  .thumbnail-images {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .thumbnail-btn {
+    width: 80px;
+    height: 80px;
+  }
+
+  .portfolio-highlights {
+    display: flex;
+  }
+
+  /* Career Utils - Desktop */
+  .career-utils-container {
+    padding: 24px;
+  }
+
+  /* 새로운 구조 Desktop 스타일 */
+  .career-details-list {
+    gap: 40px;
+  }
+
+  .career-detail-section {
+    border-radius: 18px;
+  }
+
+  .career-section-title {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+  }
+
+  .career-sub-list li {
+    font-size: 1.1rem;
+    padding: 18px 20px;
+    padding-left: 36px;
+  }
+
+  .career-sub-list li::before {
+    left: 14px;
+    font-size: 1.1rem;
+  }
+  .timeline-container {
+    padding: 40px;
+  }
+
+  .timeline-bar {
+    height: 50px;
+  }
+}
+
+/* ============ Large Desktop Styles (1200px+) ============ */
+@media (min-width: 1200px) {
+  /* 새로운 구조 Large Desktop 스타일 */
+  .career-details-list {
+    gap: 48px;
+  }
+
+  .career-detail-section {
+    border-radius: 20px;
+  }
+
+  .career-section-title {
+    margin-bottom: 28px;
+    padding-bottom: 18px;
+  }
+
+  .career-sub-list li {
+    font-size: 1.15rem;
+    padding: 20px 24px;
+    padding-left: 40px;
+  }
+}
+
+/* ============ Accessibility & Interactions ============ */
+.career-accordion-button:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.project-card:focus-within {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.portfolio-btn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.thumbnail-btn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.detail-header:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* 새로운 구조 접근성 */
+.career-detail-section:focus-within {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.career-sub-list li:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .career-accordion-icon,
+  .career-accordion-content,
+  .dashboard-card,
+  .project-card,
+  .career-modal-content,
+  .career-layout-toggle-button,
+  .portfolio-main-image,
+  .thumbnail-btn,
+  .detail-toggle,
+  .stat-item,
+  .highlight-item,
+  .career-detail-section,
+  .career-sub-list li {
+    transition: none;
+  }
+
+  @keyframes modalSlideIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .dashboard-card,
+  .project-card,
+  .career-filter-select,
+  .career-layout-toggle-button,
+  .portfolio-btn,
+  .thumbnail-btn,
+  .detail-header,
+  .career-detail-section,
+  .career-sub-list li {
+    border: 2px solid var(--text-primary);
+  }
+
+  .tech-item,
+  .tech-tag {
+    border: 2px solid var(--accent-color);
+  }
+
+  .career-section-title {
+    border-bottom: 3px solid var(--accent-color);
+  }
+}
+
+/* Dark theme adjustments */
+[data-theme='dark'] .career-modal-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme='dark'] .career-modal-content {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme='dark'] .career-detail-section {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .career-sub-list li {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Scrollbar styling for modal */
+.career-modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.career-modal-content::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.career-modal-content::-webkit-scrollbar-thumb {
+  background: var(--text-secondary);
+  border-radius: 3px;
+}
+
+.career-modal-content::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}

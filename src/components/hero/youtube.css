@@ -1,0 +1,240 @@
+/* /src/components/hero/youtube.css */
+
+/* === 🎬 YouTube Player 스타일 === */
+
+.video-player-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.main-video {
+  width: 99%; /* 📱 모바일 기본 */
+  height: 98%;
+  border-radius: 12px;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  box-shadow: 2px 4px 12px #00000014;
+}
+
+#youtube-player {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background: #ffffff;
+}
+
+#youtube-player iframe {
+  width: 100% !important;
+  height: 100% !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  border-radius: 12px;
+  border: none;
+  background: #ffffff;
+
+  mask: linear-gradient(
+    90deg,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(
+    90deg,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+}
+
+#youtube-player::before,
+#youtube-player::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 10%;
+  height: 100%;
+  background: #ffffff;
+  z-index: 5;
+  pointer-events: none;
+  border-radius: 12px;
+}
+
+#youtube-player::before {
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    #ffffff 70%,
+    transparent 100%
+  );
+}
+
+#youtube-player::after {
+  right: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #ffffff 30%,
+    #ffffff 100%
+  );
+}
+
+.main-video:hover {
+  transform: scale(1.01) translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12),
+    0 16px 48px rgba(0, 0, 0, 0.16);
+}
+
+/* === 🎮 비디오 컨트롤 버튼 === */
+.video-controls {
+  --button-v-position: 20px;
+  --button-size: 32px;
+  --scrim-background-color: rgb(232, 232, 237);
+  --scrim-hover-background-color: #ececf0;
+  --scrim-active-background-color: #dfdfe4;
+  --icon-color: rgba(0, 0, 0, 0.56);
+  --icon-interaction-color: rgba(0, 0, 0, 0.5952);
+
+  position: absolute;
+  bottom: var(--button-v-position);
+  right: 20px;
+  height: calc(100% - var(--button-v-position));
+  display: flex;
+  align-items: flex-end;
+  z-index: 10;
+}
+
+.control-btn {
+  position: sticky;
+  bottom: var(--button-v-position);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  height: var(--button-size);
+  width: var(--button-size);
+  outline: none;
+  margin: var(--button-v-position) 0 0 0;
+  padding: 0;
+  border: 0;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 100ms linear, color 100ms linear;
+  background-color: var(--scrim-background-color);
+  color: var(--icon-color);
+}
+
+.control-btn:hover {
+  background-color: var(--scrim-hover-background-color);
+  color: var(--icon-interaction-color);
+}
+
+.control-btn svg {
+  fill: currentColor;
+  pointer-events: none;
+  width: 16px;
+  height: 16px;
+}
+
+.playing .control-btn .play-icon {
+  display: none;
+}
+
+.paused .control-btn .play-icon {
+  display: block;
+}
+
+.paused .control-btn .pause-icon {
+  display: none;
+}
+
+.playing .control-btn .pause-icon {
+  display: block;
+}
+
+/* === 📱 YouTube 반응형 미디어 쿼리 === */
+
+/* 412px+ */
+@media (min-width: 412px) {
+  .main-video {
+    width: 96%;
+    height: 92%;
+    border-radius: 16px;
+  }
+
+  #youtube-player {
+    border-radius: 16px;
+  }
+
+  #youtube-player iframe {
+    border-radius: 16px;
+  }
+}
+
+/* 768px+ */
+@media (min-width: 768px) {
+  .main-video {
+    width: 95%;
+    height: 90%;
+    border-radius: 20px;
+  }
+
+  #youtube-player {
+    border-radius: 20px;
+  }
+
+  #youtube-player iframe {
+    border-radius: 20px;
+    mask: linear-gradient(
+      90deg,
+      transparent 0%,
+      black 15%,
+      black 85%,
+      transparent 100%
+    );
+    -webkit-mask: linear-gradient(
+      90deg,
+      transparent 0%,
+      black 15%,
+      black 85%,
+      transparent 100%
+    );
+  }
+
+  #youtube-player::before,
+  #youtube-player::after {
+    width: 15%;
+  }
+
+  .main-video:hover {
+    transform: scale(1.02) translateY(-8px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12),
+      0 16px 48px rgba(0, 0, 0, 0.16), 0 32px 96px rgba(0, 0, 0, 0.12);
+  }
+
+  .video-controls {
+    --button-v-position: 40px;
+    --button-size: 36px;
+    right: 40px;
+  }
+
+  .control-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+}

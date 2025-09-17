@@ -1,0 +1,2225 @@
+/* /src/components/resumeTab/resumeTab.css */
+
+/* ============ 0) Base: 공통(모바일 퍼스트) 스타일 ============ */
+/* 가장 작은 화면(~359px)에서도 적용될 공통 스타일 */
+
+.resume-component {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs);
+  box-shadow: var(--card-shadow);
+  position: relative;
+  width: 100%;
+  margin-bottom: var(--space-md);
+}
+
+[data-theme='dark'] .resume-component {
+  box-shadow: var(--card-shadow);
+}
+
+/* Resume Tab Navigation - 🚀 모바일 터치 최적화 */
+.resume-tab-navigation {
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: var(--space-sm);
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  margin-left: calc(-1 * var(--space-xs));
+  margin-right: calc(-1 * var(--space-xs));
+  padding-left: var(--space-xs);
+  padding-right: var(--space-xs);
+  /* 🚀 360px 터치 최적화 */
+  position: relative;
+  width: calc(100% + 2 * var(--space-xs));
+}
+
+.resume-tab-navigation::-webkit-scrollbar {
+  display: none;
+}
+
+.resume-tab-list {
+  display: flex;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  min-width: max-content;
+  /* 🚀 360px에서 탭 버튼 배치 최적화 */
+  width: 100%;
+  justify-content: space-between;
+}
+
+.resume-tab-item {
+  flex-shrink: 0;
+  /* 🚀 360px에서 균등 분배 */
+  flex: 1;
+  min-width: 0;
+}
+
+.resume-tab-button {
+  background: none;
+  border: none;
+  padding: var(--space-xs) var(--space-sm);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 🚀 360px 터치 영역 최적화 */
+  min-height: 44px;
+  width: 100%;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  /* 🚀 터치 디바이스 최적화 */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.resume-tab-button.active {
+  color: var(--text-primary);
+  background-color: rgba(var(--accent-rgb), 0.05);
+}
+
+.resume-tab-button:hover:not(.active) {
+  color: var(--text-primary);
+  /* 🚀 호버 효과 개선 */
+  background-color: var(--bg-tertiary);
+}
+
+/* 🚀 터치 디바이스 활성화 피드백 */
+.resume-tab-button:active {
+  transform: scale(0.98);
+  background-color: rgba(var(--accent-rgb), 0.1);
+}
+
+.resume-tab-button:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* Resume Tab Contents - 3개 탭 지원으로 수정 */
+.resume-tab-contents {
+  margin-bottom: var(--space-sm);
+  overflow: hidden;
+  position: relative;
+  /* 🚀 360px 최적화 */
+  width: calc(100% + 2 * var(--space-xs));
+}
+
+.resume-tab-content-wrapper {
+  display: flex;
+  width: 300%; /* 3개 탭 지원을 위해 200%에서 300%로 변경 */
+  transition: transform 0.3s ease;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  /* 🚀 하드웨어 가속 */
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.resume-tab-content {
+  width: 33.333%; /* 3개 탭 지원을 위해 50%에서 33.333%로 변경 */
+  flex-shrink: 0;
+  /* padding-left: var(--space-xs);
+  padding-right: var(--space-xs); */
+  /* 🚀 360px 최적화 */
+  min-height: 200px;
+}
+
+.resume-tab-content:first-child {
+  padding-left: 0;
+}
+
+.resume-tab-content:last-child {
+  padding-right: 0;
+}
+
+/* Resume Section */
+.resume-section {
+  width: 100%;
+}
+
+/* ============ ACCORDION STYLES ============ */
+
+.accordion-wrapper {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.accordion-item {
+  width: 100%;
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.accordion-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] .accordion-item:hover {
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+/* 아코디언 활성 상태 강조 */
+.accordion-item:has(.accordion-content.active) {
+  background-color: var(--bg-tertiary);
+}
+
+.accordion-header {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: var(--space-xs);
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  /* 🚀 360px 터치 영역 최적화 */
+  min-height: 48px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 🚀 터치 디바이스 활성화 피드백 */
+.accordion-header:active {
+  transform: scale(0.99);
+  background-color: rgba(var(--accent-rgb), 0.1);
+}
+
+.accordion-header:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: -2px;
+}
+
+/* 활성화된 아코디언 헤더 스타일 */
+.accordion-header[aria-expanded='true'] {
+  background-color: var(--bg-tertiary);
+  color: var(--accent-color);
+}
+
+.accordion-title {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+  /* 🚀 360px 최적화 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* 활성화된 아코디언 제목 스타일 */
+.accordion-header[aria-expanded='true'] .accordion-title {
+  color: var(--accent-color);
+  font-weight: 700;
+}
+
+.accordion-icon {
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  margin-left: var(--space-xs);
+  /* 🚀 360px 아이콘 크기 최적화 */
+  width: 20px;
+  height: 20px;
+}
+
+.accordion-header[aria-expanded='true'] .accordion-icon {
+  transform: rotate(180deg);
+  color: var(--accent-color);
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background-color: var(--bg-card);
+}
+
+.accordion-content.active {
+  max-height: none;
+  overflow: visible;
+}
+
+/* ============ CV CONTAINER STYLES ============ */
+
+.cv-container {
+  min-height: auto;
+  display: block;
+  background: #ffffff;
+  color: #000000;
+  /* 🚀 360px 최적화 */
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.cv-sidebar {
+  background: #ffffff;
+  padding: var(--space-xs);
+  color: #000000;
+  border-bottom: 1px solid #000000;
+  margin-bottom: var(--space-sm);
+}
+
+.cv-profile-section {
+  margin-bottom: var(--space-sm);
+}
+
+.cv-name {
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin-bottom: 2px;
+  color: #000000;
+  /* 🚀 360px 최적화 */
+  word-break: keep-all;
+}
+
+.cv-role {
+  font-size: 0.7rem;
+  color: #000000;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.cv-tagline {
+  font-size: 0.65rem;
+  color: #000000;
+  line-height: 1.4;
+}
+
+.cv-contact-section {
+  border-top: 1px solid #000000;
+  padding-top: var(--space-xs);
+}
+
+.cv-contact-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+  color: #000000;
+}
+
+.cv-contact-item {
+  display: block;
+  color: #000000;
+  text-decoration: none;
+  margin-bottom: 4px;
+  font-size: 0.65rem;
+  transition: color 0.2s;
+  word-break: break-all;
+  /* 🚀 360px 터치 최적화 */
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.cv-contact-item:hover {
+  color: #666666;
+}
+
+.cv-main-content {
+  background: #ffffff;
+  padding: var(--space-xs);
+}
+
+.cv-section {
+  margin-bottom: var(--space-sm);
+}
+
+.cv-section-title {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #000000;
+  margin-bottom: var(--space-xs);
+  border-bottom: 1px solid #000000;
+  padding-bottom: 4px;
+  line-height: 1.3;
+}
+
+.cv-section-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cv-strength-item,
+.cv-uniform-item {
+  background: #ffffff;
+  padding: 0;
+  margin-bottom: var(--space-sm);
+}
+
+.cv-strength-item:not(:last-child),
+.cv-uniform-item:not(:last-child) {
+  margin-bottom: var(--space-md);
+}
+
+.cv-strength-title,
+.cv-uniform-title {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 2px;
+  line-height: 1.3;
+  word-break: keep-all;
+}
+
+.cv-strength-title::before,
+.cv-uniform-title::before {
+  content: '| ';
+  color: #000000;
+  font-weight: 900;
+}
+
+.cv-strength-subtitle {
+  font-size: 0.65rem;
+  color: #f39c12;
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
+}
+
+.cv-strength-content,
+.cv-uniform-content {
+  font-size: 0.65rem;
+  color: #000000;
+  line-height: 1.6;
+}
+
+.cv-strength-content p,
+.cv-uniform-content p {
+  margin-bottom: var(--space-xs);
+}
+
+.cv-strength-content strong,
+.cv-uniform-content strong {
+  display: inline-block;
+  color: #000000;
+  font-weight: 600;
+}
+
+/* ============ CAREER CONTAINER STYLES ============ */
+
+.career-container {
+  background: #ffffff;
+  color: #000000;
+  /* 🚀 360px 최적화 */
+  font-size: 0.75rem;
+}
+
+.career-project-summary {
+  margin-bottom: var(--space-sm);
+}
+
+.career-section-title {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #000000;
+  margin-bottom: var(--space-xs);
+  border-bottom: 1px solid #000000;
+  padding-bottom: 4px;
+  line-height: 1.3;
+}
+
+.career-summary-container {
+  width: 100%;
+  border-radius: 0.25rem;
+  border: 0.0625rem solid transparent;
+  padding: var(--space-xs);
+  color: #383d41;
+  background-color: #fff3cd;
+  margin: 0 0 var(--space-sm) 0;
+}
+
+.career-summary-category {
+  margin-bottom: var(--space-xs);
+}
+
+.career-summary-title {
+  margin-bottom: var(--space-xs);
+  font-weight: 600;
+  font-size: 0.7rem;
+}
+
+.career-summary-tags {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-bottom: var(--space-xs);
+  gap: 0.1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.career-summary-tag {
+  background: #fbbf24;
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.2rem;
+  /* 🚀 360px 최적화 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.career-summary-content-summary {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.career-summary-projects {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.career-summary-projects li {
+  margin-bottom: 0.2rem;
+  font-size: 0.65rem;
+  line-height: 1.3;
+}
+
+.career-details-section {
+  margin-bottom: var(--space-sm);
+}
+
+.career-item {
+  display: block;
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.career-item:last-child {
+  border-bottom: none;
+}
+
+.career-company-info {
+  margin-bottom: var(--space-sm);
+}
+
+.career-company-name {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 2px;
+  display: block;
+  word-break: keep-all;
+}
+
+.career-period {
+  font-size: 0.65rem;
+  color: #666666;
+  margin-bottom: 1px;
+  line-height: 1;
+}
+
+.career-duration {
+  font-size: 0.65rem;
+  color: #f39c12;
+  font-weight: 600;
+}
+
+.career-achievements {
+  padding: 0;
+}
+
+.career-achievement-item {
+  margin-bottom: var(--space-sm);
+}
+
+.career-achievement-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: var(--space-xs);
+  line-height: 1.3;
+  display: block;
+  word-break: keep-all;
+}
+
+.career-achievement-title::before {
+  content: '| ';
+  color: #000000;
+  font-weight: 900;
+}
+
+.career-achievement-subtitle {
+  font-size: 0.65rem;
+  color: #f39c12;
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
+}
+
+.career-achievement-content {
+  font-size: 0.65rem;
+  color: #000000;
+  line-height: 1.5;
+}
+
+.career-achievement-content p {
+  margin-bottom: var(--space-xs);
+}
+
+.career-achievement-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.career-achievement-list li {
+  margin-bottom: 2px;
+  padding-left: var(--space-xs);
+  position: relative;
+  font-size: 0.6rem;
+}
+
+.career-achievement-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #000000;
+  font-weight: bold;
+}
+
+.career-achievement-label {
+  display: inline-block;
+  font-weight: 600;
+}
+
+/* ============ DETAIL ITEMS STYLES ============ */
+
+.detail-items-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.detail-item {
+  margin-bottom: var(--space-sm);
+}
+
+.item-title {
+  display: block;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 17px 0;
+  line-height: 1.3;
+  word-break: keep-all;
+}
+
+.item-content {
+  position: relative;
+}
+
+/* ============ SWIPER.JS STYLES ============ */
+
+.swiper {
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+}
+
+.swiper-wrapper {
+  display: flex;
+  width: 100%;
+  height: auto;
+  position: relative;
+  transition-property: transform;
+}
+
+.swiper-slide {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 100%;
+  height: auto;
+  position: relative;
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs);
+  transition: all 0.3s ease;
+  min-height: 200px;
+  touch-action: pan-y;
+}
+
+.swiper-slide-active {
+  border-color: var(--accent-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] .swiper-slide-active {
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+.slide-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.slide-title {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+  line-height: 1.3;
+  word-break: keep-all;
+}
+
+.slide-subtitle {
+  font-size: 0.65rem;
+  color: var(--accent-color);
+  font-weight: 500;
+  margin-bottom: var(--space-xs);
+}
+
+.slide-description {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.slide-description p {
+  margin-bottom: var(--space-xs);
+}
+
+.slide-description ul {
+  list-style: none;
+  margin: var(--space-xs) 0 0 0;
+  padding: 0;
+}
+
+.slide-description li {
+  margin-bottom: 1px;
+  padding-left: var(--space-xs);
+  position: relative;
+  font-size: 0.6rem;
+}
+
+.slide-description li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+/* Swiper Navigation Buttons - 🚀 360px 터치 최적화 */
+.swiper-button-prev,
+.swiper-button-next {
+  position: absolute;
+  top: 50%;
+  width: 40px;
+  height: 40px;
+  margin-top: -20px;
+  z-index: 10;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: all 0.3s ease;
+  /* 🚀 360px 터치 영역 최적화 */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.swiper-button-prev {
+  left: 8px;
+}
+
+.swiper-button-next {
+  right: 8px;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  font-family: swiper-icons;
+  font-size: 16px;
+  text-transform: none !important;
+  letter-spacing: 0;
+  font-variant: initial;
+  line-height: 1;
+}
+
+.swiper-button-prev:after {
+  content: 'prev';
+}
+
+.swiper-button-next:after {
+  content: 'next';
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--accent-color);
+}
+
+/* 🚀 터치 디바이스 활성화 피드백 */
+.swiper-button-prev:active,
+.swiper-button-next:active {
+  transform: scale(0.95);
+  background-color: rgba(var(--accent-rgb), 0.1);
+}
+
+.swiper-button-prev:focus-visible,
+.swiper-button-next:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.swiper-button-disabled {
+  opacity: 0.35;
+  cursor: auto;
+  pointer-events: none;
+}
+
+/* Swiper Pagination - 🚀 360px 최적화 */
+.swiper-pagination {
+  position: relative;
+  margin-top: var(--space-xs);
+  padding: var(--space-xs) 0;
+  text-align: center;
+}
+
+.swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+  border-radius: 50%;
+  background: var(--text-secondary);
+  opacity: 0.4;
+  cursor: pointer;
+  margin: 0 4px;
+  transition: all 0.3s ease;
+  /* 🚀 360px 터치 영역 최적화 */
+  min-width: 32px;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+  background: var(--accent-color);
+  transform: scale(1.2);
+}
+
+.swiper-pagination-bullet:hover {
+  opacity: 0.7;
+  background: var(--accent-color);
+}
+
+/* ============ COMPANY LIST STYLES ============ */
+
+.company-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.company-item {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs);
+  transition: all 0.3s ease;
+  /* 🚀 360px 터치 최적화 */
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.company-item:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.company-name {
+  display: block;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+  word-break: keep-all;
+}
+
+/* Career Slider Styles */
+.career-slider-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.career-slide {
+  display: none;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs);
+  margin-bottom: var(--space-xs);
+  transition: all 0.3s ease;
+  /* 🚀 360px 최적화 */
+  min-height: 120px;
+}
+
+.career-slide.active {
+  display: block;
+  animation: slideIn 0.3s ease;
+}
+
+.career-slide-content {
+  width: 100%;
+}
+
+.career-slide-title {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1px;
+  line-height: 1.3;
+  word-break: keep-all;
+}
+
+.career-slide-period {
+  font-size: 0.6rem;
+  color: var(--accent-color);
+  font-weight: 500;
+  margin-bottom: var(--space-xs);
+}
+
+.career-slide-description {
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.career-slide-description p {
+  margin-bottom: var(--space-xs);
+}
+
+.career-slide-description ul {
+  list-style: none;
+  margin: 1px 0 0 0;
+  padding: 0;
+}
+
+.career-slide-description li {
+  margin-bottom: 1px;
+  padding-left: var(--space-xs);
+  position: relative;
+  font-size: 0.55rem;
+}
+
+.career-slide-description li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+/* Career Slide Controls - 🚀 360px 터치 최적화 */
+.career-slide-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-xs);
+  padding: var(--space-xs) 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.career-slide-prev,
+.career-slide-next {
+  background: none;
+  border: 1px solid var(--border-color);
+  padding: 2px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  color: var(--text-secondary);
+  /* 🚀 360px 터치 영역 최적화 */
+  min-height: 36px;
+  min-width: 36px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.career-slide-prev:hover,
+.career-slide-next:hover {
+  background-color: var(--bg-secondary);
+  color: var(--accent-color);
+}
+
+/* 🚀 터치 디바이스 활성화 피드백 */
+.career-slide-prev:active,
+.career-slide-next:active {
+  transform: scale(0.95);
+  background-color: rgba(var(--accent-rgb), 0.1);
+}
+
+.career-slide-indicator {
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* 🚀 터치 디바이스 최적화 */
+@media (hover: none) {
+  .career-slide-prev,
+  .career-slide-next {
+    min-height: 40px;
+    min-width: 40px;
+  }
+}
+
+/* ============ PORTFOLIO LINK STYLES ============ */
+
+.portfolio-link-container {
+  padding: var(--space-sm);
+}
+
+.portfolio-detail-link {
+  display: block;
+  width: 100%;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  /* 🚀 360px 터치 최적화 */
+  min-height: 60px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  -webkit-touch-callout: none;
+}
+
+.portfolio-detail-link:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--card-shadow-hover);
+}
+
+/* 🚀 터치 디바이스 활성화 피드백 */
+.portfolio-detail-link:active {
+  transform: scale(0.98);
+  background-color: rgba(var(--accent-rgb), 0.05);
+}
+
+.portfolio-detail-link:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.portfolio-link-content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.portfolio-link-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  /* 🚀 360px 최적화 */
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portfolio-link-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.portfolio-link-title {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+  word-break: keep-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.portfolio-link-description {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.portfolio-link-arrow {
+  font-size: 1.2rem;
+  color: var(--accent-color);
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.portfolio-detail-link:hover .portfolio-link-arrow {
+  transform: translateX(4px);
+}
+
+/* ============ ANIMATIONS ============ */
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 아코디언 열림/닫힘 애니메이션 강화 */
+@keyframes accordionOpen {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.accordion-content.active {
+  animation: accordionOpen 0.4s ease-out;
+}
+
+/* 🚀 탭 전환 애니메이션 강화 */
+@keyframes tabSlide {
+  from {
+    transform: translateX(5px);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.resume-tab-content {
+  animation: tabSlide 0.3s ease-out;
+}
+
+/* ============ 1) ≥360px (Galaxy S 등 360 폭 계열) ============ */
+@media (min-width: 360px) {
+  /* 🚀 360px 핵심 최적화 */
+  .resume-component {
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+  }
+
+  .resume-tab-navigation {
+    margin-left: calc(-1 * var(--space-sm));
+    margin-right: calc(-1 * var(--space-sm));
+    padding-left: var(--space-sm);
+    padding-right: var(--space-sm);
+    margin-bottom: var(--space-md);
+    border-radius: var(--radius-sm);
+  }
+
+  .resume-tab-list {
+    /* 🚀 360px에서 탭 버튼 간격 조정 */
+    gap: 2px;
+  }
+
+  .resume-tab-button {
+    padding: var(--space-xs) var(--space-md);
+    min-height: 46px;
+    font-size: var(--font-size-sm);
+    /* 🚀 360px 터치 영역 강화 */
+    border-radius: var(--radius-sm);
+    margin: 0 1px;
+  }
+
+  .resume-tab-contents {
+    margin-bottom: var(--space-md);
+  }
+
+  .resume-tab-content {
+    padding-left: var(--space-sm);
+    min-height: 250px;
+  }
+
+  .accordion-wrapper {
+    gap: var(--space-sm);
+  }
+
+  .accordion-header {
+    min-height: 52px;
+    padding: var(--space-sm);
+  }
+
+  .accordion-title {
+    font-size: var(--font-size-sm);
+  }
+
+  .accordion-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .cv-name {
+    font-size: 1rem;
+  }
+
+  .cv-role {
+    font-size: 0.75rem;
+  }
+
+  .cv-tagline {
+    font-size: 0.7rem;
+  }
+
+  .career-summary-container {
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+  }
+
+  .career-summary-title {
+    font-size: 0.75rem;
+  }
+
+  .career-summary-tag {
+    font-size: 0.65rem;
+    padding: 0.125rem 0.25rem;
+  }
+
+  .swiper-slide {
+    padding: var(--space-sm);
+    min-height: 630px;
+  }
+
+  .slide-title {
+    font-size: var(--font-size-sm);
+  }
+
+  .slide-subtitle {
+    font-size: 0.7rem;
+  }
+
+  .slide-description {
+    font-size: 0.7rem;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 44px;
+    height: 44px;
+    margin-top: -22px;
+  }
+
+  .company-item {
+    padding: var(--space-sm);
+    min-height: 52px;
+  }
+
+  .company-name {
+    font-size: var(--font-size-sm);
+  }
+
+  .career-slide {
+    padding: var(--space-sm);
+    min-height: 140px;
+  }
+
+  .career-slide-title {
+    font-size: 0.7rem;
+  }
+
+  .career-slide-period {
+    font-size: 0.65rem;
+  }
+
+  .career-slide-description {
+    font-size: 0.65rem;
+  }
+
+  .career-slide-prev,
+  .career-slide-next {
+    min-height: 40px;
+    min-width: 40px;
+    padding: 4px;
+  }
+
+  .portfolio-detail-link {
+    min-height: 70px;
+    border-radius: var(--radius-md);
+  }
+
+  .portfolio-link-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1.6rem;
+  }
+
+  .portfolio-link-title {
+    font-size: var(--font-size-base);
+  }
+
+  .portfolio-link-description {
+    font-size: var(--font-size-sm);
+  }
+
+  .swiper-pagination-bullet {
+    min-width: 10px;
+    min-height: 10px;
+  }
+}
+
+/* ============ 2) ≥375px (iPhone 375 폭 계열) ============ */
+@media (min-width: 375px) {
+  .resume-component {
+    padding: var(--space-md);
+  }
+
+  .resume-tab-button {
+    font-size: var(--font-size-base);
+    padding: var(--space-sm) var(--space-lg);
+    min-height: 48px;
+  }
+
+  .resume-tab-contents {
+    margin-bottom: var(--space-lg);
+  }
+
+  .accordion-header {
+    padding: var(--space-md);
+    min-height: 56px;
+  }
+
+  .cv-sidebar {
+    padding: var(--space-sm);
+  }
+
+  .cv-main-content {
+    padding: var(--space-sm);
+  }
+
+  .cv-name {
+    font-size: 1.1rem;
+  }
+
+  .cv-contact-title {
+    font-size: 0.75rem;
+  }
+
+  .cv-contact-item {
+    font-size: 0.7rem;
+    min-height: 28px;
+  }
+
+  .cv-section-title {
+    font-size: 0.9rem;
+  }
+
+  .cv-strength-title,
+  .cv-uniform-title {
+    font-size: 0.8rem;
+  }
+
+  .cv-strength-content,
+  .cv-uniform-content {
+    font-size: 0.7rem;
+  }
+
+  .career-section-title {
+    font-size: 0.9rem;
+  }
+
+  .career-company-name {
+    font-size: 0.8rem;
+  }
+
+  .career-achievement-title {
+    font-size: 0.75rem;
+  }
+
+  .career-achievement-content {
+    font-size: 0.7rem;
+  }
+
+  .swiper-slide {
+    padding: var(--space-md);
+  }
+
+  .company-item {
+    padding: var(--space-md);
+  }
+
+  .career-slide {
+    padding: var(--space-md);
+    min-height: 160px;
+  }
+
+  .portfolio-link-container {
+    padding: var(--space-md);
+  }
+
+  .portfolio-detail-link {
+    padding: var(--space-md);
+    min-height: 80px;
+  }
+}
+
+/* ============ 3) ≥390px (iPhone Pro 390×844 계열) ============ */
+@media (min-width: 390px) {
+  .resume-component {
+    border-radius: var(--radius-lg);
+  }
+
+  .accordion-item {
+    border-radius: var(--radius-md);
+  }
+
+  .resume-tab-button {
+    min-height: 50px;
+  }
+
+  .accordion-header {
+    min-height: 58px;
+  }
+
+  .cv-name {
+    font-size: 1.2rem;
+  }
+
+  .cv-role {
+    font-size: 0.8rem;
+  }
+
+  .cv-tagline {
+    font-size: 0.75rem;
+  }
+
+  .cv-section-title {
+    font-size: 1rem;
+  }
+
+  .career-section-title {
+    font-size: 1rem;
+  }
+
+  .career-summary-tags {
+    gap: 0.15rem;
+  }
+
+  .career-company-name {
+    font-size: 0.85rem;
+  }
+
+  .career-achievement-title {
+    font-size: 0.8rem;
+  }
+
+  .career-achievement-subtitle {
+    font-size: 0.7rem;
+  }
+
+  .item-title {
+    font-size: var(--font-size-sm);
+  }
+
+  .slide-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .slide-description {
+    font-size: 0.75rem;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 48px;
+    height: 48px;
+    margin-top: -24px;
+  }
+
+  .career-slide {
+    min-height: 180px;
+  }
+
+  .career-slide-title {
+    font-size: 0.75rem;
+  }
+
+  .career-slide-period {
+    font-size: 0.7rem;
+  }
+
+  .career-slide-description {
+    font-size: 0.7rem;
+  }
+
+  .career-slide-prev,
+  .career-slide-next {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .portfolio-detail-link {
+    border-radius: var(--radius-lg);
+    min-height: 90px;
+  }
+
+  .portfolio-link-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.8rem;
+  }
+}
+
+/* ============ 4) ≥393px (iPhone 16 / 일부 Android 393 폭) ============ */
+@media (min-width: 393px) {
+  .resume-tab-navigation {
+    margin-left: calc(-1 * var(--space-md));
+    margin-right: calc(-1 * var(--space-md));
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
+  }
+
+  .accordion-wrapper {
+    gap: var(--space-md);
+  }
+
+  .cv-profile-section {
+    margin-bottom: var(--space-md);
+  }
+
+  .cv-contact-section {
+    padding-top: var(--space-sm);
+  }
+
+  .career-summary-tags {
+    width: 280px;
+    gap: 0.2rem;
+  }
+
+  .career-summary-tag {
+    padding: 0.15rem 0.3rem;
+  }
+
+  .detail-item {
+    margin-bottom: var(--space-md);
+  }
+
+  .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+    min-height: 10px;
+  }
+
+  .career-slide-controls {
+    padding: var(--space-sm) 0;
+  }
+
+  .career-slide-indicator {
+    font-size: 0.65rem;
+  }
+}
+
+/* ============ 5) ≥402px (iPhone 16 Pro 402 폭) ============ */
+@media (min-width: 402px) {
+  .resume-component {
+    padding: var(--space-lg);
+  }
+
+  .resume-tab-button {
+    min-height: 52px;
+  }
+
+  .accordion-header {
+    min-height: 60px;
+  }
+
+  .cv-name {
+    font-size: 1.3rem;
+  }
+
+  .cv-tagline {
+    font-size: 0.8rem;
+  }
+
+  .cv-section-title {
+    font-size: 1.1rem;
+  }
+
+  .cv-strength-title,
+  .cv-uniform-title {
+    font-size: 0.85rem;
+  }
+
+  .cv-strength-content,
+  .cv-uniform-content {
+    font-size: 0.75rem;
+  }
+
+  .career-section-title {
+    font-size: 1.1rem;
+  }
+
+  .career-item {
+    margin-bottom: var(--space-lg);
+  }
+
+  .career-achievement-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .career-achievement-content {
+    font-size: 0.75rem;
+  }
+
+  .item-title {
+    font-size: var(--font-size-base);
+  }
+
+  .slide-title {
+    font-size: var(--font-size-base);
+  }
+
+  .company-list {
+    gap: var(--space-md);
+  }
+
+  .company-name {
+    font-size: var(--font-size-base);
+  }
+
+  .career-slide {
+    min-height: 200px;
+  }
+
+  .career-slide-title {
+    font-size: 0.8rem;
+  }
+
+  .portfolio-detail-link {
+    min-height: 100px;
+  }
+}
+
+/* ============ 6) ≥412px (Pixel/Android 다수 412 폭) ============ */
+@media (min-width: 412px) {
+  .resume-tab-button {
+    font-size: var(--font-size-lg);
+    min-height: 54px;
+  }
+
+  .accordion-title {
+    font-size: var(--font-size-base);
+  }
+
+  .accordion-header {
+    min-height: 62px;
+  }
+
+  .cv-name {
+    font-size: 1.4rem;
+  }
+
+  .cv-role {
+    font-size: 0.85rem;
+  }
+
+  .cv-contact-title {
+    font-size: 0.8rem;
+  }
+
+  .cv-contact-item {
+    font-size: 0.75rem;
+    min-height: 32px;
+  }
+
+  .cv-strength-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .career-summary-tags {
+    width: 320px;
+  }
+
+  .career-summary-title {
+    font-size: 0.8rem;
+  }
+
+  .career-summary-projects li {
+    font-size: 0.7rem;
+  }
+
+  .career-period {
+    font-size: 0.7rem;
+  }
+
+  .career-duration {
+    font-size: 0.7rem;
+  }
+
+  .career-achievement-list li {
+    font-size: 0.65rem;
+  }
+
+  .slide-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 52px;
+    height: 52px;
+    margin-top: -26px;
+  }
+
+  .career-slide {
+    min-height: 220px;
+  }
+
+  .career-slide-prev,
+  .career-slide-next {
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  .portfolio-link-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .portfolio-detail-link {
+    min-height: 110px;
+  }
+}
+
+/* ============ 7) ≥430px (iPhone Plus/Pro Max 430 폭) ============ */
+@media (min-width: 430px) {
+  .resume-component {
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+  }
+
+  .resume-tab-button {
+    min-height: 56px;
+  }
+
+  .accordion-header {
+    padding: var(--space-md);
+    min-height: 64px;
+  }
+
+  .cv-sidebar {
+    padding: var(--space-md);
+  }
+
+  .cv-main-content {
+    padding: var(--space-md);
+  }
+
+  .cv-name {
+    font-size: 1.5rem;
+  }
+
+  .cv-section-title {
+    font-size: 1.2rem;
+  }
+
+  .cv-strength-title,
+  .cv-uniform-title {
+    font-size: 0.9rem;
+  }
+
+  .cv-strength-content,
+  .cv-uniform-content {
+    font-size: 0.8rem;
+  }
+
+  .career-section-title {
+    font-size: 1.2rem;
+  }
+
+  .career-summary-container {
+    padding: var(--space-md);
+  }
+
+  .career-summary-tags {
+    width: 340px;
+  }
+
+  .career-company-name {
+    font-size: 0.9rem;
+  }
+
+  .career-achievement-title {
+    font-size: 0.85rem;
+  }
+
+  .career-achievement-content {
+    font-size: 0.8rem;
+  }
+
+  .item-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .swiper-slide {
+    padding: var(--space-md);
+  }
+
+  .company-item {
+    padding: var(--space-md);
+  }
+
+  .company-name {
+    font-size: var(--font-size-lg);
+  }
+
+  .career-slide {
+    padding: var(--space-md);
+    min-height: 240px;
+  }
+
+  .career-slide-title {
+    font-size: 0.85rem;
+  }
+
+  .portfolio-link-container {
+    padding: var(--space-lg);
+  }
+
+  .portfolio-detail-link {
+    padding: var(--space-lg);
+    min-height: 120px;
+  }
+}
+
+/* ============ 8) ≥440px (iPhone 16 Pro Max 440 폭) ============ */
+@media (min-width: 440px) {
+  .resume-component {
+    padding: var(--space-2xl);
+  }
+
+  .resume-tab-button {
+    padding: var(--space-md) var(--space-xl);
+    min-height: 58px;
+  }
+
+  .accordion-header {
+    min-height: 66px;
+  }
+
+  .cv-name {
+    font-size: 1.6rem;
+  }
+
+  .cv-role {
+    font-size: 0.9rem;
+  }
+
+  .cv-tagline {
+    font-size: 0.85rem;
+  }
+
+  .cv-contact-title {
+    font-size: 0.85rem;
+  }
+
+  .cv-contact-item {
+    font-size: 0.8rem;
+    min-height: 36px;
+  }
+
+  .cv-section-title {
+    font-size: 1.3rem;
+  }
+
+  .cv-strength-title,
+  .cv-uniform-title {
+    font-size: 0.95rem;
+  }
+
+  .cv-strength-content,
+  .cv-uniform-content {
+    font-size: 0.85rem;
+  }
+
+  .career-section-title {
+    font-size: 1.3rem;
+  }
+
+  .career-summary-container {
+    padding: var(--space-lg);
+  }
+
+  .career-summary-tags {
+    width: 100%;
+    max-width: 380px;
+  }
+
+  .career-summary-tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.35rem;
+  }
+
+  .career-summary-projects li {
+    font-size: 0.75rem;
+  }
+
+  .career-company-name {
+    font-size: 0.95rem;
+  }
+
+  .career-achievement-title {
+    font-size: 0.9rem;
+  }
+
+  .career-achievement-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .career-achievement-content {
+    font-size: 0.85rem;
+  }
+
+  .career-achievement-list li {
+    font-size: 0.7rem;
+  }
+
+  .slide-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .slide-subtitle {
+    font-size: var(--font-size-sm);
+  }
+
+  .slide-description {
+    font-size: var(--font-size-sm);
+  }
+
+  .slide-description li {
+    font-size: 0.7rem;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 56px;
+    height: 56px;
+    margin-top: -28px;
+  }
+
+  .career-slide {
+    min-height: 260px;
+  }
+
+  .career-slide-title {
+    font-size: 0.9rem;
+  }
+
+  .career-slide-period {
+    font-size: 0.75rem;
+  }
+
+  .career-slide-description {
+    font-size: 0.75rem;
+  }
+
+  .career-slide-description li {
+    font-size: 0.65rem;
+  }
+
+  .career-slide-prev,
+  .career-slide-next {
+    min-height: 52px;
+    min-width: 52px;
+  }
+
+  .portfolio-link-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .portfolio-link-description {
+    font-size: var(--font-size-base);
+  }
+
+  .portfolio-detail-link {
+    min-height: 130px;
+  }
+
+  .portfolio-link-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 2rem;
+  }
+
+  /* 큰 화면에서는 CV 레이아웃을 사이드바 방식으로 */
+  .cv-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cv-sidebar {
+    width: 100%;
+    flex-shrink: 0;
+    border-bottom: none;
+    border-right: 2px solid #000000;
+    margin-bottom: 0;
+    margin-right: var(--space-lg);
+  }
+
+  .cv-main-content {
+    order: 2;
+    flex: 1;
+    padding: var(--space-lg);
+  }
+}
+
+/* ============ ACCESSIBILITY & ANIMATION PREFERENCES ============ */
+
+@media (prefers-reduced-motion: reduce) {
+  .swiper-slide {
+    transition: none;
+  }
+
+  .career-slide.active {
+    animation: none;
+  }
+
+  .accordion-content.active {
+    animation: none;
+  }
+
+  .company-item:hover {
+    transform: none;
+  }
+
+  .resume-tab-content-wrapper {
+    transition: none;
+  }
+
+  .accordion-content {
+    transition: none;
+  }
+
+  .accordion-icon {
+    transition: none;
+  }
+
+  .portfolio-detail-link:hover {
+    transform: none;
+  }
+
+  .portfolio-link-arrow {
+    transition: none;
+  }
+
+  .resume-tab-content {
+    animation: none;
+  }
+}
+
+/* ============ HIGH CONTRAST MODE SUPPORT ============ */
+
+@media (prefers-contrast: high) {
+  .resume-component {
+    border-width: 2px;
+  }
+
+  .accordion-item {
+    border-width: 2px;
+  }
+
+  .swiper-slide {
+    border-width: 2px;
+  }
+
+  .company-item {
+    border-width: 2px;
+  }
+
+  .career-slide {
+    border-width: 2px;
+  }
+
+  .portfolio-detail-link {
+    border-width: 2px;
+  }
+
+  .resume-tab-button {
+    border-width: 2px;
+  }
+}
+
+/* ============ PRINT STYLES ============ */
+
+@media print {
+  .resume-component {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #000;
+    padding: 1cm;
+  }
+
+  .resume-tab-navigation {
+    display: none;
+  }
+
+  .resume-tab-content-wrapper {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .resume-tab-content {
+    width: 100%;
+    padding: 0;
+  }
+
+  .accordion-header {
+    display: none;
+  }
+
+  .accordion-content {
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next,
+  .swiper-pagination {
+    display: none;
+  }
+
+  .swiper-slide {
+    display: block !important;
+    page-break-inside: avoid;
+    margin-bottom: 0.5cm;
+  }
+
+  .career-slide-controls {
+    display: none;
+  }
+
+  .career-slide {
+    display: block !important;
+    page-break-inside: avoid;
+    margin-bottom: 0.5cm;
+  }
+
+  .company-item:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .cv-container {
+    display: block;
+  }
+
+  .cv-sidebar {
+    border-right: none;
+    border-bottom: 2px solid #000000;
+    margin-right: 0;
+    margin-bottom: 0.5cm;
+    width: 100%;
+  }
+
+  .cv-main-content {
+    padding: 0;
+  }
+
+  .swiper {
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  .swiper-wrapper {
+    display: block !important;
+  }
+
+  .swiper-slide {
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 0.5cm !important;
+    break-inside: avoid;
+  }
+
+  .portfolio-detail-link {
+    page-break-inside: avoid;
+  }
+}

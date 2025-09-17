@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>노현우 - 퍼블리셔 경력기술서</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, system-ui, Roboto,
+          sans-serif;
+        line-height: 1.6;
+        color: #000000;
+        background: #ffffff;
+        padding: 0;
+        font-size: 14px;
+      }
+
+      li {
+        list-style-type: none;
+      }
+
+      .container {
+        min-height: 100vh;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 10px;
+      }
+
+      .main-content {
+        background: #ffffff;
+        padding: 15px;
+      }
+
+      .section {
+        margin-bottom: 25px;
+      }
+
+      .section-title {
+        display: inline-block;
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: #000000;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #000000;
+        padding-bottom: 8px;
+        width: 100%;
+      }
+
+      .section-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .career-item {
+        display: block;
+        margin-bottom: 30px;
+        padding-bottom: 25px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .career-item:last-child {
+        border-bottom: none;
+      }
+
+      .company-info {
+        margin-bottom: 20px;
+      }
+
+      .company-name {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #000000;
+        margin-bottom: 8px;
+      }
+
+      .company-name::before {
+        content: '';
+        color: #000000;
+        font-weight: 900;
+      }
+
+      .period {
+        font-size: 0.8rem;
+        color: #666666;
+        margin-bottom: 5px;
+      }
+
+      .duration {
+        font-size: 0.8rem;
+        color: #f39c12;
+        font-weight: 600;
+      }
+
+      .achievements {
+        padding: 0;
+      }
+
+      .achievement-item {
+        margin-bottom: 20px;
+      }
+
+      .achievement-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #000000;
+        margin-bottom: 10px;
+        line-height: 1.4;
+      }
+
+      .achievement-title::before {
+        content: '| ';
+        color: #000000;
+        font-weight: 900;
+      }
+
+      .achievement-subtitle {
+        font-size: 0.8rem;
+        color: #f39c12;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .achievement-content {
+        font-size: 0.8rem;
+        color: #000000;
+        line-height: 1.6;
+      }
+
+      .achievement-content p {
+        margin-bottom: 10px;
+      }
+
+      .achievement-content ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .achievement-content li {
+        margin-bottom: 6px;
+        padding-left: 12px;
+        position: relative;
+      }
+
+      .achievement-content li::before {
+        content: '•';
+        position: absolute;
+        left: 0;
+        color: #000000;
+        font-weight: bold;
+      }
+
+      .achievement-list {
+        margin-left: 8px;
+      }
+
+      .achievement-label {
+        display: inline-block;
+      }
+
+      .summary-container {
+        width: 100%;
+        border-radius: 0.25rem;
+        border: 0.0625rem solid transparent;
+        padding: 0.75rem;
+        color: #383d41;
+        background-color: #fff3cd;
+        margin: 0 0 1rem 0;
+      }
+
+      .summary-category {
+        margin-bottom: 1rem;
+      }
+
+      .summary-title {
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .summary-tags {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        margin-bottom: 0.5rem;
+        gap: 0.25rem;
+      }
+
+      .summary-tag {
+        background: #fbbf24;
+        color: #fff;
+        font-size: 0.7rem;
+        font-weight: 700;
+        border-radius: 0.25rem;
+        padding: 0.2rem 0.3rem;
+      }
+
+      .summary-content-summary {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .summary-projects {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .summary-projects li {
+        margin-bottom: 0.3rem;
+        font-size: 0.8rem;
+      }
+
+      .project-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .project-item {
+        margin-bottom: 12px;
+        padding-left: 12px;
+        position: relative;
+        font-size: 0.8rem;
+        line-height: 1.5;
+      }
+
+      .project-item::before {
+        content: '•';
+        position: absolute;
+        left: 0;
+        color: #000000;
+        font-weight: bold;
+      }
+
+      .project-title {
+        font-weight: 600;
+        color: #000000;
+      }
+
+      .project-company {
+        color: #666666;
+        font-size: 0.75rem;
+      }
+
+      .project-period {
+        color: #f39c12;
+        font-size: 0.7rem;
+        font-weight: 600;
+      }
+
+      .navigation-buttons {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 100;
+      }
+
+      .nav-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .download-btn,
+      .home-link {
+        display: block;
+        background: #000000;
+        color: #ffffff;
+        border: 1px solid #000000;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 0.7rem;
+        text-decoration: none;
+        text-align: center;
+        transition: all 0.2s;
+        min-width: 80px;
+        height: 100%;
+        line-height: 30px;
+      }
+
+      .download-btn:hover,
+      .home-link:hover {
+        background: #ffffff;
+        color: #000000;
+      }
+
+      @media (min-width: 375px) {
+        body {
+          font-size: 15px;
+        }
+
+        .container {
+          padding: 12px;
+        }
+
+        .main-content {
+          padding: 18px;
+        }
+
+        .section-title {
+          font-size: 1.3rem;
+        }
+
+        .summary-container {
+          padding: 1rem;
+        }
+
+        .summary-tag {
+          font-size: 0.75rem;
+          padding: 0.25rem 0.35rem;
+        }
+
+        .download-btn,
+        .home-link {
+          font-size: 0.75rem;
+          min-width: 90px;
+        }
+      }
+
+      @media (min-width: 480px) {
+        .container {
+          padding: 15px;
+        }
+
+        .main-content {
+          padding: 25px;
+        }
+
+        .section {
+          margin-bottom: 30px;
+        }
+
+        .section-title {
+          font-size: 1.4rem;
+          margin-bottom: 20px;
+        }
+
+        .career-item {
+          margin-bottom: 35px;
+          padding-bottom: 30px;
+        }
+
+        .company-name {
+          font-size: 1.1rem;
+        }
+
+        .achievement-title {
+          font-size: 1rem;
+        }
+
+        .achievement-content {
+          font-size: 0.85rem;
+        }
+
+        .summary-projects li {
+          font-size: 0.85rem;
+        }
+
+        .project-item {
+          font-size: 0.85rem;
+        }
+
+        .navigation-buttons {
+          top: 15px;
+          right: 15px;
+        }
+
+        .download-btn,
+        .home-link {
+          font-size: 0.8rem;
+          min-width: 100px;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .container {
+          max-width: 1200px;
+          padding: 20px;
+        }
+
+        .main-content {
+          padding: 35px;
+        }
+
+        .section {
+          margin-bottom: 35px;
+        }
+
+        .section-title {
+          font-size: 1.5rem;
+          margin-bottom: 25px;
+        }
+
+        .career-item {
+          display: grid;
+          grid-template-columns: 200px 1fr;
+          gap: 25px;
+          margin-bottom: 40px;
+          padding-bottom: 35px;
+        }
+
+        .company-info {
+          padding-right: 15px;
+          margin-bottom: 0;
+        }
+
+        .summary-content-summary {
+          flex-direction: row;
+          align-items: center;
+        }
+
+        .summary-tags {
+          width: 280px;
+          margin-bottom: auto;
+        }
+
+        .navigation-buttons {
+          top: 20px;
+          right: 20px;
+        }
+
+        .nav-list {
+          flex-direction: row;
+          gap: 10px;
+        }
+        .nav-list li {
+          height: 30px;
+        }
+
+        .download-btn,
+        .home-link {
+          font-size: 0.8rem;
+          min-width: 110px;
+        }
+      }
+
+      /* 1024px 이상 - 데스크탑 */
+      @media (min-width: 1024px) {
+        body {
+          font-size: 16px;
+        }
+
+        .main-content {
+          padding: 50px;
+        }
+
+        .section {
+          margin-bottom: 40px;
+        }
+
+        .career-item {
+          grid-template-columns: 200px 1fr;
+          gap: 30px;
+          margin-bottom: 50px;
+          padding-bottom: 40px;
+        }
+
+        .company-info {
+          padding-right: 20px;
+        }
+
+        .company-name {
+          font-size: 1.1rem;
+        }
+
+        .period {
+          font-size: 0.85rem;
+        }
+
+        .duration {
+          font-size: 0.85rem;
+        }
+
+        .achievement-item {
+          margin-bottom: 30px;
+        }
+
+        .achievement-title {
+          font-size: 1rem;
+          margin-bottom: 12px;
+        }
+
+        .achievement-subtitle {
+          font-size: 0.9rem;
+          margin-bottom: 10px;
+        }
+
+        .achievement-content {
+          font-size: 0.9rem;
+          line-height: 1.7;
+        }
+
+        .achievement-content p {
+          margin-bottom: 12px;
+        }
+
+        .achievement-content li {
+          margin-bottom: 8px;
+          padding-left: 15px;
+        }
+
+        .achievement-list {
+          margin-left: 10px;
+        }
+
+        .summary-container {
+          padding: 0.75rem 1.25rem;
+          margin: 0 0 1.5625rem 0;
+        }
+
+        .summary-tags {
+          width: 340px;
+        }
+
+        .summary-tag {
+          font-size: 0.8rem;
+          padding: 0.25rem 0.3125rem;
+        }
+
+        .summary-projects li {
+          font-size: 0.9rem;
+        }
+
+        .project-item {
+          margin-bottom: 15px;
+          padding-left: 15px;
+          font-size: 0.9rem;
+          line-height: 1.6;
+        }
+
+        .project-company {
+          font-size: 0.85rem;
+        }
+
+        .project-period {
+          font-size: 0.8rem;
+        }
+      }
+
+      /* 1200px 이상 - 큰 데스크탑 */
+      @media (min-width: 1200px) {
+        .main-content {
+          padding: 60px;
+        }
+      }
+
+      /* 인쇄용 스타일 */
+      @media print {
+        .navigation-buttons {
+          display: none;
+        }
+
+        .summary-content-summary {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .summary-tags {
+          width: 100%;
+        }
+      }
+
+      /* 접근성 향상 */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navigation-buttons">
+      <ul class="nav-list">
+        <li>
+          <button type="button" class="download-btn" onclick="downloadPDF()">
+            PDF 다운로드
+          </button>
+        </li>
+        <li>
+          <a href="../../../index.html" class="download-btn home-link"
+            >홈으로</a
+          >
+        </li>
+      </ul>
+    </div>
+
+    <div class="container">
+      <main class="main-content">
+        <section class="project-summary">
+          <strong class="section-title">프로젝트 수행 이력 요약</strong>
+
+          <div class="summary-container">
+            <div class="summary-category">
+              <div class="summary-title">경력 프로젝트</div>
+              <div class="summary-content-summary">
+                <ul class="summary-tags">
+                  <li><span class="summary-tag">구축</span></li>
+                  <li><span class="summary-tag">JQuery</span></li>
+                  <li><span class="summary-tag">VueJS</span></li>
+                  <li><span class="summary-tag">ReactJS</span></li>
+                  <li><span class="summary-tag">GSAP</span></li>
+                </ul>
+                <ul class="summary-projects">
+                  <li>
+                    <strong>GSAP 기반 사용자 초기 설정 가이드 구현</strong>
+                  </li>
+                  <li><strong>메신저 UI 구현 및 개선</strong></li>
+                  <li>
+                    <strong>공통 컴포넌트화 진행 (그리드 컴포넌트 제작)</strong>
+                  </li>
+                  <li>
+                    <strong
+                      >[5M] 크로스 브라우징을 고려한 웹 대시보드(Dashboard)
+                      템플릿 뷰 구현</strong
+                    >
+                    (한국신용정보원)
+                  </li>
+                  <li>
+                    <strong>[1Y] 삼성생명 디지털채널 선진화 프로젝트</strong>
+                    (삼성생명)
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="summary-category">
+              <span class="category-label">운영</span>
+              <div class="summary-content-summary">
+                <ul class="summary-tags">
+                  <li><span class="summary-tag">JQuery</span></li>
+                </ul>
+                <ul class="summary-projects">
+                  <li><strong>[7M] 삼성카드 사이트 운영</strong> (삼성카드)</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="summary-category">
+              <span class="category-label">유지보수</span>
+              <div class="summary-content-summary">
+                <ul class="summary-tags">
+                  <li><span class="summary-tag">HTML</span></li>
+                  <li><span class="summary-tag">CSS3</span></li>
+                </ul>
+                <ul class="summary-projects">
+                  <li><strong>회사 홈페이지 리뉴얼 & UI 개선</strong></li>
+                  <li>
+                    <strong
+                      >[1M] 커리어, 웹/모바일 스타일 및 컴포넌트 스크립트 이슈
+                      대응</strong
+                    >
+                    (커리어)
+                  </li>
+                  <li><strong>[1M] 카카오 SSP 구축 UI개발 업무응대</strong></li>
+                  <li>
+                    <strong>[1M] 삼성카드 이용약관 V2.2 개선</strong> (삼성카드)
+                  </li>
+                  <li>
+                    <strong
+                      >[6M] Sk 행가래 내부직원용 사이트 UI개선 및 운영</strong
+                    >
+                    (SK(주)C&C)
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="summary-category">
+              <span class="category-label">그외</span>
+              <div class="summary-content-summary">
+                <ul class="summary-tags">
+                  <li><span class="summary-tag">관리</span></li>
+                  <li><span class="summary-tag">검토</span></li>
+                  <li><span class="summary-tag">이벤트</span></li>
+                </ul>
+                <ul class="summary-projects">
+                  <li>
+                    <strong
+                      >데이터 시각화 도구 검토 (Chart.js vs Google Chart)
+                    </strong>
+                  </li>
+                  <li>
+                    <strong>신입 퍼블리셔 멘토링 & 가이드라인 제공</strong>
+                  </li>
+                  <li><strong>랜딩·이벤트 페이지 제작</strong></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <strong class="section-title">주요 관련 경력 및 성과</strong>
+
+          <div class="career-item">
+            <div class="company-info">
+              <strong class="company-name">CashMap</strong>
+              <p class="period">2024.01.03 ~ 2024.11.01</p>
+              <p class="duration">10개월</p>
+            </div>
+
+            <div class="achievements">
+              <div class="achievement-item">
+                <strong class="achievement-title"
+                  >GSAP 기반 사용자 초기 설정 가이드 구현</strong
+                >
+                <p class="achievement-subtitle">
+                  신규 사용자 온보딩 이해도·완료율 개선
+                </p>
+                <div class="achievement-content">
+                  <strong class="achievement-label">성과:</strong>
+                  <ul class="achievement-list">
+                    <li>
+                      신규 사용자의 초기 설정 이해도를 높여 온보딩 플로우를 개선
+                    </li>
+                    <li>
+                      기능 단위 보완 과정을 반복하며 기획 요구에 부합하는
+                      결과물을 완성
+                    </li>
+                    <li>주요 브라우저 전반에서 애니메이션 일관성 확보</li>
+                  </ul>
+                  <strong class="achievement-label">기여:</strong>
+                  <ul class="achievement-list">
+                    <li>
+                      SplitText·stagger·easing을 적용해 설명 문장을 가독성 높은
+                      콘텐츠로 전환
+                    </li>
+                    <li>
+                      애니메이션 코드와 레이아웃 스크립트를 분리해 렌더링 충돌을
+                      제거
+                    </li>
+                    <li>
+                      URL 기반 데모 공유·피드백 프로세스를 직접 제안·정착시켜
+                      협업 효율을 높임
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="achievement-item">
+                <h4 class="achievement-title">메신저 UI 구현 및 개선</h4>
+                <p class="achievement-subtitle">
+                  대화방 대기시간 1~2초 → 0초, 스크롤 3~4회 제거, 전송 오류 100%
+                  방지
+                </p>
+                <div class="achievement-content">
+                  <p><strong>성과:</strong></p>
+                  <ul class="achievement-list">
+                    <li>대화방 입장 대기 시간 1~2초 → 0초</li>
+                    <li>상단 이동 버튼 도입으로 평균 스크롤 3~4회 → 0회</li>
+                    <li>메시지 입력 오류 100% 방지</li>
+                    <li>이미지 지연 로딩으로 인한 스크롤 튐 문제 제거</li>
+                    <li>
+                      React 기반으로 UI를 직접 구현하며 컴포넌트 단위 개발 경험
+                      확보
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="achievement-item">
+                <h4 class="achievement-title">
+                  공통 컴포넌트화 진행 (그리드 컴포넌트 제작)
+                </h4>
+                <p class="achievement-subtitle">
+                  신규 페이지 제작 속도·유지보수 효율 향상
+                </p>
+                <div class="achievement-content">
+                  <p><strong>성과:</strong></p>
+                  <ul class="achievement-list">
+                    <li>
+                      모든 서비스 페이지 상단 검색 영역에 적용되는 공통 그리드
+                      컴포넌트를 제작
+                    </li>
+                    <li>
+                      신규 페이지 제작 시 재사용 가능한 구조로 제작
+                      속도·유지보수 효율을 개선
+                    </li>
+                  </ul>
+                  <p><strong>기여:</strong></p>
+                  <ul class="achievement-list">
+                    <li>ul-li 기반 시멘틱 마크업과 반응형 설계로 구조화</li>
+                    <li>
+                      팀원이 가져다 바로 활용할 수 있는 형태로 구현해 반복
+                      작업을 최소화
+                    </li>
+                    <li>
+                      공통화 작업을 직접 리드하며, 팀 단위 개발 효율을 체계화
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="achievement-item">
+                <h4 class="achievement-title">
+                  회사 홈페이지 리뉴얼 & UI 개선
+                </h4>
+                <div class="achievement-content">
+                  <p><strong>성과:</strong></p>
+                  <ul class="achievement-list">
+                    <li>
+                      최신 디자인 반영 및 레거시 마크업 개선으로 유지보수성 강화
+                    </li>
+                    <li>접근성 확보 및 마크업 재사용성 향상</li>
+                    <li>기존 UI 스크립트 버그 수정 및 신규 기능 구현</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="achievement-item">
+                <h4 class="achievement-title">
+                  데이터 시각화 도구 검토 (Chart.js vs Google Chart)
+                </h4>
+                <div class="achievement-content">
+                  <p><strong>성과:</strong></p>
+                  <ul class="achievement-list">
+                    <li>팀에서 요청한 기능 구현 가능 여부 중심으로 검토</li>
+                    <li>
+                      Google Chart 대비 Chart.js가 커스터마이즈·오픈소스
+                      측면에서 유리함을 확인
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="achievement-item">
+                <h4 class="achievement-title">기타 활동</h4>
+                <div class="achievement-content">
+                  <p>
+                    <strong>신입 퍼블리셔 멘토링 & 가이드라인 제공:</strong>
+                  </p>
+                  <ul class="achievement-list">
+                    <li>
+                      온보딩 과정에서 마크업 구조 원칙·태그 선택 중요성을
+                      신입에게 학습
+                    </li>
+                    <li>코드 리뷰·Q&A 방식으로 가이드 제공, 대안을 제시</li>
+                  </ul>
+                  <p><strong>랜딩·이벤트 페이지 제작:</strong></p>
+                  <ul class="achievement-list">
+                    <li>
+                      프로모션·이벤트 목적 원페이지 제작, 이미지·인풋 구조로
+                      홍보·참여 기능 제공
+                    </li>
+                    <li>기획 요청사항을 빠르게 HTML 구조로 구현, 납기 충족</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="career-item">
+            <div class="company-info">
+              <h3 class="company-name">S2publishing</h3>
+              <p class="period">2019.05.01 ~ 2022.02.01</p>
+              <p class="duration">2년 10개월</p>
+            </div>
+
+            <div class="achievements">
+              <div class="achievement-item">
+                <h4 class="achievement-title">
+                  삼성카드 사이트 운영 (삼성카드)
+                </h4>
+                <p class="achievement-subtitle">
+                  2021.07~2022.01 (7개월) | 현업
+                </p>
+                <div class="achievement-content">
+                  <p><strong>사이트 마크업 개발 / 개선 및 운영 업무</strong></p>
+                  <p>
+                    <strong>사용 기술:</strong> HTML, CSS, JS(JQuery), 적응형
+                  </p>
+
+                  <strong class="achievement-label">핵심 성과:</strong>
+                  <ul class="achievement-list">
+                    <li>
+                      BEM 방법론 적용을 통해, 클래스 컨벤션을 정의 후 페이지
+                      재작업 시간을 각각 20분(건당)(30분에서), 디자인 완료 평균
+                      기간을 2.5일(3일에서)로 단축
+                    </li>
+                    <li>
+                      업무 history 문서화를 통한 의사소통 개선으로, 기획자의
+                      업무 확인 메시지 문의 횟수를 0으로 단축
+                    </li>
+                    <li>
+                      프로젝트 코드 활용해, 스크립트 개발자 업무 8건 지원 (웹
+                      컴포넌트 스크립트 7건, 롯데월드 카드 소개 슬라이드
+                      스크립트 1건)
+                    </li>
+                    <li>
+                      코로나 5차 재난 지원금 사이트 개발에 참여하여 마크업 2건,
+                      스크립트 5건 구현
+                    </li>
+                  </ul>
+
+                  <strong class="achievement-label">역할:</strong>
+                  <ul class="achievement-list">
+                    <li>
+                      기획 이슈/디자인 변경에 따른 웹페이지 마크업 개발 및 개선
+                    </li>
+                    <li>스크립트 개발자의 업무 보조</li>
+                  </ul>
+
+                  <strong class="achievement-label">프로젝트 기여도:</strong>
+                  <ul class="achievement-list">
+                    <li>퍼블리싱(HTML/CSS): 100%</li>
+                    <li>
+                      스크립트(JQuery): 30%~40% (프로젝트 소스 코드를 베이스로
+                      기능 구현)
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="achievement-item">
+                <h4 class="achievement-title">
+                  크로스 브라우징을 고려한 웹 대시보드(Dashboard) 템플릿 뷰 구현
+                  (한국신용정보원)
+                </h4>
+                <p class="achievement-subtitle">
+                  2020.11~2021.03 (5개월) | 현업
+                </p>
+                <div class="achievement-content">
+                  <p>
+                    <strong
+                      >내부 직원이 사용하는 대시보드 템플릿의 모니터링
+                      시스템구축</strong
+                    >
+                  </p>
+                  <p><strong>사용 기술:</strong> HTML, CSS, JS(JQuery)</p>
+
+                  <strong class="achievement-label">핵심 성과:</strong>
+                  <ul class="achievement-list">
+                    <li>
+                      프로젝트 의존성 라이브러리의 Settings 파일 수정하여,
+                      스크립트 기능 오류 1건 해결
+                    </li>
+                    <li>
+                      레거시 마크업 코드 30% 를 교체하여, 페이지 내 웹 컴포넌트
+                      기능 추가 및 수정
+                    </li>
+                  </ul>
+
+                  <strong class="achievement-label">역할:</strong>
+                  <ul class="achievement-list">
+                    <li>대시보드(Dashboard) 템플릿 뷰 마크업</li>
+                    <li>
+                      동적 UI에 필요한 스크립트(JQeury) 구현 (프로젝트에서
+                      기능상 JQuery 중요도 30%)
+                    </li>
+                    <li>프로젝트 라이브러리(차트, 툴팁) 적용</li>
+                    <li>크로스 브라우징(Chrome, Edge) 준수</li>
+                    <li>페이지 퍼블리싱 개선 및 개발 응대</li>
+                  </ul>
+
+                  <p><strong>프로젝트 기여도:</strong></p>
+                  <ul class="achievement-list">
+                    <li>퍼블리싱(HTML/CSS): 100%</li>
+                    <li>
+                      스크립트(JQuery): 100% (작성내용/수준: Event에 trigger하는
+                      이벤트 핸들러 구현)
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="achievement-item">
+                <h4 class="achievement-title">
+                  카카오 SSP 구축 UI개발 업무응대
+                </h4>
+                <p class="achievement-subtitle">2021.06 (1개월) | 현업</p>
+                <div class="achievement-content">
+                  <p>
+                    <strong
+                      >카카오 SSP 구축 UI개발 중 스타일/레이아웃 이슈
+                      해결</strong
+                    >
+                  </p>
+                  <p><strong>사용 기술:</strong> HTML, CSS</p>
+
+                  <p><strong>핵심 성과:</strong></p>
+                  <ul class="achievement-list">
+                    <li>Figma 툴 사용이해</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="achievement-item">
+                <h4 class="achievement-title">
+                  Sk 행가래 내부직원용 사이트 UI개선 및 운영 (SK(주)C&C)
+                </h4>
+                <p class="achievement-subtitle">
+                  2020.05~2020.10 (6개월) | 현업 | 원격근무
+                </p>
+                <div class="achievement-content">
+                  <p>
+                    <strong>사이트 유지보수, 스타일 및 레이아웃 수정</strong>
+                  </p>
+                  <p><strong>사용 기술:</strong> HTML, CSS</p>
+
+                  <p><strong>역할:</strong></p>
+                  <ul class="achievement-list">
+                    <li>SK 행가래 웹/모바일 UI 개선</li>
+                    <li>레이아웃 및 콘텐츠 변경</li>
+                    <li>웹/모바일 CSS 수정</li>
+                  </ul>
+
+                  <p><strong>획득 역량:</strong></p>
+                  <ul class="achievement-list">
+                    <li>원격으로 업무 진행 방식을 이해</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="achievement-item">
+                <h4 class="achievement-title">
+                  삼성생명 디지털채널 선진화 프로젝트 (삼성생명)
+                </h4>
+                <p class="achievement-subtitle">2019.05~2020.04 (1년) | 현업</p>
+                <div class="achievement-content">
+                  <p>
+                    <strong
+                      >VueJS 기반 웹 프로젝트, 사이트 마크업 개발, 퍼블리셔로서
+                      첫 신규 프로젝트</strong
+                    >
+                  </p>
+                  <p><strong>사용 기술:</strong> HTML, CSS(SASS), VueJS</p>
+
+                  <p><strong>역할:</strong></p>
+                  <ul class="achievement-list">
+                    <li>공통컴포넌트 활용한 컴포넌트 HTML 레이아웃 구현</li>
+                    <li>일부 컴포넌트의 스타일(SCSS) 구현</li>
+                    <li>약관/정책안내, 기업 소개, 보험 페이지 담당</li>
+                  </ul>
+
+                  <p><strong>획득 역량:</strong></p>
+                  <ul class="achievement-list">
+                    <li>UI 마크업(컴포넌트) 개발원칙을 학습</li>
+                    <li>구축 프로젝트에서 팀원 간 협업 활동</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      // PDF 다운로드 함수
+      function downloadPDF() {
+        // 실제 PDF 생성은 서버 사이드나 클라이언트 사이드 라이브러리 필요
+        // 여기서는 브라우저 인쇄 기능 활용
+        window.print();
+      }
+
+      // 스크롤 애니메이션 효과
+      function observeElements() {
+        const elementsToObserve = document.querySelectorAll(
+          '.career-item, .achievement-item'
+        );
+
+        const observerConfig = {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px',
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.style.opacity = '1';
+              entry.target.style.transform = 'translateY(0)';
+            }
+          });
+        }, observerConfig);
+
+        elementsToObserve.forEach((element) => {
+          element.style.opacity = '0';
+          element.style.transform = 'translateY(20px)';
+          element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+          observer.observe(element);
+        });
+      }
+
+      // 페이지 로드 시 초기화
+      document.addEventListener('DOMContentLoaded', function () {
+        observeElements();
+
+        // 연락처 링크에 분석 이벤트 추가
+        const contactItems = document.querySelectorAll('.contact-item');
+        contactItems.forEach((item) => {
+          item.addEventListener('click', function (event) {
+            const linkType = this.textContent.trim();
+            console.log(`Contact clicked: ${linkType}`);
+
+            // Google Analytics나 다른 분석 도구 이벤트 전송 가능
+            // gtag('event', 'contact_click', { 'link_type': linkType });
+          });
+        });
+      });
+
+      // 반응형 레이아웃 최적화
+      function handleResize() {
+        // 기본적인 레이아웃 조정만 유지
+        console.log('Window resized:', window.innerWidth);
+      }
+
+      window.addEventListener('resize', handleResize);
+      window.addEventListener('load', handleResize);
+
+      // 키보드 접근성 개선
+      document.addEventListener('keydown', function (event) {
+        // ESC 키로 포커스 초기화
+        if (event.key === 'Escape') {
+          document.activeElement.blur();
+        }
+      });
+
+      // 다크모드 토글 (선택사항)
+      function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem(
+          'darkMode',
+          document.body.classList.contains('dark-mode')
+        );
+      }
+
+      // 다크모드 설정 복원
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+      }
+    </script>
+  </body>
+</html>
