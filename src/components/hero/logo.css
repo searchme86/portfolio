@@ -60,7 +60,6 @@
   font-size: inherit;
   font-weight: inherit;
   white-space: nowrap;
-
   /* 🌈 그라디언트 텍스트 효과 */
   background: #f5f5f7;
   background-image: var(--ai-gradient);
@@ -104,6 +103,9 @@
   .hello-text-container {
     min-width: 250px;
   }
+  .hello-text {
+    font-size: 0.875rem;
+  }
 }
 
 /* 375px+ */
@@ -123,5 +125,8 @@
   }
   .hello-text-container {
     min-width: 400px;
+  }
+  .hello-text {
+    font-size: 1.125rem;
   }
 }

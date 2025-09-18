@@ -5,9 +5,10 @@ window.HeroLogoAnimation = (() => {
 
   // 🇰🇷 한국어 인사말 데이터
   const koreanGreetingMessages = [
-    { text: '안녕하세요', lang: 'ko' },
-    { text: '반갑습니다', lang: 'ko' },
-    { text: '환영합니다', lang: 'ko' },
+    { text: '감사합니다!', lang: 'ko' },
+    { text: '방문해주셔서,', lang: 'ko' },
+    { text: '자세한 내용은', lang: 'ko' },
+    { text: '아래로 이동해요', lang: 'ko' },
   ];
 
   // 로고 애니메이션 상태 관리
@@ -16,7 +17,7 @@ window.HeroLogoAnimation = (() => {
     isAnimating: false,
     animationInterval: null,
     isPaused: false,
-    cycleDuration: 2500,
+    cycleDuration: 1500,
   };
 
   let logoVisibilityState = {
@@ -66,7 +67,7 @@ window.HeroLogoAnimation = (() => {
     console.log('🎯 한국어 인사말 애니메이션 초기화 중...');
 
     const firstGreetingText = greetingContainer.querySelector(
-      '.hello-text[data-text="안녕하세요"]'
+      '.hello-text[data-text="감사합니다!"]'
     );
     if (firstGreetingText) {
       firstGreetingText.classList.add('active');
@@ -143,7 +144,7 @@ window.HeroLogoAnimation = (() => {
     const logoElement = getHtmlElement('.logo');
     if (!logoElement) return;
 
-    console.log('🙈 Apple 헤더 show 상태 → 안녕하세요 텍스트 숨김');
+    console.log('🙈 Apple 헤더 show 상태 → 감사합니다! 텍스트 숨김');
     logoElement.style.display = 'none';
     logoVisibilityState.isVisible = false;
     logoVisibilityState.shouldHide = true;
@@ -155,7 +156,7 @@ window.HeroLogoAnimation = (() => {
     const logoElement = getHtmlElement('.logo');
     if (!logoElement) return;
 
-    console.log('🙋‍♂️ 첫 번째 섹션 복귀 → 안녕하세요 텍스트 표시');
+    console.log('🙋‍♂️ 첫 번째 섹션 복귀 → 감사합니다! 텍스트 표시');
     logoElement.style.display = 'block';
 
     logoElement.style.transition =
@@ -199,7 +200,7 @@ window.HeroLogoAnimation = (() => {
   };
 
   const executeRocketLaunchAnimation = () => {
-    console.log('💻 헤더와 히어로 충돌! 안녕하세요 텍스트가 사라집니다!');
+    console.log('💻 헤더와 히어로 충돌! 감사합니다! 텍스트가 사라집니다!');
 
     rocketLaunchState.hasLaunched = true;
     rocketLaunchState.isLaunched = true;
