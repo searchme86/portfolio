@@ -1,941 +1,1052 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hybrid Animation System v3 - 완전 개선된 애니메이션 가이드</title>
     <style>
-        /* 파일 위치: hybrid_animation_visual_guide_v3_enhanced.html */
-        
-        /* 0) Base: 공통(모바일 퍼스트) 스타일 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      /* 파일 위치: hybrid_animation_visual_guide_v3_enhanced.html */
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #0a0a0a;
-            color: #f5f5f7;
-            line-height: 1.6;
-        }
+      /* 0) Base: 공통(모바일 퍼스트) 스타일 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: #0a0a0a;
+        color: #f5f5f7;
+        line-height: 1.6;
+      }
+
+      .main-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem;
+      }
+
+      .accordion-list {
+        list-style: none;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(17, 17, 17, 0.8);
+      }
+
+      .accordion-item {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 0;
+      }
+
+      .accordion-item:last-child {
+        border-bottom: none;
+      }
+
+      .accordion-header {
+        background: rgba(41, 151, 255, 0.1);
+        padding: 1rem 1.5rem;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+        border: none;
+        width: 100%;
+        text-align: left;
+      }
+
+      .accordion-header:hover {
+        background: rgba(41, 151, 255, 0.15);
+      }
+
+      .accordion-title {
+        color: #2997ff;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .accordion-subtitle {
+        color: #86868b;
+        font-size: 0.8rem;
+        font-weight: 400;
+        margin-top: 0.25rem;
+      }
+
+      .accordion-arrow {
+        color: #2997ff;
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+        transform: rotate(0deg);
+      }
+
+      .accordion-item.active .accordion-arrow {
+        transform: rotate(180deg);
+      }
+
+      .accordion-content {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+
+      .accordion-item.active .accordion-content {
+        max-height: 10000px;
+      }
+
+      .content-wrapper {
+        padding: 1rem;
+      }
+
+      .visual-demo {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 6px;
+        padding: 1rem;
+        margin: 1rem 0;
+        border: 2px dashed rgba(41, 151, 255, 0.3);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .info-box {
+        padding: 1rem;
+        border-radius: 6px;
+        margin: 1rem 0;
+      }
+
+      .info-box.blue {
+        background: rgba(41, 151, 255, 0.1);
+        border: 1px solid rgba(41, 151, 255, 0.3);
+      }
+      .info-box.green {
+        background: rgba(52, 199, 89, 0.1);
+        border: 1px solid rgba(52, 199, 89, 0.3);
+      }
+      .info-box.orange {
+        background: rgba(255, 159, 10, 0.1);
+        border: 1px solid rgba(255, 159, 10, 0.3);
+      }
+      .info-box.red {
+        background: rgba(255, 59, 48, 0.1);
+        border: 1px solid rgba(255, 59, 48, 0.3);
+      }
+      .info-box.purple {
+        background: rgba(175, 82, 222, 0.1);
+        border: 1px solid rgba(175, 82, 222, 0.3);
+      }
+      .info-box.dark {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 1.5rem;
+      }
+
+      .info-box h4 {
+        margin-bottom: 0.6rem;
+        font-size: 1rem;
+      }
+      .info-box.blue h4 {
+        color: #2997ff;
+      }
+      .info-box.green h4 {
+        color: #34c759;
+      }
+      .info-box.orange h4 {
+        color: #ff9f0a;
+      }
+      .info-box.red h4 {
+        color: #ff3b30;
+      }
+      .info-box.purple h4 {
+        color: #af52de;
+      }
+      .info-box.dark h4 {
+        color: #2997ff;
+      }
+
+      .info-box p {
+        color: #a3a3a3;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin: 0;
+      }
+
+      .improvement-tag {
+        display: inline-block;
+        background: rgba(52, 199, 89, 0.2);
+        color: #34c759;
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+      }
+
+      .problem-tag {
+        display: inline-block;
+        background: rgba(255, 59, 48, 0.2);
+        color: #ff3b30;
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+      }
+
+      .concept-cards {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+        margin: 1rem 0;
+      }
+
+      .concept-card {
+        background: rgba(41, 151, 255, 0.05);
+        border: 1px solid rgba(41, 151, 255, 0.2);
+        border-radius: 6px;
+        padding: 0.8rem;
+        text-align: center;
+      }
+
+      .concept-emoji {
+        font-size: 1.2rem;
+        margin-bottom: 0.4rem;
+        display: block;
+      }
+
+      .concept-title {
+        color: #2997ff;
+        font-weight: 600;
+        font-size: 0.8rem;
+        margin-bottom: 0.2rem;
+      }
+
+      .concept-desc {
+        color: #a3a3a3;
+        font-size: 0.7rem;
+      }
+
+      .timeline {
+        position: relative;
+        padding-left: 1.5rem;
+        margin: 1rem 0;
+      }
+
+      .timeline::before {
+        content: '';
+        position: absolute;
+        left: 0.4rem;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(to bottom, #2997ff, transparent);
+      }
+
+      .timeline-item {
+        position: relative;
+        margin-bottom: 0.8rem;
+        padding: 0.4rem 0;
+      }
+
+      .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -1.4rem;
+        top: 0.6rem;
+        width: 6px;
+        height: 6px;
+        background: #2997ff;
+        border-radius: 50%;
+        box-shadow: 0 0 0 2px rgba(41, 151, 255, 0.2);
+      }
+
+      .timeline-time {
+        color: #2997ff;
+        font-size: 0.7rem;
+        font-weight: 600;
+      }
+
+      .timeline-desc {
+        color: #a3a3a3;
+        margin-top: 0.2rem;
+        font-size: 0.75rem;
+      }
+
+      .code-block {
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        padding: 1rem;
+        margin: 1rem 0;
+        font-family: 'SF Mono', Monaco, 'Consolas', monospace;
+        font-size: 0.75rem;
+        overflow-x: auto;
+      }
+
+      .code-block pre {
+        margin: 0;
+        color: #a3a3a3;
+      }
+
+      .code-highlight {
+        color: #2997ff;
+        font-weight: 600;
+      }
+
+      .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      .before-after {
+        padding: 0.8rem;
+        border-radius: 6px;
+      }
+
+      .before {
+        background: rgba(255, 59, 48, 0.1);
+        border: 1px solid rgba(255, 59, 48, 0.3);
+      }
+
+      .after {
+        background: rgba(52, 199, 89, 0.1);
+        border: 1px solid rgba(52, 199, 89, 0.3);
+      }
+
+      .before h5 {
+        color: #ff3b30;
+        margin-bottom: 0.4rem;
+        font-size: 0.9rem;
+      }
+
+      .after h5 {
+        color: #34c759;
+        margin-bottom: 0.4rem;
+        font-size: 0.9rem;
+      }
+
+      .flow-chart {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        margin: 1.5rem 0;
+      }
+
+      .flow-step {
+        text-align: center;
+        flex: 1;
+        min-width: 100px;
+      }
+
+      .flow-step-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 0.4rem;
+        font-weight: 600;
+        border: 2px solid;
+        font-size: 0.8rem;
+      }
+
+      .flow-step:nth-child(1) .flow-step-icon {
+        background: rgba(41, 151, 255, 0.2);
+        border-color: #2997ff;
+        color: #2997ff;
+      }
+      .flow-step:nth-child(3) .flow-step-icon {
+        background: rgba(52, 199, 89, 0.2);
+        border-color: #34c759;
+        color: #34c759;
+      }
+      .flow-step:nth-child(5) .flow-step-icon {
+        background: rgba(255, 159, 10, 0.2);
+        border-color: #ff9f0a;
+        color: #ff9f0a;
+      }
+      .flow-step:nth-child(7) .flow-step-icon {
+        background: rgba(255, 59, 48, 0.2);
+        border-color: #ff3b30;
+        color: #ff3b30;
+      }
+
+      .flow-arrow {
+        color: #2997ff;
+        font-size: 1.2rem;
+        align-self: center;
+      }
+
+      .flow-step p {
+        color: #a3a3a3;
+        font-size: 0.7rem;
+      }
+
+      .external-link {
+        color: #2997ff;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(41, 151, 255, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .external-link:hover {
+        border-bottom-color: #2997ff;
+      }
+
+      .small-desc {
+        font-size: 0.7rem;
+        color: #86868b;
+        margin-left: 0.3rem;
+      }
+
+      .scale-demo {
+        height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .device-mockup {
+        width: 80px;
+        height: 50px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        transition: transform 0.3s ease;
+        position: relative;
+        font-size: 0.7rem;
+      }
+
+      .device-mockup.large {
+        transform: scale(1);
+      }
+      .device-mockup.medium {
+        transform: scale(0.8);
+      }
+      .device-mockup.small {
+        transform: scale(0.6667);
+      }
+
+      .arrow {
+        font-size: 1.5rem;
+        color: #2997ff;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.5;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      /* 인터렉티브 시뮬레이션 스타일 */
+      .hysteresis-demo {
+        height: 200px;
+        position: relative;
+        padding: 1rem 0;
+      }
+
+      .scroll-track {
+        width: 100%;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+        position: relative;
+        margin: 1.5rem 0;
+      }
+
+      .scroll-indicator {
+        width: 16px;
+        height: 16px;
+        background: #2997ff;
+        border-radius: 50%;
+        position: absolute;
+        top: -5px;
+        transition: left 0.3s ease;
+        box-shadow: 0 0 8px rgba(41, 151, 255, 0.5);
+      }
+
+      .threshold-line {
+        position: absolute;
+        top: -8px;
+        bottom: -8px;
+        width: 2px;
+        background: #ff3b30;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .threshold-label {
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.7rem;
+        color: #ff3b30;
+      }
+
+      .hysteresis-pill {
+        width: 60px;
+        height: 24px;
+        background: rgba(66, 66, 69, 0.8);
+        border-radius: 12px;
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+      }
+
+      .direction-arrows {
+        display: flex;
+        justify-content: space-between;
+        margin: 0.8rem 0;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .direction {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.75rem;
+      }
+
+      .down-arrow {
+        color: #34c759;
+      }
+      .up-arrow {
+        color: #ff9f0a;
+      }
+
+      /* 컨트롤 버튼들 */
+      .demo-controls-wrapper {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+
+      .controls-section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+
+      .controls-section h4 {
+        color: #2997ff;
+        margin-bottom: 0.4rem;
+        font-size: 0.9rem;
+      }
+
+      .controls {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+
+      .btn {
+        background: rgba(41, 151, 255, 0.2);
+        border: 1px solid rgba(41, 151, 255, 0.5);
+        color: #2997ff;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.7rem;
+        text-align: left;
+        width: 100%;
+      }
+
+      .btn:hover {
+        background: rgba(41, 151, 255, 0.3);
+        border-color: rgba(41, 151, 255, 0.8);
+      }
+
+      .btn.active {
+        background: #2997ff;
+        color: white;
+      }
+
+      .fade-in {
+        animation: fadeIn 0.8s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(15px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* 1) ≥360px (Galaxy S 등 360 폭 계열) */
+      @media (min-width: 360px) {
         .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
+          padding: 1.2rem;
         }
-
-        .accordion-list {
-            list-style: none;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(17, 17, 17, 0.8);
-        }
-
-        .accordion-item {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 0;
-        }
-
-        .accordion-item:last-child {
-            border-bottom: none;
-        }
-
-        .accordion-header {
-            background: rgba(41, 151, 255, 0.1);
-            padding: 1rem 1.5rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-            border: none;
-            width: 100%;
-            text-align: left;
-        }
-
-        .accordion-header:hover {
-            background: rgba(41, 151, 255, 0.15);
-        }
-
         .accordion-title {
-            color: #2997ff;
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin: 0;
+          font-size: 1.15rem;
         }
-
-        .accordion-subtitle {
-            color: #86868b;
-            font-size: 0.8rem;
-            font-weight: 400;
-            margin-top: 0.25rem;
-        }
-
-        .accordion-arrow {
-            color: #2997ff;
-            font-size: 1.2rem;
-            transition: transform 0.3s ease;
-            transform: rotate(0deg);
-        }
-
-        .accordion-item.active .accordion-arrow {
-            transform: rotate(180deg);
-        }
-
-        .accordion-content {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 0;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .accordion-item.active .accordion-content {
-            max-height: 10000px;
-        }
-
         .content-wrapper {
-            padding: 1rem;
+          padding: 1.2rem;
         }
-
-        .visual-demo {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 6px;
-            padding: 1rem;
-            margin: 1rem 0;
-            border: 2px dashed rgba(41, 151, 255, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .info-box {
-            padding: 1rem;
-            border-radius: 6px;
-            margin: 1rem 0;
-        }
-
-        .info-box.blue { 
-            background: rgba(41, 151, 255, 0.1); 
-            border: 1px solid rgba(41, 151, 255, 0.3); 
-        }
-        .info-box.green { 
-            background: rgba(52, 199, 89, 0.1); 
-            border: 1px solid rgba(52, 199, 89, 0.3); 
-        }
-        .info-box.orange { 
-            background: rgba(255, 159, 10, 0.1); 
-            border: 1px solid rgba(255, 159, 10, 0.3); 
-        }
-        .info-box.red { 
-            background: rgba(255, 59, 48, 0.1); 
-            border: 1px solid rgba(255, 59, 48, 0.3); 
-        }
-        .info-box.purple {
-            background: rgba(175, 82, 222, 0.1);
-            border: 1px solid rgba(175, 82, 222, 0.3);
-        }
-        .info-box.dark { 
-            background: rgba(0, 0, 0, 0.3); 
-            padding: 1.5rem; 
-        }
-
-        .info-box h4 { 
-            margin-bottom: 0.6rem; 
-            font-size: 1rem; 
-        }
-        .info-box.blue h4 { color: #2997ff; }
-        .info-box.green h4 { color: #34c759; }
-        .info-box.orange h4 { color: #ff9f0a; }
-        .info-box.red h4 { color: #ff3b30; }
-        .info-box.purple h4 { color: #af52de; }
-        .info-box.dark h4 { color: #2997ff; }
-
-        .info-box p { 
-            color: #a3a3a3; 
-            font-size: 0.85rem; 
-            line-height: 1.5; 
-            margin: 0; 
-        }
-
-        .improvement-tag {
-            display: inline-block;
-            background: rgba(52, 199, 89, 0.2);
-            color: #34c759;
-            padding: 0.2rem 0.4rem;
-            border-radius: 3px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-        }
-
-        .problem-tag {
-            display: inline-block;
-            background: rgba(255, 59, 48, 0.2);
-            color: #ff3b30;
-            padding: 0.2rem 0.4rem;
-            border-radius: 3px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-        }
-
-        .concept-cards {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.8rem;
-            margin: 1rem 0;
-        }
-
-        .concept-card {
-            background: rgba(41, 151, 255, 0.05);
-            border: 1px solid rgba(41, 151, 255, 0.2);
-            border-radius: 6px;
-            padding: 0.8rem;
-            text-align: center;
-        }
-
-        .concept-emoji {
-            font-size: 1.2rem;
-            margin-bottom: 0.4rem;
-            display: block;
-        }
-
-        .concept-title {
-            color: #2997ff;
-            font-weight: 600;
-            font-size: 0.8rem;
-            margin-bottom: 0.2rem;
-        }
-
-        .concept-desc {
-            color: #a3a3a3;
-            font-size: 0.7rem;
-        }
-
-        .timeline {
-            position: relative;
-            padding-left: 1.5rem;
-            margin: 1rem 0;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 0.4rem;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(to bottom, #2997ff, transparent);
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 0.8rem;
-            padding: 0.4rem 0;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -1.4rem;
-            top: 0.6rem;
-            width: 6px;
-            height: 6px;
-            background: #2997ff;
-            border-radius: 50%;
-            box-shadow: 0 0 0 2px rgba(41, 151, 255, 0.2);
-        }
-
-        .timeline-time {
-            color: #2997ff;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
-
-        .timeline-desc {
-            color: #a3a3a3;
-            margin-top: 0.2rem;
-            font-size: 0.75rem;
-        }
-
-        .code-block {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            padding: 1rem;
-            margin: 1rem 0;
-            font-family: 'SF Mono', Monaco, 'Consolas', monospace;
-            font-size: 0.75rem;
-            overflow-x: auto;
-        }
-
-        .code-block pre {
-            margin: 0;
-            color: #a3a3a3;
-        }
-
-        .code-highlight {
-            color: #2997ff;
-            font-weight: 600;
-        }
-
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-
-        .before-after {
-            padding: 0.8rem;
-            border-radius: 6px;
-        }
-
-        .before {
-            background: rgba(255, 59, 48, 0.1);
-            border: 1px solid rgba(255, 59, 48, 0.3);
-        }
-
-        .after {
-            background: rgba(52, 199, 89, 0.1);
-            border: 1px solid rgba(52, 199, 89, 0.3);
-        }
-
-        .before h5 {
-            color: #ff3b30;
-            margin-bottom: 0.4rem;
-            font-size: 0.9rem;
-        }
-
-        .after h5 {
-            color: #34c759;
-            margin-bottom: 0.4rem;
-            font-size: 0.9rem;
-        }
-
-        .flow-chart {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            margin: 1.5rem 0;
-        }
-
-        .flow-step {
-            text-align: center;
-            flex: 1;
-            min-width: 100px;
-        }
-
-        .flow-step-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 0.4rem;
-            font-weight: 600;
-            border: 2px solid;
-            font-size: 0.8rem;
-        }
-
-        .flow-step:nth-child(1) .flow-step-icon { 
-            background: rgba(41, 151, 255, 0.2); 
-            border-color: #2997ff; 
-            color: #2997ff; 
-        }
-        .flow-step:nth-child(3) .flow-step-icon { 
-            background: rgba(52, 199, 89, 0.2); 
-            border-color: #34c759; 
-            color: #34c759; 
-        }
-        .flow-step:nth-child(5) .flow-step-icon { 
-            background: rgba(255, 159, 10, 0.2); 
-            border-color: #ff9f0a; 
-            color: #ff9f0a; 
-        }
-        .flow-step:nth-child(7) .flow-step-icon { 
-            background: rgba(255, 59, 48, 0.2); 
-            border-color: #ff3b30; 
-            color: #ff3b30; 
-        }
-
-        .flow-arrow {
-            color: #2997ff;
-            font-size: 1.2rem;
-            align-self: center;
-        }
-
-        .flow-step p {
-            color: #a3a3a3;
-            font-size: 0.7rem;
-        }
-
-        .external-link {
-            color: #2997ff;
-            text-decoration: none;
-            border-bottom: 1px solid rgba(41, 151, 255, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .external-link:hover {
-            border-bottom-color: #2997ff;
-        }
-
-        .small-desc {
-            font-size: 0.7rem;
-            color: #86868b;
-            margin-left: 0.3rem;
-        }
-
-        .scale-demo {
-            height: 150px;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
         .device-mockup {
-            width: 80px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            transition: transform 0.3s ease;
-            position: relative;
-            font-size: 0.7rem;
+          width: 90px;
+          height: 55px;
         }
+      }
 
-        .device-mockup.large { transform: scale(1.0); }
-        .device-mockup.medium { transform: scale(0.8); }
-        .device-mockup.small { transform: scale(0.6667); }
-
-        .arrow {
-            font-size: 1.5rem;
-            color: #2997ff;
-            animation: pulse 2s infinite;
+      /* 2) ≥375px (iPhone 375 폭 계열) */
+      @media (min-width: 375px) {
+        .accordion-header {
+          padding: 1.2rem 1.8rem;
         }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+        .accordion-title {
+          font-size: 1.2rem;
         }
-
-        /* 인터렉티브 시뮬레이션 스타일 */
-        .hysteresis-demo {
-            height: 200px;
-            position: relative;
-            padding: 1rem 0;
+        .concept-cards {
+          grid-template-columns: repeat(2, 1fr);
         }
-
-        .scroll-track {
-            width: 100%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            position: relative;
-            margin: 1.5rem 0;
+        .device-mockup {
+          width: 100px;
+          height: 60px;
+          font-size: 0.8rem;
         }
+      }
 
-        .scroll-indicator {
-            width: 16px;
-            height: 16px;
-            background: #2997ff;
-            border-radius: 50%;
-            position: absolute;
-            top: -5px;
-            transition: left 0.3s ease;
-            box-shadow: 0 0 8px rgba(41, 151, 255, 0.5);
+      /* 3) ≥390px (iPhone Pro 390×844 계열) */
+      @media (min-width: 390px) {
+        .scale-demo {
+          flex-direction: row;
+          height: 120px;
+          gap: 0.8rem;
         }
-
-        .threshold-line {
-            position: absolute;
-            top: -8px;
-            bottom: -8px;
-            width: 2px;
-            background: #ff3b30;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .threshold-label {
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.7rem;
-            color: #ff3b30;
-        }
-
-        .hysteresis-pill {
-            width: 60px;
-            height: 24px;
-            background: rgba(66, 66, 69, 0.8);
-            border-radius: 12px;
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-        }
-
-        .direction-arrows {
-            display: flex;
-            justify-content: space-between;
-            margin: 0.8rem 0;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .direction {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            font-size: 0.75rem;
-        }
-
-        .down-arrow { color: #34c759; }
-        .up-arrow { color: #ff9f0a; }
-
-        /* 컨트롤 버튼들 */
         .demo-controls-wrapper {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-            margin: 1.5rem 0;
+          grid-template-columns: 1fr 250px;
+          gap: 1.5rem;
         }
+      }
 
-        .controls-section {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
+      /* 4) ≥393px (iPhone 16 / 일부 Android 393 폭) */
+      @media (min-width: 393px) {
+        .info-box {
+          padding: 1.2rem;
         }
+        .info-box h4 {
+          font-size: 1.05rem;
+        }
+        .info-box p {
+          font-size: 0.9rem;
+        }
+      }
 
-        .controls-section h4 {
-            color: #2997ff;
-            margin-bottom: 0.4rem;
-            font-size: 0.9rem;
+      /* 5) ≥402px (iPhone 16 Pro 402 폭) */
+      @media (min-width: 402px) {
+        .accordion-title {
+          font-size: 1.25rem;
         }
+        .accordion-subtitle {
+          font-size: 0.85rem;
+        }
+        .concept-cards {
+          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        }
+      }
 
-        .controls {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
+      /* 6) ≥412px (Pixel/Android 다수 412 폭) */
+      @media (min-width: 412px) {
+        .content-wrapper {
+          padding: 1.5rem;
         }
+        .device-mockup {
+          width: 110px;
+          height: 70px;
+        }
+        .hysteresis-pill {
+          width: 70px;
+          height: 28px;
+          font-size: 0.75rem;
+        }
+      }
 
-        .btn {
-            background: rgba(41, 151, 255, 0.2);
-            border: 1px solid rgba(41, 151, 255, 0.5);
-            color: #2997ff;
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.7rem;
-            text-align: left;
-            width: 100%;
+      /* 7) ≥430px (iPhone Plus/Pro Max 430 폭) */
+      @media (min-width: 430px) {
+        .comparison-grid {
+          grid-template-columns: 1fr 1fr;
         }
+        .scale-demo {
+          height: 150px;
+        }
+        .demo-controls-wrapper {
+          grid-template-columns: 1fr 280px;
+        }
+      }
 
-        .btn:hover {
-            background: rgba(41, 151, 255, 0.3);
-            border-color: rgba(41, 151, 255, 0.8);
+      /* 8) ≥440px (iPhone 16 Pro Max 440 폭) */
+      @media (min-width: 440px) {
+        .accordion-header {
+          padding: 1.5rem 2rem;
         }
+        .accordion-title {
+          font-size: 1.3rem;
+        }
+        .device-mockup {
+          width: 120px;
+          height: 80px;
+          font-size: 0.85rem;
+        }
+      }
 
-        .btn.active {
-            background: #2997ff;
-            color: white;
+      /* 태블릿/데스크톱 스타일 */
+      @media (min-width: 768px) {
+        .main-container {
+          padding: 2rem;
         }
+        .content-wrapper {
+          padding: 2rem;
+        }
+        .accordion-title {
+          font-size: 1.4rem;
+        }
+        .accordion-subtitle {
+          font-size: 0.9rem;
+        }
+        .concept-cards {
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+        .scale-demo {
+          flex-direction: row;
+          height: 200px;
+        }
+        .demo-controls-wrapper {
+          grid-template-columns: 1fr 300px;
+          gap: 2rem;
+        }
+        .info-box {
+          padding: 1.5rem;
+        }
+        .info-box h4 {
+          font-size: 1.1rem;
+        }
+        .info-box p {
+          font-size: 0.95rem;
+        }
+        .code-block {
+          padding: 1.5rem;
+          font-size: 0.9rem;
+        }
+      }
 
-        .fade-in { 
-            animation: fadeIn 0.8s ease-out; 
+      @media (min-width: 1024px) {
+        .flow-chart {
+          flex-direction: row;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
+        .flow-step {
+          min-width: 150px;
         }
-
-        /* 1) ≥360px (Galaxy S 등 360 폭 계열) */
-        @media (min-width: 360px) {
-            .main-container { 
-                padding: 1.2rem; 
-            }
-            .accordion-title {
-                font-size: 1.15rem;
-            }
-            .content-wrapper { 
-                padding: 1.2rem; 
-            }
-            .device-mockup {
-                width: 90px;
-                height: 55px;
-            }
+        .flow-step-icon {
+          width: 60px;
+          height: 60px;
+          font-size: 1rem;
         }
-
-        /* 2) ≥375px (iPhone 375 폭 계열) */
-        @media (min-width: 375px) {
-            .accordion-header {
-                padding: 1.2rem 1.8rem;
-            }
-            .accordion-title {
-                font-size: 1.2rem;
-            }
-            .concept-cards {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .device-mockup {
-                width: 100px;
-                height: 60px;
-                font-size: 0.8rem;
-            }
-        }
-
-        /* 3) ≥390px (iPhone Pro 390×844 계열) */
-        @media (min-width: 390px) {
-            .scale-demo {
-                flex-direction: row;
-                height: 120px;
-                gap: 0.8rem;
-            }
-            .demo-controls-wrapper {
-                grid-template-columns: 1fr 250px;
-                gap: 1.5rem;
-            }
-        }
-
-        /* 4) ≥393px (iPhone 16 / 일부 Android 393 폭) */
-        @media (min-width: 393px) {
-            .info-box {
-                padding: 1.2rem;
-            }
-            .info-box h4 {
-                font-size: 1.05rem;
-            }
-            .info-box p {
-                font-size: 0.9rem;
-            }
-        }
-
-        /* 5) ≥402px (iPhone 16 Pro 402 폭) */
-        @media (min-width: 402px) {
-            .accordion-title {
-                font-size: 1.25rem;
-            }
-            .accordion-subtitle {
-                font-size: 0.85rem;
-            }
-            .concept-cards {
-                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            }
-        }
-
-        /* 6) ≥412px (Pixel/Android 다수 412 폭) */
-        @media (min-width: 412px) {
-            .content-wrapper {
-                padding: 1.5rem;
-            }
-            .device-mockup {
-                width: 110px;
-                height: 70px;
-            }
-            .hysteresis-pill {
-                width: 70px;
-                height: 28px;
-                font-size: 0.75rem;
-            }
-        }
-
-        /* 7) ≥430px (iPhone Plus/Pro Max 430 폭) */
-        @media (min-width: 430px) {
-            .comparison-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .scale-demo {
-                height: 150px;
-            }
-            .demo-controls-wrapper {
-                grid-template-columns: 1fr 280px;
-            }
-        }
-
-        /* 8) ≥440px (iPhone 16 Pro Max 440 폭) */
-        @media (min-width: 440px) {
-            .accordion-header {
-                padding: 1.5rem 2rem;
-            }
-            .accordion-title {
-                font-size: 1.3rem;
-            }
-            .device-mockup {
-                width: 120px;
-                height: 80px;
-                font-size: 0.85rem;
-            }
-        }
-
-        /* 태블릿/데스크톱 스타일 */
-        @media (min-width: 768px) {
-            .main-container { 
-                padding: 2rem; 
-            }
-            .content-wrapper { 
-                padding: 2rem; 
-            }
-            .accordion-title {
-                font-size: 1.4rem;
-            }
-            .accordion-subtitle {
-                font-size: 0.9rem;
-            }
-            .concept-cards { 
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            }
-            .scale-demo { 
-                flex-direction: row; 
-                height: 200px; 
-            }
-            .demo-controls-wrapper { 
-                grid-template-columns: 1fr 300px; 
-                gap: 2rem; 
-            }
-            .info-box {
-                padding: 1.5rem;
-            }
-            .info-box h4 {
-                font-size: 1.1rem;
-            }
-            .info-box p {
-                font-size: 0.95rem;
-            }
-            .code-block {
-                padding: 1.5rem;
-                font-size: 0.9rem;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .flow-chart { 
-                flex-direction: row; 
-            }
-            .flow-step {
-                min-width: 150px;
-            }
-            .flow-step-icon {
-                width: 60px;
-                height: 60px;
-                font-size: 1rem;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="main-container">
-        <header style="text-align: center; margin-bottom: 2rem;">
-            <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">
-                Hybrid Animation System v3
-            </h1>
-            <p style="color: #86868b; font-size: 0.9rem;">
-                완전 개선된 애플 스타일 애니메이션의 기술적 구현과 진화 과정
-            </p>
-        </header>
+      <header style="text-align: center; margin-bottom: 2rem">
+        <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem">
+          Hybrid Animation System v3
+        </h1>
+        <p style="color: #86868b; font-size: 0.9rem">
+          완전 개선된 애플 스타일 애니메이션의 기술적 구현과 진화 과정
+        </p>
+      </header>
 
-        <ul class="accordion-list">
-            <!-- 1. 이전 버전 (기존 animation_visual_guide_improved 내용) -->
-            <li class="accordion-item active">
-                <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
-                    <div>
-                        <div class="accordion-title">이전 버전</div>
-                        <div class="accordion-subtitle">pill_animation_with_dummy_sections 파일 기반 이전 구현 방식</div>
-                    </div>
-                    <span class="accordion-arrow">▲</span>
-                </button>
-                <div class="accordion-content">
-                    <div class="content-wrapper">
-                        <div class="concept-cards">
-                            <div class="concept-card">
-                                <span class="concept-emoji">🛗</span>
-                                <div class="concept-title">엘리베이터 Pill</div>
-                                <div class="concept-desc">지하 800층에서 120층까지 올라오는 작은 버튼</div>
-                            </div>
-                            <div class="concept-card">
-                                <span class="concept-emoji">🎈</span>
-                                <div class="concept-title">풍선 확장</div>
-                                <div class="concept-desc">바람을 넣어 44px에서 240px로 커지면서 텍스트 표시</div>
-                            </div>
-                            <div class="concept-card">
-                                <span class="concept-emoji">🧲</span>
-                                <div class="concept-title">자석효과</div>
-                                <div class="concept-desc">50% 지점에서 달려하게 달라붙었다가 천천히 떨어짐</div>
-                            </div>
-                            <div class="concept-card">
-                                <span class="concept-emoji">💫</span>
-                                <div class="concept-title">네온사인 폰트</div>
-                                <div class="concept-desc">마우스 올리거나 클릭하면 파란색으로 반짝임</div>
-                            </div>
-                            <div class="concept-card">
-                                <span class="concept-emoji">📱</span>
-                                <div class="concept-title">사진 축소</div>
-                                <div class="concept-desc">스크롤하면 큰 화면이 원본의 2/3 크기로 점점 작아짐</div>
-                            </div>
-                        </div>
-
-                        <div class="info-box blue">
-                            <h4>전체 동작 순서</h4>
-                            <p>
-                                <strong>1.</strong> 페이지 들어가면 → pill이 아래서 쓱 올라옴 (엘리베이터)<br>
-                                <strong>2.</strong> pill 도착하면 → 작은 상태에서 커짐 (풍선)<br>
-                                <strong>3.</strong> 스크롤 올리면 → pill이 끈적하게 붙어있음 (자석)<br>
-                                <strong>4.</strong> 마우스 올리면 → 파란색으로 반짝임 (네온사인)<br>
-                                <strong>5.</strong> 페이지 나가면 → pill이 아래로 쓱 사라짐
-                            </p>
-                        </div>
-
-                        <div class="visual-demo">
-                            <div class="scale-demo">
-                                <div>
-                                    <div class="device-mockup large">100%</div>
-                                    <div style="text-align: center; margin-top: 0.3rem; font-size: 0.7rem; color: #86868b;">시작 (scale: 1.0)</div>
-                                </div>
-                                <div class="arrow">→</div>
-                                <div>
-                                    <div class="device-mockup medium">80%</div>
-                                    <div style="text-align: center; margin-top: 0.3rem; font-size: 0.7rem; color: #86868b;">중간 (scale: 0.8)</div>
-                                </div>
-                                <div class="arrow">→</div>
-                                <div>
-                                    <div class="device-mockup small">66.7%</div>
-                                    <div style="text-align: center; margin-top: 0.3rem; font-size: 0.7rem; color: #86868b;">완료 (scale: 0.6667)</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="info-box red">
-                            <h4>이전 버전의 주요 문제점</h4>
-                            <p>
-                                • <strong>translateY 강제 이동</strong>: GPU 레이어에서 인위적인 움직임<br>
-                                • <strong>pin-spacer 높이 불일치</strong>: 레이아웃 점프 현상 발생<br>
-                                • <strong>단방향 애니메이션</strong>: 역방향 스크롤 시 어색한 전환<br>
-                                • <strong>Transform 충돌</strong>: sticky positioning과 transform 간섭<br>
-                                • <strong>일괄적 반응</strong>: 사용자 의도와 관계없는 획일적 동작
-                            </p>
-                        </div>
-                    </div>
+      <ul class="accordion-list">
+        <!-- 1. 이전 버전 (기존 animation_visual_guide_improved 내용) -->
+        <li class="accordion-item active">
+          <button
+            type="button"
+            class="accordion-header"
+            onclick="toggleAccordion(this)"
+          >
+            <div>
+              <div class="accordion-title">이전 버전</div>
+              <div class="accordion-subtitle">
+                pill_animation_with_dummy_sections 파일 기반 이전 구현 방식
+              </div>
+            </div>
+            <span class="accordion-arrow">▲</span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-wrapper">
+              <div class="concept-cards">
+                <div class="concept-card">
+                  <span class="concept-emoji">🛗</span>
+                  <div class="concept-title">엘리베이터 Pill</div>
+                  <div class="concept-desc">
+                    지하 800층에서 120층까지 올라오는 작은 버튼
+                  </div>
                 </div>
-            </li>
-
-            <!-- 2. v3 개선 개요 -->
-            <li class="accordion-item">
-                <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
-                    <div>
-                        <div class="accordion-title">v3 개선 개요 - 7가지 핵심 진화</div>
-                        <div class="accordion-subtitle">이전 버전 대비 근본적 아키텍처 변화와 기술적 도약</div>
-                    </div>
-                    <span class="accordion-arrow">▼</span>
-                </button>
-                <div class="accordion-content">
-                    <div class="content-wrapper">
-                        <div class="info-box green">
-                            <h4>🚀 핵심 개선사항 요약</h4>
-                            <p>
-                                <span class="improvement-tag">NEW</span> <strong>순차적 애니메이션 시스템</strong>: onComplete 콜백 기반 체인으로 스케일 → 높이 축소 순서 보장<br>
-                                <span class="improvement-tag">FIXED</span> <strong>Pin-spacer 높이 동기화</strong>: 110vh 고정으로 레이아웃 점프 현상 완전 해결<br>
-                                <span class="improvement-tag">ENHANCED</span> <strong>자연스러운 레이아웃 플로우</strong>: translateY 강제 이동 대신 height 기반 자연 플로우<br>
-                                <span class="improvement-tag">NEW</span> <strong>양방향 Pill 애니메이션</strong>: 극적인 상승과 부드러운 사라짐의 완벽한 대칭<br>
-                                <span class="improvement-tag">ADVANCED</span> <strong>Transform 제거 시스템</strong>: 애니메이션 완료 후 순수 sticky positioning<br>
-                                <span class="improvement-tag">SMART</span> <strong>스크롤 방향 인식</strong>: 사용자 의도에 따른 차별적 반응 시스템
-                            </p>
-                        </div>
-
-                        <div class="comparison-grid">
-                            <div class="before">
-                                <h5>❌ 이전 버전 문제점</h5>
-                                <p>
-                                    • translateY 강제 이동으로 부자연스러운 움직임<br>
-                                    • pin-spacer 높이 불일치로 레이아웃 점프<br>
-                                    • 단방향 애니메이션으로 UX 일관성 부족<br>
-                                    • Transform과 sticky positioning 충돌<br>
-                                    • 스크롤 방향 무시한 획일적 반응
-                                </p>
-                            </div>
-                            <div class="after">
-                                <h5>✅ v3 해결된 개선점</h5>
-                                <p>
-                                    • 자연스러운 레이아웃 리플로우 구현<br>
-                                    • 완벽한 pin-spacer 동기화 시스템<br>
-                                    • 양방향 대칭 애니메이션 완성<br>
-                                    • 순수 sticky positioning 활용<br>
-                                    • 스크롤 컨텍스트 인식 스마트 반응
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="info-box dark">
-                            <h4>🎯 전체 애니메이션 흐름</h4>
-                            <div class="flow-chart">
-                                <div class="flow-step">
-                                    <div class="flow-step-icon">1</div>
-                                    <p>순차적 스케일<br>애니메이션</p>
-                                </div>
-                                <div class="flow-arrow">→</div>
-                                <div class="flow-step">
-                                    <div class="flow-step-icon">2</div>
-                                    <p>자연스러운<br>높이 축소</p>
-                                </div>
-                                <div class="flow-arrow">→</div>
-                                <div class="flow-step">
-                                    <div class="flow-step-icon">3</div>
-                                    <p>극적인 Pill<br>상승</p>
-                                </div>
-                                <div class="flow-arrow">→</div>
-                                <div class="flow-step">
-                                    <div class="flow-step-icon">4</div>
-                                    <p>완벽한 Sticky<br>전환</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="concept-card">
+                  <span class="concept-emoji">🎈</span>
+                  <div class="concept-title">풍선 확장</div>
+                  <div class="concept-desc">
+                    바람을 넣어 44px에서 240px로 커지면서 텍스트 표시
+                  </div>
                 </div>
-            </li>
+                <div class="concept-card">
+                  <span class="concept-emoji">🧲</span>
+                  <div class="concept-title">자석효과</div>
+                  <div class="concept-desc">
+                    50% 지점에서 달려하게 달라붙었다가 천천히 떨어짐
+                  </div>
+                </div>
+                <div class="concept-card">
+                  <span class="concept-emoji">💫</span>
+                  <div class="concept-title">네온사인 폰트</div>
+                  <div class="concept-desc">
+                    마우스 올리거나 클릭하면 파란색으로 반짝임
+                  </div>
+                </div>
+                <div class="concept-card">
+                  <span class="concept-emoji">📱</span>
+                  <div class="concept-title">사진 축소</div>
+                  <div class="concept-desc">
+                    스크롤하면 큰 화면이 원본의 2/3 크기로 점점 작아짐
+                  </div>
+                </div>
+              </div>
 
-            <!-- 3. 이미지 Scale 애니메이션과 코드 구조 -->
-            <li class="accordion-item">
-                <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
-                    <div>
-                        <div class="accordion-title">이미지 Scale 애니메이션</div>
-                        <div class="accordion-subtitle">순차적 애니메이션의 첫 번째 단계와 핵심 코드 구조</div>
+              <div class="info-box blue">
+                <h4>전체 동작 순서</h4>
+                <p>
+                  <strong>1.</strong> 페이지 들어가면 → pill이 아래서 쓱 올라옴
+                  (엘리베이터)<br />
+                  <strong>2.</strong> pill 도착하면 → 작은 상태에서 커짐
+                  (풍선)<br />
+                  <strong>3.</strong> 스크롤 올리면 → pill이 끈적하게 붙어있음
+                  (자석)<br />
+                  <strong>4.</strong> 마우스 올리면 → 파란색으로 반짝임
+                  (네온사인)<br />
+                  <strong>5.</strong> 페이지 나가면 → pill이 아래로 쓱 사라짐
+                </p>
+              </div>
+
+              <div class="visual-demo">
+                <div class="scale-demo">
+                  <div>
+                    <div class="device-mockup large">100%</div>
+                    <div
+                      style="
+                        text-align: center;
+                        margin-top: 0.3rem;
+                        font-size: 0.7rem;
+                        color: #86868b;
+                      "
+                    >
+                      시작 (scale: 1.0)
                     </div>
-                    <span class="accordion-arrow">▼</span>
-                </button>
-                <div class="accordion-content">
-                    <div class="content-wrapper">
-                        <div class="info-box blue">
-                            <h4>🔍 이 코드에서 주목해야 할 부분</h4>
-                            <p>
-                                <strong>1. initializeSequentialAnimation 함수</strong>: 전체 순차 애니메이션의 시작점<br>
-                                <strong>2. onComplete 콜백</strong>: 다음 단계로 넘어가는 핵심 연결고리<br>
-                                <strong>3. pin-spacer 강제 고정</strong>: onUpdate에서 110vh로 높이 통제<br>
-                                <strong>4. ScrollTrigger 설정</strong>: pin, scrub, start/end 값의 의미
-                            </p>
-                        </div>
+                  </div>
+                  <div class="arrow">→</div>
+                  <div>
+                    <div class="device-mockup medium">80%</div>
+                    <div
+                      style="
+                        text-align: center;
+                        margin-top: 0.3rem;
+                        font-size: 0.7rem;
+                        color: #86868b;
+                      "
+                    >
+                      중간 (scale: 0.8)
+                    </div>
+                  </div>
+                  <div class="arrow">→</div>
+                  <div>
+                    <div class="device-mockup small">66.7%</div>
+                    <div
+                      style="
+                        text-align: center;
+                        margin-top: 0.3rem;
+                        font-size: 0.7rem;
+                        color: #86868b;
+                      "
+                    >
+                      완료 (scale: 0.6667)
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-                        <div class="code-block">
-                            <pre>
+              <div class="info-box red">
+                <h4>이전 버전의 주요 문제점</h4>
+                <p>
+                  • <strong>translateY 강제 이동</strong>: GPU 레이어에서
+                  인위적인 움직임<br />
+                  • <strong>pin-spacer 높이 불일치</strong>: 레이아웃 점프 현상
+                  발생<br />
+                  • <strong>단방향 애니메이션</strong>: 역방향 스크롤 시 어색한
+                  전환<br />
+                  • <strong>Transform 충돌</strong>: sticky positioning과
+                  transform 간섭<br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- 2. v3 개선 개요 -->
+        <li class="accordion-item">
+          <button
+            type="button"
+            class="accordion-header"
+            onclick="toggleAccordion(this)"
+          >
+            <div>
+              <div class="accordion-title">v3 개선 개요 - 7가지 핵심 진화</div>
+              <div class="accordion-subtitle">
+                이전 버전 대비 근본적 아키텍처 변화와 기술적 도약
+              </div>
+            </div>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-wrapper">
+              <div class="info-box green">
+                <h4>🚀 핵심 개선사항 요약</h4>
+                <p>
+                  <span class="improvement-tag">NEW</span>
+                  <strong>순차적 애니메이션 시스템</strong>: onComplete 콜백
+                  기반 체인으로 스케일 → 높이 축소 순서 보장<br />
+                  <span class="improvement-tag">FIXED</span>
+                  <strong>Pin-spacer 높이 동기화</strong>: 110vh 고정으로
+                  레이아웃 점프 현상 완전 해결<br />
+                  <span class="improvement-tag">ENHANCED</span>
+                  <strong>자연스러운 레이아웃 플로우</strong>: translateY 강제
+                  이동 대신 height 기반 자연 플로우<br />
+                  <span class="improvement-tag">NEW</span>
+                  <strong>양방향 Pill 애니메이션</strong>: 극적인 상승과
+                  부드러운 사라짐의 완벽한 대칭<br />
+                  <span class="improvement-tag">ADVANCED</span>
+                  <strong>Transform 제거 시스템</strong>: 애니메이션 완료 후
+                  순수 sticky positioning<br />
+                  <span class="improvement-tag">SMART</span>
+                  <strong>스크롤 방향 인식</strong>: 스크롤에 따라서 pill
+                  앨리먼트 애니메이션이 다르게 반응
+                </p>
+              </div>
+
+              <div class="comparison-grid">
+                <div class="before">
+                  <h5>❌ 이전 버전 문제점</h5>
+                  <p>
+                    • translateY 강제 이동으로 부자연스러운 움직임<br />
+                    • pin-spacer 높이 불일치로 레이아웃 점프<br />
+                    • 단방향 애니메이션으로 UX 일관성 부족<br />
+                    • Transform과 sticky positioning 충돌<br />
+                    • 스크롤 방향 무시한 획일적 반응
+                  </p>
+                </div>
+                <div class="after">
+                  <h5>✅ v3 해결된 개선점</h5>
+                  <p>
+                    • 자연스러운 레이아웃 리플로우 구현<br />
+                    • 완벽한 pin-spacer 동기화 시스템<br />
+                    • 양방향 대칭 애니메이션 완성<br />
+                    • 순수 sticky positioning 활용<br />
+                    • 스크롤 컨텍스트 인식 스마트 반응
+                  </p>
+                </div>
+              </div>
+
+              <div class="info-box dark">
+                <h4>🎯 전체 애니메이션 흐름</h4>
+                <div class="flow-chart">
+                  <div class="flow-step">
+                    <div class="flow-step-icon">1</div>
+                    <p>순차적 스케일<br />애니메이션</p>
+                  </div>
+                  <div class="flow-arrow">→</div>
+                  <div class="flow-step">
+                    <div class="flow-step-icon">2</div>
+                    <p>자연스러운<br />높이 축소</p>
+                  </div>
+                  <div class="flow-arrow">→</div>
+                  <div class="flow-step">
+                    <div class="flow-step-icon">3</div>
+                    <p>극적인 Pill<br />상승</p>
+                  </div>
+                  <div class="flow-arrow">→</div>
+                  <div class="flow-step">
+                    <div class="flow-step-icon">4</div>
+                    <p>완벽한 Sticky<br />전환</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- 3. 이미지 Scale 애니메이션과 코드 구조 -->
+        <li class="accordion-item">
+          <button
+            type="button"
+            class="accordion-header"
+            onclick="toggleAccordion(this)"
+          >
+            <div>
+              <div class="accordion-title">이미지 Scale 애니메이션</div>
+              <div class="accordion-subtitle">
+                순차적 애니메이션의 첫 번째 단계와 핵심 코드 구조
+              </div>
+            </div>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-wrapper">
+              <div class="info-box blue">
+                <h4>🔍 이 코드에서 주목해야 할 부분</h4>
+                <p>
+                  <strong>1. initializeSequentialAnimation 함수</strong>: 전체
+                  순차 애니메이션의 시작점<br />
+                  <strong>2. onComplete 콜백</strong>: 다음 단계로 넘어가는 핵심
+                  연결고리<br />
+                  <strong>3. pin-spacer 강제 고정</strong>: onUpdate에서 110vh로
+                  높이 통제<br />
+                  <strong>4. ScrollTrigger 설정</strong>: pin, scrub, start/end
+                  값의 의미
+                </p>
+              </div>
+
+              <div class="code-block">
+                <pre>
 <span class="code-highlight">// 📁 파일 위치: hybrid_pill_animation_system(3).html</span>
 <span class="code-highlight">// 🎯 핵심 함수: initializeSequentialAnimation()</span>
 <span class="code-highlight">// 📋 목적: 이미지 스케일링과 높이 축소를 순차적으로 실행</span>
@@ -943,7 +1054,7 @@
 const initializeSequentialAnimation = () => {
   // 🚀 순차적 애니메이션 시작 로그
   console.log('[DEBUG] 순차적 애니메이션 초기화 - 스케일링 → onComplete → height');
-  
+
   // 🎨 이미지 스케일 애니메이션 설정
   gsap.to(DOM_ELEMENTS.scalableDeviceMockup, {
     <span class="code-highlight">scale: 0.6667,</span> // 원본의 2/3 크기로 축소
@@ -954,7 +1065,7 @@ const initializeSequentialAnimation = () => {
       scrub: 1, // 스크롤과 1:1 동기화
       start: 'top top', // 뷰포트 상단에서 시작
       end: '+=400vh', // 뷰포트 높이의 4배 구간
-      
+
       <span class="code-highlight">// 🚨 중요: pin-spacer 높이 강제 고정</span>
       onUpdate: (self) => {
         // 📏 GSAP이 자동 생성하는 pin-spacer 요소 찾기
@@ -965,7 +1076,7 @@ const initializeSequentialAnimation = () => {
           console.log(`[DEBUG] pin-spacer 110vh 고정: ${(self.progress * 100).toFixed(1)}%`);
         }
       },
-      
+
       <span class="code-highlight">// 🔗 핵심: 다음 단계로 연결하는 콜백</span>
       onComplete: () => {
         // ✅ 스케일 애니메이션 100% 완료 후 높이 애니메이션 시작
@@ -977,72 +1088,95 @@ const initializeSequentialAnimation = () => {
   });
 };
                             </pre>
-                        </div>
+              </div>
 
-                        <div class="info-box orange">
-                            <h4>📖 코드 읽는 방법</h4>
-                            <p>
-                                <strong>ScrollTrigger 설정 이해</strong><br>
-                                • <code>pin</code>: 해당 섹션을 스크롤 중 화면에 고정<br>
-                                • <code>scrub: 1</code>: 스크롤과 1:1 동기화된 애니메이션<br>
-                                • <code>end: '+=400vh'</code>: 뷰포트 높이의 4배만큼 긴 구간<br><br>
-                                <strong>pin-spacer 문제 해결</strong><br>
-                                • GSAP이 자동 생성하는 .pin-spacer 요소의 높이를 강제로 110vh 고정<br>
-                                • 이렇게 하지 않으면 텍스트 섹션이 예상치 못한 곳으로 점프함<br><br>
-                                <strong>onComplete의 역할</strong><br>
-                                • 스케일 애니메이션이 100% 완료된 후에만 다음 함수 실행<br>
-                                • 이전 버전에서는 동시 실행으로 인한 충돌 발생
-                            </p>
-                        </div>
+              <div class="info-box orange">
+                <h4>📖 코드 읽는 방법</h4>
+                <p>
+                  <strong>ScrollTrigger 설정 이해</strong><br />
+                  • <code>pin</code>: 해당 섹션을 스크롤 중 화면에 고정<br />
+                  • <code>scrub: 1</code>: 스크롤과 1:1 동기화된 애니메이션<br />
+                  • <code>end: '+=400vh'</code>: 뷰포트 높이의 4배만큼 긴
+                  구간<br /><br />
+                  <strong>pin-spacer 문제 해결</strong><br />
+                  • GSAP이 자동 생성하는 .pin-spacer 요소의 높이를 강제로 110vh
+                  고정<br />
+                  • 이렇게 하지 않으면 텍스트 섹션이 예상치 못한 곳으로
+                  점프함<br /><br />
+                  <strong>onComplete의 역할</strong><br />
+                  • 스케일 애니메이션이 100% 완료된 후에만 다음 함수 실행<br />
+                  • 이전 버전에서는 동시 실행으로 인한 충돌 발생
+                </p>
+              </div>
 
-                        <div class="visual-demo">
-                            <h4 style="color: #2997ff; margin-bottom: 1rem;">애니메이션 진행 과정</h4>
-                            <div class="timeline">
-                                <div class="timeline-item">
-                                    <div class="timeline-time">0vh - 시작</div>
-                                    <div class="timeline-desc">이미지 scale: 1.0, pin-spacer 자동 생성</div>
-                                </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-time">200vh - 중간</div>
-                                    <div class="timeline-desc">이미지 scale: 0.83, pin-spacer 110vh 강제 고정</div>
-                                </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-time">400vh - 완료</div>
-                                    <div class="timeline-desc">이미지 scale: 0.6667, onComplete 콜백 실행</div>
-                                </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-time">콜백 실행</div>
-                                    <div class="timeline-desc">initializeHeightAnimation() 함수 호출</div>
-                                </div>
-                            </div>
-                        </div>
+              <div class="visual-demo">
+                <h4 style="color: #2997ff; margin-bottom: 1rem">
+                  애니메이션 진행 과정
+                </h4>
+                <div class="timeline">
+                  <div class="timeline-item">
+                    <div class="timeline-time">0vh - 시작</div>
+                    <div class="timeline-desc">
+                      이미지 scale: 1.0, pin-spacer 자동 생성
                     </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-time">200vh - 중간</div>
+                    <div class="timeline-desc">
+                      이미지 scale: 0.83, pin-spacer 110vh 강제 고정
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-time">400vh - 완료</div>
+                    <div class="timeline-desc">
+                      이미지 scale: 0.6667, onComplete 콜백 실행
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-time">콜백 실행</div>
+                    <div class="timeline-desc">
+                      initializeHeightAnimation() 함수 호출
+                    </div>
+                  </div>
                 </div>
-            </li>
+              </div>
+            </div>
+          </div>
+        </li>
 
-            <!-- 4. 자연스러운 레이아웃 플로우 -->
-            <li class="accordion-item">
-                <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
-                    <div>
-                        <div class="accordion-title">자연스러운 레이아웃 플로우</div>
-                        <div class="accordion-subtitle">height 기반 애니메이션과 pin-spacer 동기화 코드</div>
-                    </div>
-                    <span class="accordion-arrow">▼</span>
-                </button>
-                <div class="accordion-content">
-                    <div class="content-wrapper">
-                        <div class="info-box blue">
-                            <h4>🔍 initializeHeightAnimation 함수에서 주목할 코드</h4>
-                            <p>
-                                <strong>1. gsap.delayedCall</strong>: 0.5초 대기 후 자연스러운 전환<br>
-                                <strong>2. syncPinSpacer 함수</strong>: requestAnimationFrame으로 실시간 동기화<br>
-                                <strong>3. getBoundingClientRect()</strong>: 실제 DOM 크기 측정<br>
-                                <strong>4. 최종 고정 처리</strong>: 애니메이션 완료 후 110vh 확정
-                            </p>
-                        </div>
+        <!-- 4. 자연스러운 레이아웃 플로우 -->
+        <li class="accordion-item">
+          <button
+            type="button"
+            class="accordion-header"
+            onclick="toggleAccordion(this)"
+          >
+            <div>
+              <div class="accordion-title">자연스러운 레이아웃 플로우</div>
+              <div class="accordion-subtitle">
+                height 기반 애니메이션과 pin-spacer 동기화 코드
+              </div>
+            </div>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-wrapper">
+              <div class="info-box blue">
+                <h4>🔍 initializeHeightAnimation 함수에서 주목할 코드</h4>
+                <p>
+                  <strong>1. gsap.delayedCall</strong>: 0.5초 대기 후 자연스러운
+                  전환<br />
+                  <strong>2. syncPinSpacer 함수</strong>:
+                  requestAnimationFrame으로 실시간 동기화<br />
+                  <strong>3. getBoundingClientRect()</strong>: 실제 DOM 크기
+                  측정<br />
+                  <strong>4. 최종 고정 처리</strong>: 애니메이션 완료 후 110vh
+                  확정
+                </p>
+              </div>
 
-                        <div class="code-block">
-                            <pre>
+              <div class="code-block">
+                <pre>
 <span class="code-highlight">// 📁 함수 위치: initializeHeightAnimation()</span>
 <span class="code-highlight">// 🎯 스케일 완료 후 호출되는 함수</span>
 <span class="code-highlight">// 📋 목적: 이미지 섹션 높이를 100vh에서 60vh로 축소</span>
@@ -1057,11 +1191,11 @@ const initializeHeightAnimation = () => {
       <span class="code-highlight">height: '60vh',</span> // 100vh → 60vh 축소
       duration: 2, // 2초 동안 부드럽게 진행
       ease: 'power2.inOut', // 자연스러운 가감속 곡선
-      
+
       onStart: () => {
         console.log('[DEBUG] height 축소 시작');
       },
-      
+
       onComplete: () => {
         console.log('[DEBUG] height 축소 완료');
         <span class="code-highlight">// 🔒 최종 pin-spacer 110vh로 확정</span>
@@ -1083,7 +1217,7 @@ const initializeHeightAnimation = () => {
         // 🔧 pin-spacer 높이를 실제 섹션 높이와 동기화
         pinSpacer.style.setProperty('height', `${currentHeight}px`, 'important');
         pinSpacer.style.minHeight = 'auto';
-        
+
         console.log(`[DEBUG] pin-spacer 동기화: ${currentHeight.toFixed(1)}px`);
         <span class="code-highlight">requestAnimationFrame(syncPinSpacer);</span> // 다음 프레임에 재귀 호출
       }
@@ -1092,78 +1226,91 @@ const initializeHeightAnimation = () => {
   });
 };
                             </pre>
-                        </div>
+              </div>
 
-                        <div class="comparison-grid">
-                            <div class="before">
-                                <h5>❌ 이전: translateY 강제 이동</h5>
-                                <div class="code-block" style="margin-top: 0.5rem;">
-<pre>
+              <div class="comparison-grid">
+                <div class="before">
+                  <h5>❌ 이전: translateY 강제 이동</h5>
+                  <div class="code-block" style="margin-top: 0.5rem">
+                    <pre>
 // 부자연스러운 GPU 레이어 이동
 // 브라우저 엔진에서 위치만 변경, 실제 레이아웃 플로우 무시
 gsap.fromTo('.display-text-section',
   { y: window.innerHeight }, // 화면 밖에서 시작
   { y: 0 } // 강제 이동으로 원래 위치로
 );
-</pre>
-                                </div>
-                            </div>
-                            <div class="after">
-                                <h5>✅ v3: height 기반 자연 플로우</h5>
-                                <div class="code-block" style="margin-top: 0.5rem;">
-<pre>
+</pre
+                    >
+                  </div>
+                </div>
+                <div class="after">
+                  <h5>✅ v3: height 기반 자연 플로우</h5>
+                  <div class="code-block" style="margin-top: 0.5rem">
+                    <pre>
 // 자연스러운 레이아웃 리플로우
 // 브라우저 레이아웃 엔진이 문서 플로우 재계산
 gsap.to(deviceImageSection, {
-  height: '60vh' // 위 섹션 축소로 
+  height: '60vh' // 위 섹션 축소로
   // 아래 텍스트가 자연히 올라옴
 });
-</pre>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="info-box green">
-                            <h4>🧠 왜 이런 방식으로 바뀌었나?</h4>
-                            <p>
-                                <strong>실제 Apple 홈페이지 방식</strong><br>
-                                • Apple은 앞선 섹션의 크기 변화로 뒤 콘텐츠가 자연스럽게 올라오는 방식 사용<br>
-                                • translateY는 GPU 레이어에서만 움직이는 시각적 착시<br><br>
-                                <strong>브라우저 엔진 레벨 차이</strong><br>
-                                • height 변화 → 브라우저 레이아웃 엔진이 문서 플로우 재계산<br>
-                                • 후속 요소들이 자동으로 위치 조정되어 자연스러운 움직임<br><br>
-                                <strong>requestAnimationFrame 활용</strong><br>
-                                • 브라우저의 렌더링 사이클에 맞춰 pin-spacer 동기화<br>
-                                • 60fps 부드러운 애니메이션 보장
-                            </p>
-                        </div>
-                    </div>
+</pre
+                    >
+                  </div>
                 </div>
-            </li>
+              </div>
 
-            <!-- 5. Pill 애니메이션 시스템 -->
-            <li class="accordion-item">
-                <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
-                    <div>
-                        <div class="accordion-title">Pill 애니메이션</div>
-                        <div class="accordion-subtitle">양방향 타임라인과 ScrollTrigger 컨트롤러 구조</div>
-                    </div>
-                    <span class="accordion-arrow">▼</span>
-                </button>
-                <div class="accordion-content">
-                    <div class="content-wrapper">
-                        <div class="info-box blue">
-                            <h4>🔍 Pill 애니메이션에서 중요한 함수들</h4>
-                            <p>
-                                <strong>1. createPillRiseTimeline()</strong>: 상승 애니메이션 타임라인 생성<br>
-                                <strong>2. createPillDisappearTimeline()</strong>: 사라짐 애니메이션 타임라인 생성<br>
-                                <strong>3. initializePillAnimation()</strong>: ScrollTrigger로 양방향 제어<br>
-                                <strong>4. CSS 클래스 전환</strong>: .expanded로 가로 확장 제어
-                            </p>
-                        </div>
+              <div class="info-box green">
+                <h4>🧠 왜 이런 방식으로 바뀌었나?</h4>
+                <p>
+                  <strong>실제 Apple 홈페이지 방식</strong><br />
+                  • Apple은 앞선 섹션의 크기 변화로 뒤 콘텐츠가 자연스럽게
+                  올라오는 방식 사용<br />
+                  • translateY는 GPU 레이어에서만 움직이는 시각적 착시<br /><br />
+                  <strong>브라우저 엔진 레벨 차이</strong><br />
+                  • height 변화 → 브라우저 레이아웃 엔진이 문서 플로우 재계산<br />
+                  • 후속 요소들이 자동으로 위치 조정되어 자연스러운 움직임<br /><br />
+                  <strong>requestAnimationFrame 활용</strong><br />
+                  • 브라우저의 렌더링 사이클에 맞춰 pin-spacer 동기화<br />
+                  • 60fps 부드러운 애니메이션 보장
+                </p>
+              </div>
+            </div>
+          </div>
+        </li>
 
-                        <div class="code-block">
-                            <pre>
+        <!-- 5. Pill 애니메이션 시스템 -->
+        <li class="accordion-item">
+          <button
+            type="button"
+            class="accordion-header"
+            onclick="toggleAccordion(this)"
+          >
+            <div>
+              <div class="accordion-title">Pill 애니메이션</div>
+              <div class="accordion-subtitle">
+                양방향 타임라인과 ScrollTrigger 컨트롤러 구조
+              </div>
+            </div>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-wrapper">
+              <div class="info-box blue">
+                <h4>🔍 Pill 애니메이션에서 중요한 함수들</h4>
+                <p>
+                  <strong>1. createPillRiseTimeline()</strong>: 상승 애니메이션
+                  타임라인 생성<br />
+                  <strong>2. createPillDisappearTimeline()</strong>: 사라짐
+                  애니메이션 타임라인 생성<br />
+                  <strong>3. initializePillAnimation()</strong>: ScrollTrigger로
+                  양방향 제어<br />
+                  <strong>4. CSS 클래스 전환</strong>: .expanded로 가로 확장
+                  제어
+                </p>
+              </div>
+
+              <div class="code-block">
+                <pre>
 <span class="code-highlight">// 📁 함수 위치: createPillRiseTimeline()</span>
 <span class="code-highlight">// 🚀 극적인 상승 애니메이션 구조</span>
 <span class="code-highlight">// 📋 목적: 화면 하단에서 상단으로 빠른 상승 후 가로 확장</span>
@@ -1186,11 +1333,11 @@ const createPillRiseTimeline = () => {
 
   <span class="code-highlight">// 🚁 1단계: 수직 상승 (800px → -120px)</span>
   riseTimeline.fromTo(DOM_ELEMENTS.animatedPillWrapper,
-    { 
+    {
       y: 800,        // 화면 하단 800px 아래 시작점
       opacity: 0.9   // 약간의 투명도로 부드러운 등장
-    },    
-    { 
+    },
+    {
       y: -120,                   // 화면 위 120px 종료점
       opacity: 1.0,              // 완전 불투명
       duration: 0.9,             // 0.9초 동안
@@ -1212,10 +1359,10 @@ const createPillRiseTimeline = () => {
   return riseTimeline;
 };
                             </pre>
-                        </div>
+              </div>
 
-                        <div class="code-block">
-                            <pre>
+              <div class="code-block">
+                <pre>
 <span class="code-highlight">// 📁 함수 위치: initializePillAnimation()</span>
 <span class="code-highlight">// 🎮 양방향 ScrollTrigger 컨트롤러</span>
 <span class="code-highlight">// 📋 목적: 스크롤 방향에 따른 차별적 pill 애니메이션 제어</span>
@@ -1230,11 +1377,11 @@ const initializePillAnimation = () => {
     trigger: '.main-animation-section',
     start: 'top top',    // 섹션 상단이 뷰포트 상단에 도달
     end: 'bottom top',   // 섹션 하단이 뷰포트 상단에 도달
-    
+
     <span class="code-highlight">// ⬇️ 하향 스크롤: 섹션 진입</span>
     onEnter: () => {
       console.log('[DEBUG] main-animation-section 진입 - 즉시 Pill 실행');
-      
+
       // 🛑 기존 애니메이션 중단 처리
       if (ANIMATION_STATE.isAnimating) {
         pillDisappearTimeline.kill(); // 기존 애니메이션 중단
@@ -1245,7 +1392,7 @@ const initializePillAnimation = () => {
         y: 800, opacity: 0.9, display: 'flex'
       });
       DOM_ELEMENTS.animatedPillWrapper.classList.remove('expanded');
-      
+
       <span class="code-highlight">// 🚀 상승 애니메이션 즉시 시작</span>
       pillRiseTimeline.restart();
     },
@@ -1253,16 +1400,16 @@ const initializePillAnimation = () => {
     <span class="code-highlight">// ⬆️ 상향 스크롤: 섹션 이탈</span>
     onLeaveBack: () => {
       console.log('[DEBUG] main-animation-section 이탈 - Pill 사라짐');
-      
+
       // 📍 현재 pill 위치 확인
       const currentY = gsap.getProperty(DOM_ELEMENTS.animatedPillWrapper, 'y');
-      
+
       <span class="code-highlight">// 🤔 현재 상태에 따른 차별적 반응</span>
       if (currentY <= -100) {
         <span class="code-highlight">// 🎯 시나리오 1: 이미 상승 완료된 상태</span>
         console.log('[DEBUG] Pill 완성 상태 → 부드러운 사라짐 실행');
         pillDisappearTimeline.restart(); // 축소 → 하향 이동
-        
+
       } else {
         <span class="code-highlight">// ⚡ 시나리오 2: 아직 상승 진행 중</span>
         console.log('[DEBUG] 상승 중 이탈 → 즉시 숨김');
@@ -1279,150 +1426,240 @@ const initializePillAnimation = () => {
   });
 };
                             </pre>
-                        </div>
+              </div>
 
-                        <div class="info-box orange">
-                            <h4>📖 코드 이해 포인트</h4>
-                            <p>
-                                <strong>Timeline 패턴</strong><br>
-                                • <code>paused: true</code>로 생성 후 <code>restart()</code>로 실행<br>
-                                • 수동 제어로 정확한 타이밍 관리<br><br>
-                                <strong>CSS 클래스 활용</strong><br>
-                                • JavaScript로 직접 width 변경 대신 CSS 클래스 토글<br>
-                                • <code>.expanded</code> 클래스에 정의된 CSS transition 활용<br><br>
-                                <strong>상태 기반 분기</strong><br>
-                                • <code>gsap.getProperty()</code>로 현재 위치 확인<br>
-                                • 현재 상태에 따라 다른 애니메이션 실행<br><br>
-                                <strong>kill() 메서드</strong><br>
-                                • 충돌하는 애니메이션을 즉시 중단<br>
-                                • 새로운 애니메이션과의 간섭 방지
-                            </p>
-                        </div>
+              <div class="info-box orange">
+                <h4>📖 코드 이해 포인트</h4>
+                <p>
+                  <strong>Timeline 패턴</strong><br />
+                  • <code>paused: true</code>로 생성 후 <code>restart()</code>로
+                  실행<br />
+                  • 수동 제어로 정확한 타이밍 관리<br /><br />
+                  <strong>CSS 클래스 활용</strong><br />
+                  • JavaScript로 직접 width 변경 대신 CSS 클래스 토글<br />
+                  • <code>.expanded</code> 클래스에 정의된 CSS transition
+                  활용<br /><br />
+                  <strong>상태 기반 분기</strong><br />
+                  • <code>gsap.getProperty()</code>로 현재 위치 확인<br />
+                  • 현재 상태에 따라 다른 애니메이션 실행<br /><br />
+                  <strong>kill() 메서드</strong><br />
+                  • 충돌하는 애니메이션을 즉시 중단<br />
+                  • 새로운 애니메이션과의 간섭 방지
+                </p>
+              </div>
 
-                        <!-- 인터렉티브 시뮬레이션 추가 -->
-                        <div class="demo-controls-wrapper">
-                            <div class="visual-demo">
-                                <div class="hysteresis-demo">
-                                    <div class="direction-arrows">
-                                        <div class="direction">
-                                            <span class="down-arrow">↓</span>
-                                            <span>하향 스크롤: 부드러운 일반 변화</span>
-                                        </div>
-                                        <div class="direction">
-                                            <span class="up-arrow">↑</span>
-                                            <span>상향 스크롤: 50% 지점에서 달라붙기</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="scroll-track">
-                                        <div class="scroll-indicator" id="scrollIndicator"></div>
-                                        <div class="threshold-line"></div>
-                                        <div class="threshold-label">50% 달라붙는 지점</div>
-                                    </div>
-                                    
-                                    <div class="hysteresis-pill" id="hystPill">Pill</div>
-                                </div>
-                            </div>
-
-                            <div class="controls-section">
-                                <h4>테스트 컨트롤</h4>
-                                <p style="color: #a3a3a3; font-size: 0.75rem; margin-bottom: 0.8rem;">
-                                    각 버튼은 스크롤 진행률을 시뮬레이션합니다. 하향/상향 버튼을 번갈아 클릭해서 pill의 서로 다른 반응을 확인해보세요.
-                                </p>
-
-                                <div class="controls">
-                                    <button type="button" class="btn" onclick="simulateScroll('down', 0, this)">0% (시작점)</button>
-                                    <button type="button" class="btn" onclick="simulateScroll('down', 25, this)">25% (하향)</button>
-                                    <button type="button" class="btn" onclick="simulateScroll('down', 50, this)">50% (임계점)</button>
-                                    <button type="button" class="btn" onclick="simulateScroll('down', 75, this)">75% (하향)</button>
-                                    <button type="button" class="btn" onclick="simulateScroll('down', 100, this)">100% (완료)</button>
-                                </div>
-
-                                <div class="controls">
-                                    <button type="button" class="btn" onclick="simulateScroll('up', 100, this)">100% → 75% (상향)</button>
-                                    <button type="button" class="btn" onclick="simulateScroll('up', 50, this)">75% → 50% (달라붙기 시작)</button>
-                                    <button type="button" class="btn" onclick="simulateScroll('up', 25, this)">50% → 25% (복원 시작)</button>
-                                    <button type="button" class="btn" onclick="simulateScroll('up', 0, this)">25% → 0% (원위치)</button>
-                                </div>
-                            </div>
-                        </div>
+              <!-- 인터렉티브 시뮬레이션 추가 -->
+              <div class="demo-controls-wrapper">
+                <div class="visual-demo">
+                  <div class="hysteresis-demo">
+                    <div class="direction-arrows">
+                      <div class="direction">
+                        <span class="down-arrow">↓</span>
+                        <span>하향 스크롤: 부드러운 일반 변화</span>
+                      </div>
+                      <div class="direction">
+                        <span class="up-arrow">↑</span>
+                        <span>상향 스크롤: 50% 지점에서 달라붙기</span>
+                      </div>
                     </div>
+
+                    <div class="scroll-track">
+                      <div class="scroll-indicator" id="scrollIndicator"></div>
+                      <div class="threshold-line"></div>
+                      <div class="threshold-label">50% 달라붙는 지점</div>
+                    </div>
+
+                    <div class="hysteresis-pill" id="hystPill">Pill</div>
+                  </div>
                 </div>
-            </li>
 
-            <!-- 6. 스크롤 방향 인식 애니메이션 -->
-            <li class="accordion-item">
-                <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
-                    <div>
-                        <div class="accordion-title">스크롤 방향 인식 애니메이션</div>
-                        <div class="accordion-subtitle">사용자 의도에 따라 다르게 반응하는 지능형 시스템</div>
-                    </div>
-                    <span class="accordion-arrow">▼</span>
-                </button>
-                <div class="accordion-content">
-                    <div class="content-wrapper">
-                        <div class="info-box blue">
-                            <h4>🧠 사용자 의도 인식 시스템</h4>
-                            <p>
-                                같은 스크롤 위치라도 어떤 방향에서 왔는지에 따라 다른 반응을 보이는 시스템입니다. 
-                                하향 스크롤은 새로운 콘텐츠 탐색 의도로, 상향 스크롤은 이전 콘텐츠 복귀 의도로 해석합니다.
-                            </p>
-                        </div>
+                <div class="controls-section">
+                  <h4>테스트 컨트롤</h4>
+                  <p
+                    style="
+                      color: #a3a3a3;
+                      font-size: 0.75rem;
+                      margin-bottom: 0.8rem;
+                    "
+                  >
+                    각 버튼은 스크롤 진행률을 시뮬레이션합니다. 하향/상향 버튼을
+                    번갈아 클릭해서 pill의 서로 다른 반응을 확인해보세요.
+                  </p>
 
-                        <div class="comparison-grid">
-                            <div style="background: rgba(52, 199, 89, 0.1); border: 1px solid rgba(52, 199, 89, 0.3); padding: 1rem; border-radius: 8px;">
-                                <h5 style="color: #34c759; margin-bottom: 0.5rem;">↓ 하향 스크롤 (탐색 의도)</h5>
-                                <p style="color: #a3a3a3; margin: 0;">
-                                    <strong>부드럽고 자연스러운 반응</strong><br>
-                                    • 일반적인 애니메이션 진행<br>
-                                    • 새로운 콘텐츠 발견을 위한 원활한 흐름<br>
-                                    • 사용자의 탐색 욕구를 방해하지 않음
-                                </p>
-                            </div>
-                            <div style="background: rgba(255, 159, 10, 0.1); border: 1px solid rgba(255, 159, 10, 0.3); padding: 1rem; border-radius: 8px;">
-                                <h5 style="color: #ff9f0a; margin-bottom: 0.5rem;">↑ 상향 스크롤 (복귀 의도)</h5>
-                                <p style="color: #a3a3a3; margin: 0;">
-                                    <strong>현재 상태를 고려한 적절한 반응</strong><br>
-                                    • Pill 완성 상태: 부드러운 사라짐 애니메이션<br>
-                                    • Pill 진행 중: 즉시 숨김 처리<br>
-                                    • 사용자 의도를 방해하지 않는 빠른 대응
-                                </p>
-                            </div>
-                        </div>
+                  <div class="controls">
+                    <button
+                      type="button"
+                      class="btn"
+                      onclick="simulateScroll('down', 0, this)"
+                    >
+                      0% (시작점)
+                    </button>
+                    <button
+                      type="button"
+                      class="btn"
+                      onclick="simulateScroll('down', 25, this)"
+                    >
+                      25% (하향)
+                    </button>
+                    <button
+                      type="button"
+                      class="btn"
+                      onclick="simulateScroll('down', 50, this)"
+                    >
+                      50% (임계점)
+                    </button>
+                    <button
+                      type="button"
+                      class="btn"
+                      onclick="simulateScroll('down', 75, this)"
+                    >
+                      75% (하향)
+                    </button>
+                    <button
+                      type="button"
+                      class="btn"
+                      onclick="simulateScroll('down', 100, this)"
+                    >
+                      100% (완료)
+                    </button>
+                  </div>
 
-                        <div class="code-block">
-                            <pre>
+                  <div class="controls">
+                    <button
+                      type="button"
+                      class="btn"
+                      onclick="simulateScroll('up', 100, this)"
+                    >
+                      100% → 75% (상향)
+                    </button>
+                    <button
+                      type="button"
+                      class="btn"
+                      onclick="simulateScroll('up', 50, this)"
+                    >
+                      75% → 50% (달라붙기 시작)
+                    </button>
+                    <button
+                      type="button"
+                      class="btn"
+                      onclick="simulateScroll('up', 25, this)"
+                    >
+                      50% → 25% (복원 시작)
+                    </button>
+                    <button
+                      type="button"
+                      class="btn"
+                      onclick="simulateScroll('up', 0, this)"
+                    >
+                      25% → 0% (원위치)
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- 6. 스크롤 방향 인식 애니메이션 -->
+        <li class="accordion-item">
+          <button
+            type="button"
+            class="accordion-header"
+            onclick="toggleAccordion(this)"
+          >
+            <div>
+              <div class="accordion-title">스크롤 방향 인식 애니메이션</div>
+              <div class="accordion-subtitle">
+                스크롤 방향에 따라 다르게 반응
+              </div>
+            </div>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-wrapper">
+              <div class="info-box blue">
+                <h4>🧠 스크롤 방향에 따른 다른 반응을 보임</h4>
+                <p>
+                  같은 스크롤 위치라도 어떤 방향에서 왔는지에 따라 다른 반응을
+                  보이는 시스템입니다. 하향 스크롤은 새로운 콘텐츠 탐색 의도로,
+                  상향 스크롤은 이전 콘텐츠 복귀 의도로 해석합니다.
+                </p>
+              </div>
+
+              <div class="comparison-grid">
+                <div
+                  style="
+                    background: rgba(52, 199, 89, 0.1);
+                    border: 1px solid rgba(52, 199, 89, 0.3);
+                    padding: 1rem;
+                    border-radius: 8px;
+                  "
+                >
+                  <h5 style="color: #34c759; margin-bottom: 0.5rem">
+                    ↓ 하향 스크롤 (탐색 의도)
+                  </h5>
+                  <p style="color: #a3a3a3; margin: 0">
+                    <strong>부드럽고 자연스러운 반응</strong><br />
+                    • 일반적인 애니메이션 진행<br />
+                    • 새로운 콘텐츠 발견을 위한 원활한 흐름<br />
+                    • 사용자의 탐색 욕구를 방해하지 않음
+                  </p>
+                </div>
+                <div
+                  style="
+                    background: rgba(255, 159, 10, 0.1);
+                    border: 1px solid rgba(255, 159, 10, 0.3);
+                    padding: 1rem;
+                    border-radius: 8px;
+                  "
+                >
+                  <h5 style="color: #ff9f0a; margin-bottom: 0.5rem">
+                    ↑ 상향 스크롤 (복귀 의도)
+                  </h5>
+                  <p style="color: #a3a3a3; margin: 0">
+                    <strong>현재 상태를 고려한 적절한 반응</strong><br />
+                    • Pill 완성 상태: 부드러운 사라짐 애니메이션<br />
+                    • Pill 진행 중: 즉시 숨김 처리<br />
+                    • 스크롤에 따라서 pill 앨리먼트 애니메이션이 다르게 반응
+                  </p>
+                </div>
+              </div>
+
+              <div class="code-block">
+                <pre>
 <span class="code-highlight">// 📁 위치: ScrollTrigger.create() 내부</span>
 <span class="code-highlight">// 🎯 스크롤 방향별 차별 대응 로직</span>
-<span class="code-highlight">// 📋 목적: 사용자 의도를 파악하여 적절한 애니메이션 선택</span>
+<span class="code-highlight">// 📋 목적: 스크롤에 따라서 pill 앨리먼트
+                                                  애니메이션이 다르게
+                                                  반응</span>
 
 ScrollTrigger.create({
   trigger: '.main-animation-section',
   start: 'top top',
   end: 'bottom top',
-  
+
   <span class="code-highlight">// ⬇️ 하향 진입: 적극적 환영</span>
   onEnter: () => {
     console.log('[DEBUG] 하향 진입 - 자연스러운 애니메이션');
-    
+
     // 🎬 즉시 극적인 상승 애니메이션 시작
     // 사용자가 새로운 콘텐츠를 보려는 의도로 해석
     pillRiseTimeline.restart();
   },
-  
+
   <span class="code-highlight">// ⬆️ 상향 이탈: 상황 판단 후 대응</span>
   onLeaveBack: () => {
     console.log('[DEBUG] 상향 이탈 - 현재 상태 확인 후 적절한 반응');
-    
+
     <span class="code-highlight">// 📍 현재 Pill 위치 확인</span>
     const currentY = gsap.getProperty(DOM_ELEMENTS.animatedPillWrapper, 'y');
-    
+
     if (currentY <= -100) {
       <span class="code-highlight">// 🎯 시나리오 1: 이미 상승 완료된 상태</span>
       console.log('[DEBUG] Pill 완성 상태 → 부드러운 사라짐 실행');
       // 사용자가 pill을 충분히 봤으므로 정중한 사라짐 애니메이션
       pillDisappearTimeline.restart(); // 축소 → 하향 이동
-      
+
     } else {
       <span class="code-highlight">// ⚡ 시나리오 2: 아직 상승 진행 중</span>
       console.log('[DEBUG] 상승 중 이탈 → 즉시 숨김');
@@ -1438,81 +1675,104 @@ ScrollTrigger.create({
   }
 });
                             </pre>
-                        </div>
+              </div>
 
-                        <div class="visual-demo">
-                            <h4 style="color: #2997ff; margin-bottom: 1rem;">지능형 반응 시나리오</h4>
-                            <div class="timeline">
-                                <div class="timeline-item">
-                                    <div class="timeline-time">시나리오 1</div>
-                                    <div class="timeline-desc">하향 스크롤로 섹션 진입 → 극적인 pill 상승 애니메이션</div>
-                                </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-time">시나리오 2</div>
-                                    <div class="timeline-desc">상향 스크롤로 섹션 이탈 (pill 완전 상승 후) → 부드러운 사라짐</div>
-                                </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-time">시나리오 3</div>
-                                    <div class="timeline-desc">상향 스크롤로 섹션 이탈 (pill 상승 중) → 즉시 숨김</div>
-                                </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-time">시나리오 4</div>
-                                    <div class="timeline-desc">빠른 방향 전환 → 기존 애니메이션 kill() 후 새 애니메이션 시작</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="info-box green">
-                            <h4>💡 코드에서 배울 점</h4>
-                            <p>
-                                <strong>조건부 로직의 중요성</strong><br>
-                                • 단순히 위치만 보지 않고 현재 상태(currentY)를 먼저 확인<br>
-                                • 상태에 따라 완전히 다른 처리 로직 실행<br><br>
-                                <strong>사용자 경험 최우선</strong><br>
-                                • 하향 스크롤: 사용자가 보고 싶어하므로 풀 애니메이션 제공<br>
-                                • 상향 스크롤: 사용자가 빨리 이동하고 싶으므로 빠른 대응<br><br>
-                                <strong>상태 관리 패턴</strong><br>
-                                • ANIMATION_STATE 객체로 전역 상태 관리<br>
-                                • 각 애니메이션의 현재 단계(phase) 추적<br>
-                                • 충돌 방지를 위한 isAnimating 플래그 활용
-                            </p>
-                        </div>
+              <div class="visual-demo">
+                <h4 style="color: #2997ff; margin-bottom: 1rem">
+                  지능형 반응 시나리오
+                </h4>
+                <div class="timeline">
+                  <div class="timeline-item">
+                    <div class="timeline-time">시나리오 1</div>
+                    <div class="timeline-desc">
+                      하향 스크롤로 섹션 진입 → 극적인 pill 상승 애니메이션
                     </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-time">시나리오 2</div>
+                    <div class="timeline-desc">
+                      상향 스크롤로 섹션 이탈 (pill 완전 상승 후) → 부드러운
+                      사라짐
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-time">시나리오 3</div>
+                    <div class="timeline-desc">
+                      상향 스크롤로 섹션 이탈 (pill 상승 중) → 즉시 숨김
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-time">시나리오 4</div>
+                    <div class="timeline-desc">
+                      빠른 방향 전환 → 기존 애니메이션 kill() 후 새 애니메이션
+                      시작
+                    </div>
+                  </div>
                 </div>
-            </li>
+              </div>
 
-            <!-- 7. Transform 제거 시스템 -->
-            <li class="accordion-item">
-                <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
-                    <div>
-                        <div class="accordion-title">Transform 제거 시스템</div>
-                        <div class="accordion-subtitle">sticky positioning과의 충돌 해결과 부드러운 전환 코드</div>
-                    </div>
-                    <span class="accordion-arrow">▼</span>
-                </button>
-                <div class="accordion-content">
-                    <div class="content-wrapper">
-                        <div class="info-box red">
-                            <h4>🚨 Transform + Sticky 충돌 문제</h4>
-                            <p>
-                                애니메이션에서 사용하는 <code>transform: translateY()</code>와 <code>position: sticky</code>가 
-                                동시에 적용되면 브라우저에서 위치 계산 충돌이 발생합니다. 
-                                각각 다른 좌표계에서 작동하기 때문입니다.
-                            </p>
-                        </div>
+              <div class="info-box green">
+                <h4>💡 코드에서 배울 점</h4>
+                <p>
+                  <strong>조건부 로직의 중요성</strong><br />
+                  • 단순히 위치만 보지 않고 현재 상태(currentY)를 먼저 확인<br />
+                  • 상태에 따라 완전히 다른 처리 로직 실행<br /><br />
+                  <strong>사용자 경험 최우선</strong><br />
+                  • 하향 스크롤: 사용자가 보고 싶어하므로 풀 애니메이션 제공<br />
+                  • 상향 스크롤: 사용자가 빨리 이동하고 싶으므로 빠른 대응<br /><br />
+                  <strong>상태 관리 패턴</strong><br />
+                  • ANIMATION_STATE 객체로 전역 상태 관리<br />
+                  • 각 애니메이션의 현재 단계(phase) 추적<br />
+                  • 충돌 방지를 위한 isAnimating 플래그 활용
+                </p>
+              </div>
+            </div>
+          </div>
+        </li>
 
-                        <div class="info-box blue">
-                            <h4>🔍 initializeTransformRemoval 함수 분석</h4>
-                            <p>
-                                <strong>1. 특정 스크롤 구간 설정</strong>: 65%~90% 지점에서 점진적 제거<br>
-                                <strong>2. 사인 곡선 easing</strong>: 자연스러운 수학적 변화<br>
-                                <strong>3. 실시간 조정</strong>: onUpdate로 매 프레임 transform 값 변경<br>
-                                <strong>4. 완전 제거 시점</strong>: 99% 지점에서 transform: '' 적용
-                            </p>
-                        </div>
+        <!-- 7. Transform 제거 시스템 -->
+        <li class="accordion-item">
+          <button
+            type="button"
+            class="accordion-header"
+            onclick="toggleAccordion(this)"
+          >
+            <div>
+              <div class="accordion-title">Transform 제거 시스템</div>
+              <div class="accordion-subtitle">
+                sticky positioning과의 충돌 해결과 부드러운 전환 코드
+              </div>
+            </div>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-wrapper">
+              <div class="info-box red">
+                <h4>🚨 Transform + Sticky 충돌 문제</h4>
+                <p>
+                  애니메이션에서 사용하는 <code>transform: translateY()</code>와
+                  <code>position: sticky</code>가 동시에 적용되면 브라우저에서
+                  위치 계산 충돌이 발생합니다. 각각 다른 좌표계에서 작동하기
+                  때문입니다.
+                </p>
+              </div>
 
-                        <div class="code-block">
-                            <pre>
+              <div class="info-box blue">
+                <h4>🔍 initializeTransformRemoval 함수 분석</h4>
+                <p>
+                  <strong>1. 특정 스크롤 구간 설정</strong>: 65%~90% 지점에서
+                  점진적 제거<br />
+                  <strong>2. 사인 곡선 easing</strong>: 자연스러운 수학적
+                  변화<br />
+                  <strong>3. 실시간 조정</strong>: onUpdate로 매 프레임
+                  transform 값 변경<br />
+                  <strong>4. 완전 제거 시점</strong>: 99% 지점에서 transform: ''
+                  적용
+                </p>
+              </div>
+
+              <div class="code-block">
+                <pre>
 <span class="code-highlight">// 📁 함수 위치: initializeTransformRemoval()</span>
 <span class="code-highlight">// ⚡ 스크롤 동기화 Transform 점진적 제거</span>
 <span class="code-highlight">// 📋 목적: sticky positioning 충돌 없이 부드러운 전환</span>
@@ -1523,28 +1783,28 @@ const initializeTransformRemoval = () => {
     <span class="code-highlight">start: '65% top',  // 스케일 애니메이션 65% 지점</span>
     <span class="code-highlight">end: '90% top',    // 90% 지점까지 점진적 제거</span>
     <span class="code-highlight">scrub: 2,          // 부드러운 스크롤 동기화</span>
-    
+
     onUpdate: (self) => {
       // 📊 현재 진행률 (0~1)
       const progress = self.progress;
-      
+
       <span class="code-highlight">// 🌊 부드러운 easing 적용 (사인 곡선)</span>
       // Math.sin()을 사용하여 0에서 시작해 1에서 완만하게 끝나는 곡선
       const easedProgress = Math.sin((progress * Math.PI) / 2);
-      
+
       <span class="code-highlight">// 📐 Transform 값 점진적 감소</span>
       // -120px에서 0px로 자연스럽게 변화
       const currentY = -120 + 120 * easedProgress; // -120px → 0px
-      
+
       <span class="code-highlight">// 🎨 실시간 DOM 적용</span>
       DOM_ELEMENTS.animatedPillWrapper.style.transform = `translateY(${currentY}px)`;
-      
+
       // 🎭 시각적 개선: 투명도도 함께 조정
       const opacity = 0.95 + 0.05 * easedProgress; // 0.95 → 1.0
       DOM_ELEMENTS.animatedPillWrapper.style.opacity = opacity;
-      
+
       console.log(`[DEBUG] 부드러운 동기화: ${currentY.toFixed(1)}px (${(progress * 100).toFixed(1)}%)`);
-      
+
       <span class="code-highlight">// 🎯 완전 제거 시점</span>
       if (progress >= 0.99) {
         // 🧹 모든 transform 스타일 완전 제거
@@ -1554,7 +1814,7 @@ const initializeTransformRemoval = () => {
         console.log('[DEBUG] Transform 완전 제거 - 순수 sticky 활성화');
       }
     },
-    
+
     onLeaveBack: () => {
       console.log('[DEBUG] Transform 제거 지점 역방향 통과');
       // 🔄 역방향 이동 시 상태 복원
@@ -1563,95 +1823,120 @@ const initializeTransformRemoval = () => {
   });
 };
                             </pre>
-                        </div>
+              </div>
 
-                        <div class="visual-demo">
-                            <h4 style="color: #2997ff; margin-bottom: 1rem;">Transform 제거 과정 시각화</h4>
-                            <div class="timeline">
-                                <div class="timeline-item">
-                                    <div class="timeline-time">65% 지점</div>
-                                    <div class="timeline-desc">Transform 제거 시작: translateY(-120px)</div>
-                                </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-time">진행 중</div>
-                                    <div class="timeline-desc">점진적 변화: -120px → -110px → -100px → ...</div>
-                                </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-time">90% 지점</div>
-                                    <div class="timeline-desc">거의 완료: translateY(-10px)</div>
-                                </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-time">99% 지점</div>
-                                    <div class="timeline-desc">완전 제거: transform: '' + 순수 sticky 활성화</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="info-box green">
-                            <h4>📖 수학적 원리와 코드 패턴</h4>
-                            <p>
-                                <strong>사인 곡선 easing 선택 이유</strong><br>
-                                • <code>Math.sin((progress * Math.PI) / 2)</code>: 0에서 시작해 1에서 완만하게 끝남<br>
-                                • 시각적으로 가장 자연스러운 변화 곡선<br>
-                                • 급작스럽지 않고 부드럽게 완료<br><br>
-                                <strong>scrub: 2의 의미</strong><br>
-                                • 스크롤 변화에 2초 지연으로 반응<br>
-                                • 너무 민감하지 않은 안정적인 동기화<br><br>
-                                <strong>99% 임계값 사용</strong><br>
-                                • progress === 1.0은 부동소수점 정확도 문제로 감지 어려움<br>
-                                • 0.99는 충분히 완료에 가까우면서 확실한 감지 지점
-                            </p>
-                        </div>
-
-                        <div style="background: rgba(41, 151, 255, 0.1); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                            <p style="color: #2997ff; margin: 0;">
-                                <strong>💡 핵심 아이디어</strong><br>
-                                10px 범위 내의 미세한 변화로 사용자는 시각적으로 거의 감지할 수 없지만, 
-                                브라우저 엔진에서는 완전히 다른 위치 계산 시스템으로 전환됩니다.
-                            </p>
-                        </div>
+              <div class="visual-demo">
+                <h4 style="color: #2997ff; margin-bottom: 1rem">
+                  Transform 제거 과정 시각화
+                </h4>
+                <div class="timeline">
+                  <div class="timeline-item">
+                    <div class="timeline-time">65% 지점</div>
+                    <div class="timeline-desc">
+                      Transform 제거 시작: translateY(-120px)
                     </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-time">진행 중</div>
+                    <div class="timeline-desc">
+                      점진적 변화: -120px → -110px → -100px → ...
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-time">90% 지점</div>
+                    <div class="timeline-desc">
+                      거의 완료: translateY(-10px)
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-time">99% 지점</div>
+                    <div class="timeline-desc">
+                      완전 제거: transform: '' + 순수 sticky 활성화
+                    </div>
+                  </div>
                 </div>
-            </li>
+              </div>
 
-            <!-- 8. 전체 동작 플로우 -->
-            <li class="accordion-item">
-                <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
-                    <div>
-                        <div class="accordion-title">전체 동작 플로우</div>
-                        <div class="accordion-subtitle">모든 시스템이 통합된 완전한 애니메이션 흐름과 코드 구조</div>
-                    </div>
-                    <span class="accordion-arrow">▼</span>
-                </button>
-                <div class="accordion-content">
-                    <div class="content-wrapper">
-                        <div class="info-box dark">
-                            <h4>🎯 전체 코드 실행 순서</h4>
-                            <div class="flow-chart">
-                                <div class="flow-step">
-                                    <div class="flow-step-icon">1</div>
-                                    <p>initializeApp()<br>전체 초기화</p>
-                                </div>
-                                <div class="flow-arrow">→</div>
-                                <div class="flow-step">
-                                    <div class="flow-step-icon">2</div>
-                                    <p>Sequential<br>Animation</p>
-                                </div>
-                                <div class="flow-arrow">→</div>
-                                <div class="flow-step">
-                                    <div class="flow-step-icon">3</div>
-                                    <p>Pill Animation<br>+ Transform 제거</p>
-                                </div>
-                                <div class="flow-arrow">→</div>
-                                <div class="flow-step">
-                                    <div class="flow-step-icon">4</div>
-                                    <p>Interactive<br>상태 완성</p>
-                                </div>
-                            </div>
-                        </div>
+              <div class="info-box green">
+                <h4>📖 수학적 원리와 코드 패턴</h4>
+                <p>
+                  <strong>사인 곡선 easing 선택 이유</strong><br />
+                  • <code>Math.sin((progress * Math.PI) / 2)</code>: 0에서
+                  시작해 1에서 완만하게 끝남<br />
+                  • 시각적으로 가장 자연스러운 변화 곡선<br />
+                  • 급작스럽지 않고 부드럽게 완료<br /><br />
+                  <strong>scrub: 2의 의미</strong><br />
+                  • 스크롤 변화에 2초 지연으로 반응<br />
+                  • 너무 민감하지 않은 안정적인 동기화<br /><br />
+                  <strong>99% 임계값 사용</strong><br />
+                  • progress === 1.0은 부동소수점 정확도 문제로 감지 어려움<br />
+                  • 0.99는 충분히 완료에 가까우면서 확실한 감지 지점
+                </p>
+              </div>
 
-                        <div class="code-block">
-                            <pre>
+              <div
+                style="
+                  background: rgba(41, 151, 255, 0.1);
+                  padding: 1rem;
+                  border-radius: 8px;
+                  margin-top: 1rem;
+                "
+              >
+                <p style="color: #2997ff; margin: 0">
+                  <strong>💡 핵심 아이디어</strong><br />
+                  10px 범위 내의 미세한 변화로 사용자는 시각적으로 거의 감지할
+                  수 없지만, 브라우저 엔진에서는 완전히 다른 위치 계산
+                  시스템으로 전환됩니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- 8. 전체 동작 플로우 -->
+        <li class="accordion-item">
+          <button
+            type="button"
+            class="accordion-header"
+            onclick="toggleAccordion(this)"
+          >
+            <div>
+              <div class="accordion-title">전체 동작 플로우</div>
+              <div class="accordion-subtitle">
+                모든 시스템이 통합된 완전한 애니메이션 흐름과 코드 구조
+              </div>
+            </div>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-wrapper">
+              <div class="info-box dark">
+                <h4>🎯 전체 코드 실행 순서</h4>
+                <div class="flow-chart">
+                  <div class="flow-step">
+                    <div class="flow-step-icon">1</div>
+                    <p>initializeApp()<br />전체 초기화</p>
+                  </div>
+                  <div class="flow-arrow">→</div>
+                  <div class="flow-step">
+                    <div class="flow-step-icon">2</div>
+                    <p>Sequential<br />Animation</p>
+                  </div>
+                  <div class="flow-arrow">→</div>
+                  <div class="flow-step">
+                    <div class="flow-step-icon">3</div>
+                    <p>Pill Animation<br />+ Transform 제거</p>
+                  </div>
+                  <div class="flow-arrow">→</div>
+                  <div class="flow-step">
+                    <div class="flow-step-icon">4</div>
+                    <p>Interactive<br />상태 완성</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="code-block">
+                <pre>
 <span class="code-highlight">// 📁 메인 초기화 함수 구조</span>
 <span class="code-highlight">// 🎯 모든 애니메이션의 시작점</span>
 <span class="code-highlight">// 📋 목적: 전체 시스템을 올바른 순서로 초기화</span>
@@ -1663,15 +1948,15 @@ const initializeApp = () => {
     <span class="code-highlight">// 🎬 1. 순차적 애니메이션 (원래 방식)</span>
     // 스케일링 → onComplete → 높이 축소 순서로 진행
     initializeSequentialAnimation();
-    
+
     <span class="code-highlight">// 🎭 2. Pill 애니메이션 (원본 타이밍)</span>
     // 메인 섹션 진입 시 즉시 실행되는 독립적 시스템
     initializePillAnimation();
-    
+
     <span class="code-highlight">// ⚙️ 3. Transform 제거 시스템</span>
     // sticky positioning과의 충돌 방지를 위한 점진적 제거
     initializeTransformRemoval();
-    
+
     <span class="code-highlight">// 🎯 4. 인터랙션 힌트</span>
     // 사용자 가이드 및 시각적 피드백 시스템
     initializeInteractionHints();
@@ -1694,18 +1979,18 @@ const initializeApp = () => {
 <span class="code-highlight">// 🚀 앱 시작</span>
 initializeApp();
                             </pre>
-                        </div>
+              </div>
 
-                        <div class="info-box blue">
-                            <h4>📊 핵심 데이터 구조</h4>
-                            <p>
-                                코드 전반에서 사용되는 중요한 객체들과 설정값들을 이해하면 
-                                전체 동작을 더 쉽게 파악할 수 있습니다.
-                            </p>
-                        </div>
+              <div class="info-box blue">
+                <h4>📊 핵심 데이터 구조</h4>
+                <p>
+                  코드 전반에서 사용되는 중요한 객체들과 설정값들을 이해하면
+                  전체 동작을 더 쉽게 파악할 수 있습니다.
+                </p>
+              </div>
 
-                        <div class="code-block">
-                            <pre>
+              <div class="code-block">
+                <pre>
 <span class="code-highlight">// 📁 주요 데이터 구조</span>
 <span class="code-highlight">// 🎯 전역에서 사용되는 핵심 객체들</span>
 
@@ -1739,156 +2024,203 @@ const ANIMATION_STATE = {
   isTransformRemoved: false, // Transform 제거 완료 여부
 };
                             </pre>
-                        </div>
+              </div>
 
-                        <div class="visual-demo">
-                            <h4 style="color: #2997ff; margin-bottom: 1rem;">사용자 스크롤 시나리오별 실행 흐름</h4>
-                            
-                            <div style="background: rgba(52, 199, 89, 0.1); border: 1px solid rgba(52, 199, 89, 0.3); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-                                <h5 style="color: #34c759; margin-bottom: 0.5rem;">🎬 시나리오 1: 정상 진행</h5>
-                                <div class="timeline">
-                                    <div class="timeline-item">
-                                        <div class="timeline-time">스크롤 시작</div>
-                                        <div class="timeline-desc">initializeSequentialAnimation() 실행</div>
-                                    </div>
-                                    <div class="timeline-item">
-                                        <div class="timeline-time">400vh 완료</div>
-                                        <div class="timeline-desc">onComplete → initializeHeightAnimation()</div>
-                                    </div>
-                                    <div class="timeline-item">
-                                        <div class="timeline-time">메인 섹션 진입</div>
-                                        <div class="timeline-desc">ScrollTrigger onEnter → pillRiseTimeline.restart()</div>
-                                    </div>
-                                    <div class="timeline-item">
-                                        <div class="timeline-time">65% 지점</div>
-                                        <div class="timeline-desc">initializeTransformRemoval() 시작</div>
-                                    </div>
-                                    <div class="timeline-item">
-                                        <div class="timeline-time">99% 지점</div>
-                                        <div class="timeline-desc">transform 완전 제거, sticky 활성화</div>
-                                    </div>
-                                </div>
-                            </div>
+              <div class="visual-demo">
+                <h4 style="color: #2997ff; margin-bottom: 1rem">
+                  사용자 스크롤 시나리오별 실행 흐름
+                </h4>
 
-                            <div style="background: rgba(255, 159, 10, 0.1); border: 1px solid rgba(255, 159, 10, 0.3); padding: 1rem; border-radius: 8px;">
-                                <h5 style="color: #ff9f0a; margin-bottom: 0.5rem;">🔄 시나리오 2: 역방향 이탈</h5>
-                                <div class="timeline">
-                                    <div class="timeline-item">
-                                        <div class="timeline-time">상향 스크롤</div>
-                                        <div class="timeline-desc">ScrollTrigger onLeaveBack 실행</div>
-                                    </div>
-                                    <div class="timeline-item">
-                                        <div class="timeline-time">현재 상태 확인</div>
-                                        <div class="timeline-desc">gsap.getProperty()로 currentY 측정</div>
-                                    </div>
-                                    <div class="timeline-item">
-                                        <div class="timeline-time">조건부 분기</div>
-                                        <div class="timeline-desc">완료 상태면 disappearTimeline, 진행 중이면 즉시 숨김</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="info-box green">
-                            <h4>🎓 코드를 읽을 때 주의깊게 봐야 할 부분</h4>
-                            <p>
-                                <strong>함수 호출 체인</strong>: onComplete 콜백들이 어떻게 연결되어 순차 실행되는지<br>
-                                <strong>상태 관리 패턴</strong>: ANIMATION_STATE 객체가 어떻게 업데이트되고 활용되는지<br>
-                                <strong>조건부 로직</strong>: 각 함수에서 현재 상태를 확인하고 분기하는 패턴<br>
-                                <strong>타이밍 제어</strong>: gsap.delayedCall, setTimeout 등으로 자연스러운 전환 만드는 방법<br>
-                                <strong>DOM 조작 패턴</strong>: querySelector vs getElementById 사용, 스타일 적용 방식<br>
-                                <strong>에러 처리</strong>: 각 함수에서 null 체크, 중복 실행 방지 로직
-                            </p>
-                        </div>
+                <div
+                  style="
+                    background: rgba(52, 199, 89, 0.1);
+                    border: 1px solid rgba(52, 199, 89, 0.3);
+                    padding: 1rem;
+                    border-radius: 8px;
+                    margin-bottom: 1rem;
+                  "
+                >
+                  <h5 style="color: #34c759; margin-bottom: 0.5rem">
+                    🎬 시나리오 1: 정상 진행
+                  </h5>
+                  <div class="timeline">
+                    <div class="timeline-item">
+                      <div class="timeline-time">스크롤 시작</div>
+                      <div class="timeline-desc">
+                        initializeSequentialAnimation() 실행
+                      </div>
                     </div>
+                    <div class="timeline-item">
+                      <div class="timeline-time">400vh 완료</div>
+                      <div class="timeline-desc">
+                        onComplete → initializeHeightAnimation()
+                      </div>
+                    </div>
+                    <div class="timeline-item">
+                      <div class="timeline-time">메인 섹션 진입</div>
+                      <div class="timeline-desc">
+                        ScrollTrigger onEnter → pillRiseTimeline.restart()
+                      </div>
+                    </div>
+                    <div class="timeline-item">
+                      <div class="timeline-time">65% 지점</div>
+                      <div class="timeline-desc">
+                        initializeTransformRemoval() 시작
+                      </div>
+                    </div>
+                    <div class="timeline-item">
+                      <div class="timeline-time">99% 지점</div>
+                      <div class="timeline-desc">
+                        transform 완전 제거, sticky 활성화
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </li>
-        </ul>
+
+                <div
+                  style="
+                    background: rgba(255, 159, 10, 0.1);
+                    border: 1px solid rgba(255, 159, 10, 0.3);
+                    padding: 1rem;
+                    border-radius: 8px;
+                  "
+                >
+                  <h5 style="color: #ff9f0a; margin-bottom: 0.5rem">
+                    🔄 시나리오 2: 역방향 이탈
+                  </h5>
+                  <div class="timeline">
+                    <div class="timeline-item">
+                      <div class="timeline-time">상향 스크롤</div>
+                      <div class="timeline-desc">
+                        ScrollTrigger onLeaveBack 실행
+                      </div>
+                    </div>
+                    <div class="timeline-item">
+                      <div class="timeline-time">현재 상태 확인</div>
+                      <div class="timeline-desc">
+                        gsap.getProperty()로 currentY 측정
+                      </div>
+                    </div>
+                    <div class="timeline-item">
+                      <div class="timeline-time">조건부 분기</div>
+                      <div class="timeline-desc">
+                        완료 상태면 disappearTimeline, 진행 중이면 즉시 숨김
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="info-box green">
+                <h4>🎓 코드를 읽을 때 주의깊게 봐야 할 부분</h4>
+                <p>
+                  <strong>함수 호출 체인</strong>: onComplete 콜백들이 어떻게
+                  연결되어 순차 실행되는지<br />
+                  <strong>상태 관리 패턴</strong>: ANIMATION_STATE 객체가 어떻게
+                  업데이트되고 활용되는지<br />
+                  <strong>조건부 로직</strong>: 각 함수에서 현재 상태를 확인하고
+                  분기하는 패턴<br />
+                  <strong>타이밍 제어</strong>: gsap.delayedCall, setTimeout
+                  등으로 자연스러운 전환 만드는 방법<br />
+                  <strong>DOM 조작 패턴</strong>: querySelector vs
+                  getElementById 사용, 스타일 적용 방식<br />
+                  <strong>에러 처리</strong>: 각 함수에서 null 체크, 중복 실행
+                  방지 로직
+                </p>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
     </div>
 
     <script>
-        // 📁 파일 위치: hybrid_animation_visual_guide_v3_enhanced.html
-        
-        // 🎯 아코디언 토글 함수
-        function toggleAccordion(header) {
-            const item = header.parentElement;
-            const isActive = item.classList.contains('active');
-            
-            // 모든 아코디언 닫기
-            document.querySelectorAll('.accordion-item').forEach(accordionItem => {
-                accordionItem.classList.remove('active');
-            });
-            
-            // 클릭된 아이템이 비활성화 상태였다면 활성화
-            if (!isActive) {
-                item.classList.add('active');
-            }
+      // 📁 파일 위치: hybrid_animation_visual_guide_v3_enhanced.html
+
+      // 🎯 아코디언 토글 함수
+      function toggleAccordion(header) {
+        const item = header.parentElement;
+        const isActive = item.classList.contains('active');
+
+        // 모든 아코디언 닫기
+        document
+          .querySelectorAll('.accordion-item')
+          .forEach((accordionItem) => {
+            accordionItem.classList.remove('active');
+          });
+
+        // 클릭된 아이템이 비활성화 상태였다면 활성화
+        if (!isActive) {
+          item.classList.add('active');
+        }
+      }
+
+      // 🎮 히스테리시스 시뮬레이션 - 인터렉티브 기능
+      let currentProgress = 0;
+      let currentDirection = 'down';
+
+      function simulateScroll(direction, progress, buttonElement = null) {
+        // 🎯 현재 스크롤 상태 업데이트
+        currentDirection = direction;
+        currentProgress = progress;
+
+        // 📍 스크롤 인디케이터 위치 업데이트
+        const indicator = document.getElementById('scrollIndicator');
+        if (indicator) {
+          indicator.style.left = progress + '%';
         }
 
-        // 🎮 히스테리시스 시뮬레이션 - 인터렉티브 기능
-        let currentProgress = 0;
-        let currentDirection = 'down';
+        // 💊 Pill 위치 계산 및 적용
+        const pill = document.getElementById('hystPill');
+        if (pill) {
+          let pillY;
 
-        function simulateScroll(direction, progress, buttonElement = null) {
-            // 🎯 현재 스크롤 상태 업데이트
-            currentDirection = direction;
-            currentProgress = progress;
-            
-            // 📍 스크롤 인디케이터 위치 업데이트
-            const indicator = document.getElementById('scrollIndicator');
-            if (indicator) {
-                indicator.style.left = progress + '%';
+          if (direction === 'down') {
+            // ⬇️ 하향 스크롤: 일반적인 변화
+            // 사인 곡선으로 자연스러운 움직임 구현
+            const easedProgress = Math.sin(((progress / 100) * Math.PI) / 2);
+            pillY = -60 + 60 * easedProgress; // -60px → 0px
+            pill.style.background = 'rgba(66, 66, 69, 0.8)'; // 기본색
+          } else {
+            // ⬆️ 상향 스크롤: 달라붙기 효과
+            if (progress >= 50) {
+              // 🧲 50% 이상에서 자석처럼 고정
+              pillY = 0; // 50% 이상에서 고정
+              pill.style.background = 'rgba(52, 199, 89, 0.8)'; // 달라붙기 표시 (녹색)
+            } else {
+              // 📉 50% 미만에서 점진적 복원
+              const restoreRatio = (50 - progress) / 50;
+              pillY = -60 * Math.sin((restoreRatio * Math.PI) / 2);
+              pill.style.background = 'rgba(255, 159, 10, 0.8)'; // 복원 표시 (주황색)
             }
-            
-            // 💊 Pill 위치 계산 및 적용
-            const pill = document.getElementById('hystPill');
-            if (pill) {
-                let pillY;
-                
-                if (direction === 'down') {
-                    // ⬇️ 하향 스크롤: 일반적인 변화
-                    // 사인 곡선으로 자연스러운 움직임 구현
-                    const easedProgress = Math.sin((progress / 100) * Math.PI / 2);
-                    pillY = -60 + 60 * easedProgress; // -60px → 0px
-                    pill.style.background = 'rgba(66, 66, 69, 0.8)'; // 기본색
-                } else {
-                    // ⬆️ 상향 스크롤: 달라붙기 효과
-                    if (progress >= 50) {
-                        // 🧲 50% 이상에서 자석처럼 고정
-                        pillY = 0; // 50% 이상에서 고정
-                        pill.style.background = 'rgba(52, 199, 89, 0.8)'; // 달라붙기 표시 (녹색)
-                    } else {
-                        // 📉 50% 미만에서 점진적 복원
-                        const restoreRatio = (50 - progress) / 50;
-                        pillY = -60 * Math.sin(restoreRatio * Math.PI / 2);
-                        pill.style.background = 'rgba(255, 159, 10, 0.8)'; // 복원 표시 (주황색)
-                    }
-                }
-                
-                // 🎨 계산된 위치를 실제 DOM에 적용
-                pill.style.transform = `translateY(${pillY}px)`;
-            }
-            
-            // 🎯 버튼 활성화 상태 업데이트
-            if (buttonElement) {
-                document.querySelectorAll('.btn').forEach(btn => btn.classList.remove('active'));
-                buttonElement.classList.add('active');
-            }
+          }
+
+          // 🎨 계산된 위치를 실제 DOM에 적용
+          pill.style.transform = `translateY(${pillY}px)`;
         }
 
-        // 🚀 페이드인 애니메이션
-        document.addEventListener('DOMContentLoaded', function() {
-            // 초기 시뮬레이션 상태 설정
-            simulateScroll('down', 0);
-            
-            // 각 아코디언 아이템에 페이드인 효과 적용
-            const elements = document.querySelectorAll('.accordion-item');
-            elements.forEach((el, index) => {
-                setTimeout(() => {
-                    el.classList.add('fade-in');
-                }, index * 100);
-            });
+        // 🎯 버튼 활성화 상태 업데이트
+        if (buttonElement) {
+          document
+            .querySelectorAll('.btn')
+            .forEach((btn) => btn.classList.remove('active'));
+          buttonElement.classList.add('active');
+        }
+      }
+
+      // 🚀 페이드인 애니메이션
+      document.addEventListener('DOMContentLoaded', function () {
+        // 초기 시뮬레이션 상태 설정
+        simulateScroll('down', 0);
+
+        // 각 아코디언 아이템에 페이드인 효과 적용
+        const elements = document.querySelectorAll('.accordion-item');
+        elements.forEach((el, index) => {
+          setTimeout(() => {
+            el.classList.add('fade-in');
+          }, index * 100);
         });
+      });
     </script>
-</body>
+  </body>
 </html>

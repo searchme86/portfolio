@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>스크롤 시계 애니메이션 - 완전 분석 가이드</title>
+    <title>GSAP 스크롤 시계 애니메이션 - 완전 분석 가이드</title>
     <style>
       /* 파일 위치: device-specific-upperdate-coordinates-animation-guide.html */
 
@@ -585,11 +585,10 @@
     <div class="main-container">
       <header style="text-align: center; margin-bottom: 2rem">
         <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem">
-          스크롤 시계 애니메이션
+          GSAP 스크롤 시계 애니메이션
         </h1>
         <p style="color: #86868b; font-size: 0.9rem">
-          Apple Watch 스타일 애니메이션의 완전한 기술적 구현과 디바이스별 반응형
-          좌표 시스템 분석
+          스크롤에 따른 시계 디스플레이의 변화를 구현한 프로젝트
         </p>
       </header>
 
@@ -794,68 +793,7 @@
           </div>
         </li>
 
-        <!-- 3. 디바이스별 좌표 시스템 -->
-        <li class="accordion-item">
-          <button
-            type="button"
-            class="accordion-header"
-            onclick="toggleAccordion(this)"
-          >
-            <div>
-              <div class="accordion-title">디바이스별 좌표 시스템</div>
-              <div class="accordion-subtitle">
-                upperDate 요소의 반응형 좌표 분리와 정밀 위치 계산
-              </div>
-            </div>
-            <span class="accordion-arrow">▼</span>
-          </button>
-          <div class="accordion-content">
-            <div class="content-wrapper">
-              <div class="info-box blue">
-                <h4>🎯 디바이스별 좌표 분리 시스템</h4>
-                <p>
-                  <strong>핵심 아이디어</strong>: 같은 upperDate 요소라도
-                  디바이스 크기에 따라 최적 위치가 다름<br />
-                  <strong>구현 방법</strong>: CSS 변수 + JavaScript 동적 계산 +
-                  미디어쿼리<br />
-                  <strong>반응 기준점</strong>: 375px(소형), 768px(태블릿),
-                  데스크톱<br />
-                  <strong>좌표 단위</strong>: 상대적 퍼센트(%) + 절대값 픽셀(px)
-                  혼용
-                </p>
-              </div>
-
-              <div class="coordinate-grid">
-                <div class="coordinate-demo">
-                  <h5>데스크톱</h5>
-                  <div class="values">
-                    top: -50%<br />
-                    left: 70%<br />
-                    font-size: 35px
-                  </div>
-                </div>
-                <div class="coordinate-demo">
-                  <h5>모바일 (768px 이하)</h5>
-                  <div class="values">
-                    top: -70%<br />
-                    left: 56%<br />
-                    font-size: 10px
-                  </div>
-                </div>
-                <div class="coordinate-demo">
-                  <h5>소형 모바일 (375px 이하)</h5>
-                  <div class="values">
-                    left: 57%<br />
-                    font-size: 20px<br />
-                    padding: 3px 6px
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </li>
-
-        <!-- 4. 동적 검은색 애니메이션 시스템 -->
+        <!-- 3. 동적 검은색 애니메이션 시스템 -->
         <li class="accordion-item">
           <button
             type="button"
@@ -875,9 +813,9 @@
               <div class="info-box blue">
                 <h4>🖤 동적 검은색 시스템 개요</h4>
                 <p>
-                  Apple Watch의 고급스러운 검은색 케이스를 재현하기 위해 여러
-                  검은색 톤을 조합하고, 펄스(맥박)와 쉬머(반짝임) 애니메이션을
-                  통해 정적인 색상이 아닌 살아있는 느낌을 구현합니다.
+                  Apple Watch의 검은색 케이스를 재현하기 위해 여러 검은색 톤을
+                  조합하고, 펄스(맥박)와 쉬머(반짝임) 애니메이션을 통해 정적인
+                  색상이 아닌 살아있는 느낌을 구현합니다.
                 </p>
               </div>
 
@@ -899,9 +837,7 @@
                 <div class="concept-card">
                   <span class="concept-emoji">🎭</span>
                   <div class="concept-title">하이브리드 모드</div>
-                  <div class="concept-desc">
-                    Pulse + Shimmer 동시 적용 최고급 효과
-                  </div>
+                  <div class="concept-desc">Pulse + Shimmer 동시 적용 효과</div>
                 </div>
                 <div class="concept-card">
                   <span class="concept-emoji">🔄</span>
@@ -1178,7 +1114,7 @@
           }, index * 100);
         });
 
-        console.log('[DEBUG] 스크롤 시계 애니메이션 가이드 로드 완료');
+        console.log('[DEBUG] GSAP 스크롤 시계 애니메이션 가이드 로드 완료');
       });
     </script>
   </body>
