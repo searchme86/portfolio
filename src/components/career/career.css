@@ -96,7 +96,7 @@ label {
   cursor: pointer;
   color: var(--text-primary);
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 0.625rem;
 }
 
 /* 타임라인 그래프 추가 스타일 */
@@ -1579,6 +1579,9 @@ label:hover {
     padding: 9px 11px;
     padding-left: 22px;
     font-size: 0.87rem;
+  }
+  label {
+    font-size: 0.75rem;
   }
 }
 
