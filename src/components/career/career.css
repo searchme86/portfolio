@@ -213,6 +213,8 @@ label {
 /* // here */
 .career-container {
   width: 100%;
+  padding: 14px;
+  box-sizing: border-box;
 }
 
 /* Career Accordion */
@@ -250,12 +252,6 @@ label {
   border-radius: 6px;
   padding-left: 6px;
   padding-right: 6px;
-}
-
-.career-accordion-button:focus {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
-  border-radius: 4px;
 }
 
 .career-summary {
@@ -344,7 +340,6 @@ label {
 /* Career Detail Section - 각 li 섹션 */
 .career-detail-section {
   background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
   border-radius: 8px;
   transition: all 0.3s ease;
   padding: 20px;
@@ -891,12 +886,6 @@ label {
   border-color: var(--accent-color);
 }
 
-.career-filter-select:focus {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
-  border-color: var(--accent-color);
-}
-
 /* Layout Toggle Container */
 .career-layout-toggle-container {
   display: flex;
@@ -942,11 +931,6 @@ label {
 .career-layout-toggle-button:hover {
   border-color: var(--accent-color);
   color: var(--accent-color);
-}
-
-.career-layout-toggle-button:focus {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
 }
 
 .career-layout-toggle-button.active {
@@ -1417,11 +1401,6 @@ input[type='radio']:focus-visible {
 
 label:hover {
   color: var(--accent-color);
-}
-
-.timeline-segment:focus-visible {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
 }
 
 /* ============ 모바일에서 세로 배치로 변경 ============ */
@@ -2587,95 +2566,6 @@ label:hover {
     font-size: 1.15rem;
     padding: 20px 24px;
     padding-left: 40px;
-  }
-}
-
-/* ============ Accessibility & Interactions ============ */
-.career-accordion-button:focus-visible {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
-}
-
-.project-card:focus-within {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
-}
-
-.portfolio-btn:focus-visible {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
-}
-
-.thumbnail-btn:focus-visible {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
-}
-
-.detail-header:focus-visible {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
-}
-
-/* 새로운 구조 접근성 */
-.career-detail-section:focus-within {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
-}
-
-.career-sub-list li:focus-visible {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .career-accordion-icon,
-  .career-accordion-content,
-  .dashboard-card,
-  .project-card,
-  .career-modal-content,
-  .career-layout-toggle-button,
-  .portfolio-main-image,
-  .thumbnail-btn,
-  .detail-toggle,
-  .stat-item,
-  .highlight-item,
-  .career-detail-section,
-  .career-sub-list li {
-    transition: none;
-  }
-
-  @keyframes modalSlideIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-}
-
-/* High contrast mode */
-@media (prefers-contrast: high) {
-  .dashboard-card,
-  .project-card,
-  .career-filter-select,
-  .career-layout-toggle-button,
-  .portfolio-btn,
-  .thumbnail-btn,
-  .detail-header,
-  .career-detail-section,
-  .career-sub-list li {
-    border: 2px solid var(--text-primary);
-  }
-
-  .tech-item,
-  .tech-tag {
-    border: 2px solid var(--accent-color);
-  }
-
-  .career-section-title {
-    border-bottom: 3px solid var(--accent-color);
   }
 }
 
